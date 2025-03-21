@@ -1,0 +1,54 @@
+import React from "react";
+import { Field, ErrorMessage, useField } from "formik";
+import { FaExclamationCircle } from "react-icons/fa"; // Error Icon
+
+interface InputFieldProps {
+  type?: "text" | "email" | "password" | "number";
+  placeholder?: string;
+  name: string;
+  icon?: React.ReactNode; // Allows any React icon
+  className?: string;
+}
+
+const InputField: React.FC<InputFieldProps> = ({
+  type = "text",
+  placeholder,
+  name,
+  icon,
+  className = "",
+}) => {
+  const [field, meta] = useField(name); // Get Formik field state
+  
+  return (
+    <div className="mb-6 w-full">
+      <div
+        className={`w-full relative flex flex-row border rounded-lg p-2 ${
+          meta.touched && meta.error ? "border-red-500" : "border-gray-300"
+        } ${className}`}
+      >
+        {/* Left Icon */}
+        {icon && <div className="flex items-center px-3">{icon}</div>}
+
+        {/* Input Field */}
+        <Field
+          {...field}
+          type={type}
+          placeholder={placeholder}
+          className={`bg-white text-gray-900 text-sm rounded-lg focus:ring-0 block w-full p-2.5 outline-none `}
+        />
+
+        {/* Error Icon */}
+        {meta.touched && meta.error && (
+          <div className="flex items-center px-3">
+            <FaExclamationCircle className="w-5 h-5 text-red-500" />
+          </div>
+        )}
+      </div>
+
+      {/* Error Message */}
+      <ErrorMessage name={name} component="p" className="text-red-500 text-sm mt-1 text-left" />
+    </div>
+  );
+};
+
+export default InputField;
