@@ -3,92 +3,99 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Button from "../FormComponents/Button";
 import InputField from "../FormComponents/InputField";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { FaEdit } from "react-icons/fa";
+import { FaChevronRight, FaFileArchive } from "react-icons/fa";
 import { useOnboardingStore } from "../../store/AppStore";
 
-// Define TypeScript type for a service
-interface Service {
-  serviceName: string;
-  price: number;
-  hours: number;
+// Define TypeScript type for a item
+interface Item {
+  itemName: string;
 }
 
-const AddServices = () => {
+const AddItems = () => {
   const { setStep } = useOnboardingStore();
-  const [services, setServices] = useState<Service[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const validationSchema = Yup.object().shape({
-    serviceName: Yup.string().required("Service name is required"),
-    price: Yup.number()
-      .typeError("Price must be a number")
-      .required("Price is required"),
-    hours: Yup.number()
-      .typeError("Estimated hours must be a number")
-      .required("Estimated hours are required"),
+    itemName: Yup.string().required("Item name is required"),
   });
 
-  const handleSubmit = (
-    values: Service,
-    { resetForm }: FormikHelpers<Service>
-  ) => {
+  const handleSubmit = (values: Item, { resetForm }: FormikHelpers<Item>) => {
     if (editIndex !== null) {
-      // Update existing service
-      const updatedServices = [...services];
-      updatedServices[editIndex] = values;
-      setServices(updatedServices);
+      // Update existing Item
+      const updatedItems = [...items];
+      updatedItems[editIndex] = values;
+      setItems(updatedItems);
       setEditIndex(null);
     } else {
-      // Add new service
-      setServices([...services, values]);
+      // Add new item
+      setItems([...items, values]);
     }
 
     setShowModal(false);
     resetForm();
   };
 
-  const handleDelete = (index: number) => {
-    setServices(services.filter((_, i) => i !== index));
-  };
+  //   const handleDelete = (index: number) => {
+  //     setItems(items.filter((_, i) => i !== index));
+  //   };
 
-  const handleEdit = (index: number) => {
-    setEditIndex(index);
-    setShowModal(true);
-  };
+  //   const handleEdit = (index: number) => {
+  //     setEditIndex(index);
+  //     setShowModal(true);
+  //   };
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4 relative">
       <h2 className="text-2xl font-bold text-brand text-center">
-        Add your services
+        Add your Item Types
       </h2>
       <p className="text-gray-600 text-center mt-2">
-        Add the services you render below to complete your store setup
+        Add the items you deal with below to complete your store setup
       </p>
-      <Button label="Add a service" onClick={() => setShowModal(true)} />
+      <Button label="Add a item" onClick={() => setShowModal(true)} />
 
-      {services.length > 0 && (
+      <div className="mt-1 w-full flex flex-col justify-start text-black">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className="bg-brand-100 p-3 rounded-md mt-2 text-left flex items-center gap-2 w-full">
+            <div className="bg-brand-200 p-3 rounded-full">
+              <FaFileArchive className="text-black h-6 w-6" />
+            </div>
+            <div className="w-full">
+              <p>{item.itemName}</p>
+              <p className="text-[12px] text-gray-800">Washing, Iron</p>
+            </div>
+            <div className="float-right">
+              <FaChevronRight className="text-black" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* {items.length > 0 && (
         <div className="w-full max-w-2xl mt-6 overflow-x-auto">
           <table className="w-full border-collapse bg-white">
             <thead className="bg-gray-100">
               <tr className="text-left text-gray-600">
-                <th className="px-4 py-3 rounded-s-lg">Service</th>
+                <th className="px-4 py-3 rounded-s-lg">item</th>
                 <th className="px-4 py-3">Price</th>
                 <th className="px-4 py-3">Est. Hours</th>
                 <th className="px-4 py-3 rounded-e-lg text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {services.map((service, index) => (
+              {items.map((item, index) => (
                 <tr
                   key={index}
                   className="text-gray-700 odd:bg-white even:bg-gray-50 hover:bg-blue-50">
-                  <td className="px-4 py-3">{service.serviceName}</td>
+                  <td className="px-4 py-3">{item.itemName}</td>
                   <td className="px-4 py-3">
-                    ₦{service.price.toLocaleString()}
+                    ₦{item.itemName.toLocaleString()}
                   </td>
-                  <td className="px-4 py-3">{service.hours} hours</td>
+                  <td className="px-4 py-3">{item.itemName} hours</td>
                   <td className="px-4 py-3 flex justify-center space-x-2">
                     <FaEdit
                       className="text-blue-500 hover:text-blue-700 cursor-pointer"
@@ -104,32 +111,32 @@ const AddServices = () => {
             </tbody>
           </table>
         </div>
-      )}
+      )} */}
 
       <p className="text-gray-600 text-center mt-6">
-        Click the “Add a service” button to add the type of services you render
-        in your laundry store
+        Click the “Add a item” button to add the type of items you render in
+        your laundry store
       </p>
 
       <Button
         label="Next"
-        className={`${services.length === 0 ? "bg-blue-200" : "bg-brand"}`}
-        disabled={services.length === 0}
-        onClick={() => setStep("add items")}
+        className={`${items.length === 0 ? "bg-blue-200" : "bg-brand"}`}
+        disabled={items.length === 0}
+        onClick={() => setStep("onboarding complete")}
       />
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-[30px] text-left text-black font-bold mb-4">
-              {editIndex !== null ? "Edit service" : "Add new service"}
+              {editIndex !== null ? "Edit item" : "Add new item"}
             </h3>
 
             <Formik
               initialValues={
                 editIndex !== null
-                  ? services[editIndex]
-                  : { serviceName: "", price: 0, hours: 0 }
+                  ? items[editIndex]
+                  : { itemName: "", price: 0, hours: 0 }
               }
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
@@ -138,25 +145,12 @@ const AddServices = () => {
                 <Form>
                   <InputField
                     type="text"
-                    placeholder="Service name e.g wash, starch, iron"
-                    name="serviceName"
+                    placeholder="item name e.g Trouser, Shirt, suits, Agbada etc..."
+                    name="itemName"
                   />
-                  <InputField
-                    type="number"
-                    placeholder="Enter your designated price"
-                    name="price"
-                  />
-                  <InputField
-                    type="number"
-                    placeholder="Estimated Hours"
-                    name="hours"
-                  />
-
                   <Button
                     type="submit"
-                    label={
-                      editIndex !== null ? "Update service" : "Add service"
-                    }
+                    label={editIndex !== null ? "Update item" : "Add item"}
                   />
                   <button
                     type="button"
@@ -177,4 +171,4 @@ const AddServices = () => {
   );
 };
 
-export default AddServices;
+export default AddItems;

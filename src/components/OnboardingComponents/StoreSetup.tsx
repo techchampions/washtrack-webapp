@@ -80,7 +80,7 @@ const StoreSetup = () => {
           console.log("Store Data:", values);
           setStep("add services"); // Redirect user after setup
         }}>
-        {({ handleSubmit }) => (
+        {() => (
           <Form className="w-full flex flex-col space-y-4">
             {/* Store Location */}
             <InputField

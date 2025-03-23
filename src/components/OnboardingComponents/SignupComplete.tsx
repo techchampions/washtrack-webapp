@@ -1,4 +1,3 @@
-import React from "react";
 import { useOnboardingStore } from "../../store/AppStore";
 import Button from "../FormComponents/Button";
 

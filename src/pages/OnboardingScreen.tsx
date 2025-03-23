@@ -6,6 +6,8 @@ import OTP from "../components/OnboardingComponents/OTP";
 import StoreSetup from "../components/OnboardingComponents/StoreSetup";
 import SignupComplete from "../components/OnboardingComponents/SignupComplete";
 import AddServices from "../components/OnboardingComponents/AddServices";
+import AddItems from "../components/OnboardingComponents/AddItems";
+import OnboardingComplete from "../components/OnboardingComponents/OnboardingComplete";
 
 const Onboarding = () => {
   const { step } = useOnboardingStore();
@@ -25,6 +27,10 @@ const Onboarding = () => {
         return <StoreSetup />;
       case "add services":
         return <AddServices />;
+      case "add items":
+        return <AddItems />;
+      case "onboarding complete":
+        return <OnboardingComplete />;
       default:
         return <GetStarted />;
     }
@@ -43,12 +49,12 @@ const Onboarding = () => {
         className="relative top-[70px] left-[60px] w-[250px] h-[50px] opacity-70"
       />
       <div className="flex w-full justify-center">
-        <div className="absolute flex flex-row justify-center items-start mt-8 h-screen w-[90%]">
+        <div className="absolute flex flex-row justify-center items-start my-auto h-screen w-[90%]">
           <div className="w-1/2 bg-opacity-40"></div>
           {/* <GetStarted/> */}
 
           {/* Onboarding Content Container */}
-          <div className=" w-1/2 max-w-[600px] min-h-[600px] bg-white py-[50px] px-20 rounded-[25px] shadow-lg flex flex-col items-center justify-center">
+          <div className=" w-1/2 max-w-[600px] min-h-[600px] bg-white py-[20px] px-20 rounded-[25px] shadow-lg flex flex-col items-center justify-center">
             {stepContainer()}
           </div>
         </div>

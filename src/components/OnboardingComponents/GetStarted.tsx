@@ -5,7 +5,7 @@ function GetStarted() {
   const { setStep } = useOnboardingStore();
   const { isLoggedIn } = useUserStore();
   const handleGetStarted = () => {
-    setStep("setup store");
+    setStep("signup");
   };
 
   return (
@@ -15,7 +15,7 @@ function GetStarted() {
         <img
           src="./images/logo-blue.png"
           alt="WashTrack"
-          className="h-[100px]"
+          className="h-[75px]"
         />
       </div>
 
@@ -23,7 +23,7 @@ function GetStarted() {
         <img
           src="./images/onboardingt-shirt.png"
           alt="WashTrack"
-          className="h-[400px]"
+          className="h-[300px]"
         />
       </div>
 

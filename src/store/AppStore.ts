@@ -9,7 +9,9 @@ type OnboardingState = {
     | "verify OTP"
     | "signup completed"
     | "setup store"
-    | "add services";
+    | "add services"
+    | "add items"
+    | "onboarding complete";
   setStep: (newStep: OnboardingState["step"]) => void;
   // signupComplete:boolean;
   // setSignupComplete: (newSignupComplete:OnboardingState["signupComplete"]) => void;

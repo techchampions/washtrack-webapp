@@ -2,7 +2,8 @@
 
 @theme {
   --color-brand: #00bcff;
-  --color-branding: #ebf7fc;
+  --color-brand-100: #ebf7fc;
+  --color-brand-200: #53a5df1a;
 }
 
 :root {
