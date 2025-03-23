@@ -2,7 +2,14 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type OnboardingState = {
-  step: "Get Started" | "signup" | "login" | "verify OTP" | "signup completed" | "setup store";
+  step:
+    | "Get Started"
+    | "signup"
+    | "login"
+    | "verify OTP"
+    | "signup completed"
+    | "setup store"
+    | "add services";
   setStep: (newStep: OnboardingState["step"]) => void;
   // signupComplete:boolean;
   // setSignupComplete: (newSignupComplete:OnboardingState["signupComplete"]) => void;
