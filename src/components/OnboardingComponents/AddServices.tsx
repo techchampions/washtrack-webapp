@@ -69,10 +69,10 @@ const AddServices = () => {
       <Button label="Add a service" onClick={() => setShowModal(true)} />
 
       {services.length > 0 && (
-        <div className="w-full max-w-2xl mt-6 overflow-x-auto">
+        <div className="w-full max-w-2xl mt-6 overflow-x-hidden max-h-[300px] overflow-y-auto">
           <table className="w-full border-collapse bg-white">
             <thead className="bg-gray-100">
-              <tr className="text-left text-gray-600">
+              <tr className="text-left text-gray-600 font-bold text-[12px]">
                 <th className="px-4 py-3 rounded-s-lg">Service</th>
                 <th className="px-4 py-3">Price</th>
                 <th className="px-4 py-3">Est. Hours</th>
@@ -83,7 +83,7 @@ const AddServices = () => {
               {services.map((service, index) => (
                 <tr
                   key={index}
-                  className="text-gray-700 odd:bg-white even:bg-gray-50 hover:bg-blue-50">
+                  className="text-gray-700 odd:bg-white even:bg-gray-50 hover:bg-blue-50 text-[12px]">
                   <td className="px-4 py-3">{service.serviceName}</td>
                   <td className="px-4 py-3">
                     ₦{service.price.toLocaleString()}
@@ -106,14 +106,21 @@ const AddServices = () => {
         </div>
       )}
 
-      <p className="text-gray-600 text-center mt-6">
+      <p
+        className={`${
+          services.length === 0
+            ? "hidden"
+            : "text-gray-600 text-center text-[10px] mt-6"
+        }`}>
         Click the “Add a service” button to add the type of services you render
         in your laundry store
       </p>
 
       <Button
         label="Next"
-        className={`${services.length === 0 ? "bg-blue-200" : "bg-brand"}`}
+        className={`${
+          services.length === 0 ? "hidden bg-blue-200" : "bg-brand"
+        }`}
         disabled={services.length === 0}
         onClick={() => setStep("add items")}
       />

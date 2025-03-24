@@ -36,9 +36,7 @@ const SignUp: React.FC = () => {
       {({ isSubmitting }) => (
         <div className=" w-full">
           <div className="flex flex-col justify-center mb-4">
-            <h3 className="text-2xl text-center text-[#00BCFF]">
-              Create Account
-            </h3>
+            <h3 className="text-2xl text-center text-brand]">Create Account</h3>
             <p className="mt-2 text-gray-400">
               Sign Up via your Phone Number and Email
             </p>
@@ -49,30 +47,30 @@ const SignUp: React.FC = () => {
             <InputField
               name="businessName"
               placeholder="Business Name"
-              icon={<FaUser className="text-blue-500 w-5 h-5" />}
+              icon={<FaUser className="text-brand w-5 h-5" />}
             />
             <InputField
               name="phoneNumber"
               placeholder="Phone Number"
-              icon={<FaPhone className="text-blue-500 w-5 h-5" />}
+              icon={<FaPhone className="text-brand w-5 h-5" />}
             />
             <InputField
               name="email"
               type="email"
               placeholder="Email Address"
-              icon={<FaEnvelope className="text-blue-500 w-5 h-5" />}
+              icon={<FaEnvelope className="text-brand w-5 h-5" />}
             />
             <InputField
               name="password"
               type="password"
               placeholder="Password"
-              icon={<FaLock className="text-blue-500 w-5 h-5" />}
+              icon={<FaLock className="text-brand w-5 h-5" />}
             />
             <Button label="Sign Up" type="submit" isLoading={isSubmitting} />
             <p className="text-gray-500 mt-4 text-center font-medium">
               Have an account?
               <span
-                className="text-blue-500 cursor-pointer ml-1"
+                className="text-brand cursor-pointer ml-1"
                 onClick={() => setStep("login")}>
                 "Log in
               </span>

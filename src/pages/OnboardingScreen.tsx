@@ -54,7 +54,7 @@ const Onboarding = () => {
           {/* <GetStarted/> */}
 
           {/* Onboarding Content Container */}
-          <div className=" w-1/2 max-w-[600px] min-h-[600px] bg-white py-[20px] px-20 rounded-[25px] shadow-lg flex flex-col items-center justify-center">
+          <div className=" w-1/2 max-w-[600px] min-h-[600px] bg-white py-[20px] px-20 rounded-[25px] shadow-lg flex flex-col items-center justify-start">
             {stepContainer()}
           </div>
         </div>

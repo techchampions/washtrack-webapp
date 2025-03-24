@@ -13,6 +13,8 @@ type OnboardingState = {
     | "add items"
     | "onboarding complete";
   setStep: (newStep: OnboardingState["step"]) => void;
+  hasCompletedOnboarding: boolean;
+  setHasCompletedOnboarding: (newHasCompletedOnboarding: boolean) => void;
   // signupComplete:boolean;
   // setSignupComplete: (newSignupComplete:OnboardingState["signupComplete"]) => void;
 };
@@ -23,6 +25,9 @@ export const useOnboardingStore = create<OnboardingState>()(
     (set) => ({
       step: "Get Started", // Default step
       setStep: (newStep) => set({ step: newStep }),
+      hasCompletedOnboarding: false,
+      setHasCompletedOnboarding: (newHasCompletedOnboarding) =>
+        set({ hasCompletedOnboarding: newHasCompletedOnboarding }),
       // signupComplete:false,
       // setSignupComplete: (newSignupComplete) => set({ signupComplete: newSignupComplete })
     }),
