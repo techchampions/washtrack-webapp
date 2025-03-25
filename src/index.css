@@ -4,6 +4,12 @@
   --color-brand: #00bcff;
   --color-brand-100: #ebf7fc;
   --color-brand-200: rgba(83, 165, 223, 0.2);
+  --color-brand-250: #cde7f7;
+  --color-brand-300: #80deff;
+  --color-brand-400: #09b1ef;
+  --color-brand-border: #a8d3f0;
+  --color-dark-purple: #4b164c;
+
   --color-quick-action-icon: rgba(9, 39, 101, 1);
   --font-brand-bold: sk-modernist-bold;
 }

@@ -19,7 +19,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
       {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center bg-transparent outline-none text-white px-3 py-2 rounded-md">
+        className="flex items-center text-left bg-transparent outline-none text-white px-3 py-2 rounded-md">
         {selected} <FaChevronDown className="ml-2 text-white" />
       </button>
 

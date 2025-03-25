@@ -6,12 +6,12 @@ function DashboardScreen() {
   return (
     <div className="fixed inset-0 z-50 flex h-screen w-screen">
       {/* Sidebar */}
-      <aside className="hidden w-64 bg-brand text-white p-4 md:flex flex-col">
+      <aside className="hidden w-[320px] bg-brand text-white p-4 md:flex flex-col">
         <NavigationContainer />
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 bg-gray-100 overflow-y-auto">
+      <main className="flex-1 p-6 bg-white overflow-y-auto">
         {/* Header */}
         <Header />
         <Outlet />

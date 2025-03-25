@@ -11,7 +11,7 @@ function Header() {
     setIsLoggedIn(false);
   };
   return (
-    <div className="flex justify-between items-center mb-6">
+    <div className="flex justify-between items-center mb-6 w-[90%] mx-auto">
       <div className="flex flex-row gap-1">
         <img
           src="./images/profile-img.png"

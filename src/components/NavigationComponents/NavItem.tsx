@@ -20,10 +20,10 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
           to={path}
           end={true}
           className={({ isActive }) =>
-            `flex items-center justify-between px-3 py-1 rounded-md transition ${
+            `flex items-center justify-between px-3 py-[7px] rounded-md transition ${
               isActive
-                ? "bg-blue-400 text-white"
-                : "text-white hover:bg-blue-400"
+                ? "bg-brand-400 text-white"
+                : "text-white hover:bg-brand-400"
             }`
           }>
           <div className="flex items-center space-x-2">
@@ -34,7 +34,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
       ) : (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between w-full px-3 py-1 text-white rounded-md hover:bg-blue-400">
+          className="flex items-center justify-between w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400">
           <div className="flex items-center space-x-2">
             {icon}
             <span>{label}</span>
@@ -54,10 +54,10 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
               to={child.path}
               end={true}
               className={({ isActive }) =>
-                `block py-1 px-2 rounded-md transition text-left ${
+                `block py-[7px] px-2 rounded-md transition text-left ${
                   isActive
-                    ? "bg-blue-400 text-white"
-                    : "text-white hover:bg-blue-400"
+                    ? "bg-brand-400 text-white"
+                    : "text-white hover:bg-brand-400"
                 }`
               }>
               {child.label}

@@ -6,12 +6,13 @@ import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
 import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
 import { TbMoneybag } from "react-icons/tb";
 import { RiAppsLine } from "react-icons/ri";
+import NavbarAddorder from "./NavbarAddorder";
 
 function NavigationContainer() {
   return (
     <div className="flex flex-col py-10 px-10">
       <img src="./images/logo.png" alt="Wash Track" className="w-full" />
-      <nav className="space-y-4 text-white py-8">
+      <nav className="space-y-1 text-white py-8">
         <NavItem
           label="Overview"
           icon={<FaHome className="text-white" />}
@@ -64,6 +65,7 @@ function NavigationContainer() {
           ]}
         />
       </nav>
+      <NavbarAddorder />
     </div>
   );
 }
