@@ -1,5 +1,5 @@
 import React from "react";
-import { BsClipboard2Check } from "react-icons/bs";
+import { BsClipboard2Check, BsFileTextFill } from "react-icons/bs";
 
 interface OrderProps {
   orderId: string;
@@ -20,7 +20,8 @@ const OrderItem: React.FC<OrderProps> = ({
     <div className="bg-brand-100 text-[16px] p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
       {/* Icon */}
       <div className="bg-brand-250 p-3 flex justify-center items-center rounded-full border border-brand-border">
-        <BsClipboard2Check size={20} className="text-dark-purple" />
+        <BsFileTextFill size={20} className="text-quick-action-icon" />
+        {/* <BsClipboard2Check size={20} className="text-dark-purple" /> */}
       </div>
 
       {/* Order Details */}

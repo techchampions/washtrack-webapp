@@ -13,8 +13,8 @@ const QuickActions = () => {
     {
       label: "Inventory",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <BsFillGridFill className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <BsFillGridFill className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/inventory",
@@ -22,8 +22,8 @@ const QuickActions = () => {
     {
       label: "Orders",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <FaClipboardList className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <FaClipboardList className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/orders",
@@ -31,8 +31,8 @@ const QuickActions = () => {
     {
       label: "Customers",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <FaUsers className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <FaUsers className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/customers",
@@ -40,8 +40,8 @@ const QuickActions = () => {
     {
       label: "Expense",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <FaMoneyBill className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <FaMoneyBill className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/expense",
@@ -49,8 +49,8 @@ const QuickActions = () => {
     {
       label: "Revenue",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <FaSackDollar className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <FaSackDollar className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/revenue",
@@ -58,8 +58,8 @@ const QuickActions = () => {
     {
       label: "Reports",
       icon: (
-        <div className="p-2 md:p-5 bg-brand-200 rounded-full">
-          <FaChartBar className="text-quick-action-icon h-6 w-6 md:h-12 md:w-12" />
+        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
+          <FaChartBar className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
         </div>
       ),
       path: "/reports",
