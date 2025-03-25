@@ -1,8 +1,8 @@
 import React from "react";
 import { IoMdMore } from "react-icons/io";
 import NavItem from "./NavItem";
-import { FaBox, FaChartBar, FaList, FaTh } from "react-icons/fa";
-import { MdAddBox, MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
+import { FaChartBar, FaHome, FaList } from "react-icons/fa";
+import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
 import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
 import { TbMoneybag } from "react-icons/tb";
 import { RiAppsLine } from "react-icons/ri";
@@ -13,34 +13,39 @@ function NavigationContainer() {
       <img src="./images/logo.png" alt="Wash Track" className="w-full" />
       <nav className="space-y-4 text-white py-8">
         <NavItem
+          label="Overview"
+          icon={<FaHome className="text-white" />}
+          path="/dashboard"
+        />
+        <NavItem
           label="Add Order"
           icon={<MdOutlineAddBox className="text-white" />}
-          path="/dashbord/add-order"
+          path="/dashboard/add-order"
         />
         <NavItem
           label="Inventory"
           icon={<MdOutlineInventory className="text-white" />}
-          path="/dashbord/inventory"
+          path="/dashboard/inventory"
         />
         <NavItem
           label="My Store"
           icon={<LiaStoreAltSolid className="text-white" />}
-          path="/dashbord/my-store"
+          path="/dashboard/my-store"
         />
         <NavItem
           label="Orders"
           icon={<FaList className="text-white" />}
-          path="/dashbord/my-order"
+          path="/dashboard/my-order"
         />
         <NavItem
           label="Revenue"
           icon={<TbMoneybag className="text-white" />}
-          path="/dashbord/revenue"
+          path="/dashboard/revenue"
         />
         <NavItem
           label="Expense"
           icon={<LiaMoneyBillAltSolid className="text-white" />}
-          path="/dashbord/expense"
+          path="/dashboard/expense"
         />
         <NavItem
           label="Report"
@@ -58,9 +63,6 @@ function NavigationContainer() {
             { label: "Outstanding", path: "/dashboard/outstanding" },
           ]}
         />
-        <a href="#" className="block flex items-center">
-          More <IoMdMore className="ml-2" />
-        </a>
       </nav>
     </div>
   );

@@ -3,10 +3,11 @@ import { Field, ErrorMessage, useField } from "formik";
 import { FaExclamationCircle } from "react-icons/fa"; // Error Icon
 
 interface InputFieldProps {
-  type?: "text" | "email" | "password" | "number";
+  type?: "text" | "email" | "password" | "number" | "checkbox";
   placeholder?: string;
   name: string;
   icon?: React.ReactNode; // Allows any React icon
+  rightIcon?: React.ReactNode; // Allows any React icon
   className?: string;
 }
 
@@ -15,14 +16,15 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   name,
   icon,
+  rightIcon,
   className = "",
 }) => {
   const [field, meta] = useField(name); // Get Formik field state
 
   return (
-    <div className="mb-6 w-full">
+    <div className="mb-4 w-full">
       <div
-        className={`w-full relative flex flex-row border rounded-lg ${
+        className={`w-full relative flex flex-row border rounded-lg py-[1px] ${
           meta.touched && meta.error ? "border-red-500" : "border-gray-300"
         } ${className}`}>
         {/* Left Icon */}
@@ -42,13 +44,15 @@ const InputField: React.FC<InputFieldProps> = ({
             <FaExclamationCircle className="w-5 h-5 text-red-500" />
           </div>
         )}
+        {/* Right Icon */}
+        {rightIcon && <div className="flex items-center pr-3">{rightIcon}</div>}
       </div>
 
       {/* Error Message */}
       <ErrorMessage
         name={name}
         component="p"
-        className="text-red-500 text-sm mt-1 text-left"
+        className="text-red-500 text-xs mt-1 text-left"
       />
     </div>
   );

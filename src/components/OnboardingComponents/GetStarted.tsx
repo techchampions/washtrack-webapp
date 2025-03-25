@@ -9,7 +9,7 @@ function GetStarted() {
   };
 
   return (
-    <div className=" w-full">
+    <div className="m-auto w-full">
       {/* Logo */}
       <div className="flex justify-center">
         <img

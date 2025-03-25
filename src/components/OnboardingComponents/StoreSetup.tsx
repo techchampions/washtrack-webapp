@@ -40,8 +40,10 @@ const StoreSetup = () => {
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4">
-      <h2 className="text-[30px] font-bold text-blue-500">Setup your store</h2>
-      <p className="text-gray-500 text-center">
+      <h2 className="text-[30px] font-brand-bold text-blue-500">
+        Setup your store
+      </h2>
+      <p className="text-gray-500 text-xs text-center">
         Fill in the information below to setup your store
       </p>
 
@@ -58,12 +60,12 @@ const StoreSetup = () => {
             <img
               src={logo}
               alt="Store Logo"
-              className="w-full h-full rounded-full object-contain"
+              className="w-full h-full rounded-full object-cover"
             />
           ) : (
             <img
               src="./images/profile-img.png"
-              className="w-full h-full rounded-full object-contain"
+              className="w-full h-full rounded-full object-cover"
               alt=""
             />
           )}
@@ -120,12 +122,18 @@ const StoreSetup = () => {
                       <img
                         src={banners[index]}
                         alt="Banner"
-                        className="w-full h-full object-contain text-black"
+                        className="w-full h-full object-cover text-black"
                       />
                     ) : (
                       <div className="flex flex-col justify-center items-center">
-                        <MdOutlineFileUpload size={50} />
-                        <p className="text-sm text-gray-500">Upload banner</p>
+                        <MdOutlineFileUpload
+                          size={35}
+                          className="text-gray-500"
+                        />
+                        <p className="text-xs text-black">Upload Store Image</p>
+                        <p className="text-[6px] text-black mt-[2px]">
+                          (Recommended Dimensions: 930*1163)
+                        </p>
                       </div>
                     )}
                   </label>

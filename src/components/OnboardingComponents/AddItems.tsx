@@ -3,8 +3,14 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Button from "../FormComponents/Button";
 import InputField from "../FormComponents/InputField";
-import { FaChevronRight, FaFileArchive } from "react-icons/fa";
+import {
+  FaChevronRight,
+  FaFile,
+  FaFileAlt,
+  FaFileArchive,
+} from "react-icons/fa";
 import { useOnboardingStore } from "../../store/AppStore";
+import { FiFileText } from "react-icons/fi";
 
 // Define TypeScript type for a item
 interface Item {
@@ -48,7 +54,7 @@ const AddItems = () => {
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4 relative">
-      <h2 className="text-2xl font-bold text-brand text-center">
+      <h2 className="text-2xl font-brand-bold text-brand text-center">
         Add your Item Types
       </h2>
       <p className="text-gray-600 text-center mt-2">
@@ -56,13 +62,13 @@ const AddItems = () => {
       </p>
       <Button label="Add a item" onClick={() => setShowModal(true)} />
 
-      <div className="mt-1 w-full flex flex-col justify-start text-black">
+      <div className="mt-1 w-full flex flex-col justify-start text-black h-[200px] max-w-[300px] min-w-[300px] overflow-y-auto">
         {items.map((item, index) => (
           <div
             key={index}
             className="bg-brand-100 p-3 rounded-md mt-2 text-left flex items-center gap-2 w-full">
             <div className="bg-brand-200 p-3 rounded-full">
-              <FaFileArchive className="text-black h-6 w-6" />
+              <FiFileText className="text-quick-action-icon h-6 w-6" />
             </div>
             <div className="w-full">
               <p>{item.itemName}</p>
@@ -113,7 +119,7 @@ const AddItems = () => {
         </div>
       )} */}
 
-      <p className="text-gray-600 text-center mt-6">
+      <p className="text-gray-600 text-xs text-center mt-6">
         Click the “Add a item” button to add the type of items you render in
         your laundry store
       </p>
@@ -127,16 +133,14 @@ const AddItems = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-white p-6 rounded-[25px] shadow-lg w-[380px] max-w-md">
             <h3 className="text-[30px] text-left text-black font-bold mb-4">
               {editIndex !== null ? "Edit item" : "Add new item"}
             </h3>
 
             <Formik
               initialValues={
-                editIndex !== null
-                  ? items[editIndex]
-                  : { itemName: "", price: 0, hours: 0 }
+                editIndex !== null ? items[editIndex] : { itemName: "" }
               }
               validationSchema={validationSchema}
               onSubmit={handleSubmit}

@@ -4,16 +4,16 @@ import Button from "../FormComponents/Button";
 const SignupComplete = () => {
   const { setStep } = useOnboardingStore();
   return (
-    <div className="w-full flex flex-col justify-center">
+    <div className="w-full flex flex-col justify-center items-center h-[100%] m-auto">
       <div className="w-[160px] h-[170px] mx-auto">
         <img src="./images/1171275266.png" className="w-full h-full" alt="" />
       </div>
       <div className="text-center mt-[20px] flex flex-col justify-center">
-        <div className="text-[24px] text-brand">Hi Business Name !</div>
-        <h2 className="text-[28px] font-bold text-black">
+        <div className="text-[18px] text-brand">Hi Business Name !</div>
+        <h2 className="text-[28px] font-brand-bold text-black">
           Welcome to WashTrack
         </h2>
-        <p className="max-w-[320px] text-black text-center mx-auto">
+        <p className="max-w-[320px] text-gray-700 text-center mx-auto">
           Would you like to continue with your store, setup to get started
         </p>
       </div>

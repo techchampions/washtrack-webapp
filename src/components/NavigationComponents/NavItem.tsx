@@ -1,28 +1,3 @@
-// import { NavLink } from "react-router-dom";
-
-// interface NavItemProps {
-//   label: string;
-//   icon: JSX.Element;
-//   path: string;
-// }
-
-// const NavItem: React.FC<NavItemProps> = ({ label, icon, path }) => {
-//   return (
-//     <NavLink
-//       to={path}
-//       className={({ isActive }) =>
-//         `flex items-center space-x-2 px-3 py-1 rounded-md transition ${
-//           isActive ? "bg-brand text-white" : "text-white hover:bg-brand-100"
-//         }`
-//       }>
-//       {icon}
-//       <span>{label}</span>
-//     </NavLink>
-//   );
-// };
-
-// export default NavItem;
-
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FaChevronDown } from "react-icons/fa";
@@ -43,6 +18,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
       {path ? (
         <NavLink
           to={path}
+          end={true}
           className={({ isActive }) =>
             `flex items-center justify-between px-3 py-1 rounded-md transition ${
               isActive
@@ -76,6 +52,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
             <NavLink
               key={index}
               to={child.path}
+              end={true}
               className={({ isActive }) =>
                 `block py-1 px-2 rounded-md transition text-left ${
                   isActive

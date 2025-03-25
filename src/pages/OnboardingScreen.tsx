@@ -46,15 +46,12 @@ const Onboarding = () => {
       <img
         src="./images/logo.png"
         alt="Wash Track"
-        className="relative top-[70px] left-[60px] w-[250px] h-[50px] opacity-70"
+        className="relative top-[40px] left-[60px] w-[250px] h-[50px] opacity-70"
       />
       <div className="flex w-full justify-center">
-        <div className="absolute flex flex-row justify-center items-start my-auto h-screen w-[90%]">
-          <div className="w-1/2 bg-opacity-40"></div>
-          {/* <GetStarted/> */}
-
+        <div className="absolute flex flex-row justify-end items-start my-auto h-screen w-[95%] md:w-[80%]">
           {/* Onboarding Content Container */}
-          <div className=" w-1/2 max-w-[600px] min-h-[600px] bg-white py-[20px] px-20 rounded-[25px] shadow-lg flex flex-col items-center justify-start">
+          <div className="w-full md:w-[480px] max-w-[600px] min-h-[600px] md:min-h-[600px] max-h-[80vh] md:max-h-[88vh] bg-white py-[20px] px-5 md:px-16 rounded-[25px] shadow-lg flex flex-col items-center justify-start my-auto md:my-0">
             {stepContainer()}
           </div>
         </div>

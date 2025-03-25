@@ -5,9 +5,11 @@ import InputField from "../FormComponents/InputField";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa6";
 import { useOnboardingStore } from "../../store/AppStore";
 import Button from "../FormComponents/Button";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp: React.FC = () => {
   const { setStep } = useOnboardingStore();
+  const [showPassword, setShowPassword] = React.useState(false);
   return (
     <Formik
       initialValues={{
@@ -35,8 +37,10 @@ const SignUp: React.FC = () => {
       }}>
       {({ isSubmitting }) => (
         <div className=" w-full">
-          <div className="flex flex-col justify-center mb-4">
-            <h3 className="text-2xl text-center text-brand]">Create Account</h3>
+          <div className="flex flex-col justify-center mb-1 mt-8">
+            <h3 className="text-2xl text-center font-brand-bold text-brand">
+              Create Account
+            </h3>
             <p className="mt-2 text-gray-400">
               Sign Up via your Phone Number and Email
             </p>
@@ -62,17 +66,62 @@ const SignUp: React.FC = () => {
             />
             <InputField
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               icon={<FaLock className="text-brand w-5 h-5" />}
+              rightIcon={
+                showPassword ? (
+                  <FaEyeSlash
+                    className="text-gray-500 w-5 h-5 cursor-pointer"
+                    onClick={() => setShowPassword(false)}
+                  />
+                ) : (
+                  <FaEye
+                    className="text-gray-500 w-5 h-5 cursor-pointer"
+                    onClick={() => setShowPassword(true)}
+                  />
+                )
+              }
             />
-            <Button label="Sign Up" type="submit" isLoading={isSubmitting} />
+            <div className="flex items-center mb-8">
+              <input
+                type="checkbox"
+                name="agree"
+                className="mr-2 text-brand bg-brand"
+                required
+              />
+              <p className="text-gray-500 text-[10px]">
+                By continuing, you agree to our
+                <a
+                  href="/terms"
+                  className="text-brand mx-1"
+                  target="_blank"
+                  rel="noreferrer">
+                  Terms of Service
+                </a>
+                and
+                <a
+                  href="/terms"
+                  className="text-brand mx-1"
+                  target="_blank"
+                  rel="noreferrer">
+                  Privacy Policy
+                </a>
+              </p>
+            </div>
+
+            <Button
+              label="Sign Up"
+              type="submit"
+              isLoading={isSubmitting}
+              className="mt-[100px]"
+            />
             <p className="text-gray-500 mt-4 text-center font-medium">
               Have an account?
               <span
                 className="text-brand cursor-pointer ml-1"
                 onClick={() => setStep("login")}>
-                "Log in
+                Sign In
               </span>
             </p>
           </Form>
