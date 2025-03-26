@@ -18,25 +18,29 @@ const InventoryScreen: React.FC = () => {
   return (
     <div className=" bg-white rounded-lg w-full md:w-[90%] mx-auto">
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 gap-4 mb-4 h-[180px] md:w-[300px] w-full">
+      <div className="grid grid-cols-2 gap-4 mb-4 h-[150px] md:h-[280px] md:h-fill w-full">
         <MainCard>
-          <div className="text-white py-6 flex flex-col justify-between my-auto">
-            <div className="flex flex-col space-y-0">
-              <div className="text-[80px] font-brand-bold text-left">200</div>
-              <div className="text-md text-left">Total Orders</div>
+          <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
+            <div className="flex flex-col space-y-0 text-left">
+              <div className="text-[40px] md:text-[80px] font-brand-bold">
+                200
+              </div>
+              <div className="text-md text-white/80">Total Orders</div>
             </div>
-            <p className="text-sm underline text-white text-right underline-offset-4 cursor-pointer">
+            <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
               View all
             </p>
           </div>
         </MainCard>
         <MainCard>
-          <div className="text-white py-6 flex flex-col justify-between my-auto">
-            <div className="flex flex-col space-y-0">
-              <div className="text-[80px] font-brand-bold text-left">50</div>
-              <div className="text-md text-left">Customers</div>
+          <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
+            <div className="flex flex-col space-y-0 text-left">
+              <div className="text-[40px] md:text-[80px] font-brand-bold">
+                50
+              </div>
+              <div className="text-md text-white/80">Customers</div>
             </div>
-            <p className="text-sm underline text-white text-right underline-offset-4 cursor-pointer">
+            <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
               View all
             </p>
           </div>
@@ -44,11 +48,11 @@ const InventoryScreen: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-5 border-b mt-10 mb-8">
+      <div className="grid grid-cols-4 gap-2 md:gap-5 border-b mt-10 mb-4 md:mb-8">
         {["Current", "Pickup", "Completed", "All"].map((tab) => (
           <button
             key={tab}
-            className={`py-2 px-4 text-md rounded-sm font-brand-bold ${
+            className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-brand-bold ${
               activeTab === tab
                 ? "bg-brand text-white"
                 : "border border-gray-200 text-gray-400"
@@ -63,10 +67,10 @@ const InventoryScreen: React.FC = () => {
       <table className="w-full border-collapse text-black ">
         <thead>
           <tr className="bg-transparent text-gray-400">
-            <th className=" px-4 py-4">S/N</th>
-            <th className=" px-4 py-4">Item Type</th>
-            <th className=" px-4 py-4">No of Items</th>
-            <th className=" px-4 py-4">Action</th>
+            <th className=" p-2 md:p-4">S/N</th>
+            <th className=" p-2 md:p-4">Item Type</th>
+            <th className=" p-2 md:p-4">No of Items</th>
+            <th className=" p-2 md:p-4">Action</th>
           </tr>
         </thead>
         <tbody>

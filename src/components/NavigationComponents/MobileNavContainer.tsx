@@ -5,14 +5,14 @@ import MobileNavItem from "./MobileNavItem";
 
 const BottomNav = () => {
   return (
-    <nav className="fixed flex bottom-0 left-0 right-0 bg-white shadow-md py-4 px-2 md:hidden justify-around">
-      <MobileNavItem label="Home" icon={<FaHome size={24} />} path="/home" />
+    <nav className="fixed flex bottom-0  left-0 right-0 bg-white shadow-lg shadow-black py-4 px-2 md:hidden justify-around">
+      <MobileNavItem label="Home" icon={<FaHome size={24} />} path="/" />
       <MobileNavItem
         label="Inventory"
         icon={<MdOutlineInventory size={24} />}
         path="/dashboard/inventory"
       />
-      <button className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg -mt-6">
+      <button className="bg-brand text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg -mt-6">
         <FaPlus size={24} />
       </button>
       <MobileNavItem

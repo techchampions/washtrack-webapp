@@ -17,7 +17,7 @@ function NavigationContainer() {
           <NavItem
             label="Overview"
             icon={<FaHome className="text-white" />}
-            path="/dashboard"
+            path="/"
           />
           <NavItem
             label="Add Order"

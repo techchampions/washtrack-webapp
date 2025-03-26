@@ -3,7 +3,7 @@ import React from "react";
 const MainCard = ({ children, className = "", ...props }) => {
   return (
     <div
-      className={`bg-brand relative text-white text-left py-3 md:py-6 px-10 rounded-[20px] w-full h-full flex flex-col justify-between overflow-hidden ${className}`}
+      className={`bg-brand relative text-white text-left py-3 md:py-6 p-5 md:px-10 rounded-[20px] w-full h-full flex flex-col justify-between overflow-hidden ${className}`}
       {...props}>
       <img
         src="../images/group-ellipse.svg"
@@ -13,7 +13,7 @@ const MainCard = ({ children, className = "", ...props }) => {
       <img
         src="../images/ellipse-b.svg"
         alt="inventory"
-        className="absolute left-0 bottom-0 h-8 md:h-6 "
+        className="absolute left-0 bottom-0 h-8 md:h-8 w-8 md:w-20 "
       />
       <div className="relative -top-1 z-10">{children}</div>
     </div>

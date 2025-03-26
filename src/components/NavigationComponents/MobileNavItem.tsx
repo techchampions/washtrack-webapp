@@ -16,12 +16,13 @@ const MobileNavItem: React.FC<NavItemProps> = ({
   return (
     <NavLink
       to={path}
+      end={true}
       className={({ isActive }) =>
-        `flex flex-col items-center text-gray-500 ${
-          isActive ? "text-blue-500" : ""
+        `flex flex-col items-center ${
+          isActive ? "text-brand" : " text-gray-500"
         }`
       }>
-      <div className="relative">
+      <div className={`relative `}>
         {icon}
         {badgeCount && badgeCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">

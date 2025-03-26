@@ -35,7 +35,7 @@ function HomeScreen() {
             </h2>
           </div>
         </MainCard>
-        <div className="hidden md:flex flex-row md:flex-col w-full md:w-[30%] h-full gap-1 justify-between">
+        <div className="hidden md:flex flex-row md:flex-col w-full md:w-[45%] h-full gap-1 justify-between">
           <SmallMainCard>
             <div className="bg-white p-1 flex justify-start items-center rounded-full">
               <BiCheckCircle className="h-[30px] w-[30px] text-green-500" />
@@ -68,13 +68,12 @@ function HomeScreen() {
         </div>
         <SmallMainCardMobile>
           <div className="flex justify-center items-center gap-1">
-            <div className="bg-white p-1 flex justify-start items-center rounded-full">
-              <BiCheckCircle className="h-5 w-5 md:h-[30px] md:w-[30px] text-green-500" />
+            <div className="bg-white p-1 flex justify-center items-center rounded-full">
+              <FaClockRotateLeft className="h-5 w-5 md:h-[30px] md:w-[30px] text-red-500" />
             </div>
-
-            <div className="w-fill flex flex-col text-left">
-              <p className="flex items-center text-sm md:text-lg flex-row gap-2 text-gray-200">
-                Completed{" "}
+            <div className="w-fill flex flex-col">
+              <p className="flex items-center justify-end text-sm md:text-lg flex-row gap-2 text-gray-200">
+                Pending{" "}
                 <span>
                   <Badge />
                 </span>
@@ -82,13 +81,15 @@ function HomeScreen() {
               <h2 className="text-lg md:text-2xl font-bold">₦ 20,000</h2>
             </div>
           </div>
+
           <div className="flex justify-center items-center gap-1">
-            <div className="bg-white p-1 flex justify-center items-center rounded-full">
-              <FaClockRotateLeft className="h-5 w-5 md:h-[30px] md:w-[30px] text-red-500" />
+            <div className="bg-white p-1 flex justify-start items-center rounded-full">
+              <BiCheckCircle className="h-5 w-5 md:h-[30px] md:w-[30px] text-green-500" />
             </div>
-            <div className="w-fill flex flex-col">
-              <p className="flex items-center justify-end text-sm md:text-lg flex-row gap-2 text-gray-200">
-                Pending{" "}
+
+            <div className="w-fill flex flex-col text-left">
+              <p className="flex items-center text-sm md:text-lg flex-row gap-2 text-gray-200">
+                Completed{" "}
                 <span>
                   <Badge />
                 </span>
