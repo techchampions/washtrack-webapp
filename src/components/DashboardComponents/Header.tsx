@@ -14,7 +14,7 @@ function Header() {
     <div className="flex justify-between items-center mb-6 w-[90%] mx-auto">
       <div className="flex flex-row gap-1">
         <img
-          src="./images/profile-img.png"
+          src="../images/profile-img.png"
           alt=""
           className="h-8 w-8 rounded-full"
         />

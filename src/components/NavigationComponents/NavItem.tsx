@@ -28,7 +28,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
           }>
           <div className="flex items-center space-x-2">
             {icon}
-            <span className="text-white">{label}</span>
+            <span className="text-white text-sm">{label}</span>
           </div>
         </NavLink>
       ) : (
@@ -54,7 +54,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
               to={child.path}
               end={true}
               className={({ isActive }) =>
-                `block py-[7px] px-2 rounded-md transition text-left ${
+                `block py-[7px] px-2 rounded-md transition text-left text-xs ${
                   isActive
                     ? "bg-brand-400 text-white"
                     : "text-white hover:bg-brand-400"

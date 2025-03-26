@@ -39,7 +39,7 @@ const Onboarding = () => {
     <div className="fixed inset-0 z-50 h-screen w-full ">
       {/* Background Image */}
       <img
-        src="./images/onboardingBG.png"
+        src="../images/onboardingBG.png"
         alt="Onboarding Background"
         className="absolute inset-0 w-full h-full object-cover"
       />

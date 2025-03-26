@@ -13,7 +13,7 @@ function GetStarted() {
       {/* Logo */}
       <div className="flex justify-center">
         <img
-          src="./images/logo-blue.png"
+          src="../images/logo-blue.png"
           alt="WashTrack"
           className="h-[75px]"
         />
@@ -21,7 +21,7 @@ function GetStarted() {
 
       <div className="flex justify-center mb-4">
         <img
-          src="./images/onboardingt-shirt.png"
+          src="../images/onboardingt-shirt.png"
           alt="WashTrack"
           className="h-[300px]"
         />

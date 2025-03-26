@@ -1,18 +1,23 @@
 import React, { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
+import { CgChevronRight } from "react-icons/cg";
+import { FaChevronRight, FaUserCircle } from "react-icons/fa";
 import { MdOutlineCalendarToday } from "react-icons/md";
 
 const AddorderScreen: React.FC = () => {
   const [pickupDate, setPickupDate] = useState<string>("2024-07-22");
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 w-full p-6 bg-white shadow-lg rounded-lg">
+    <div className="flex flex-col md:flex-row gap-6 w-full">
       {/* Left Section */}
       <div className="w-full md:w-2/3">
         {/* Customer Info */}
         <div className="flex items-center justify-between p-4 bg-gray-100 rounded-lg">
           <div className="flex items-center gap-4">
-            <FaUserCircle size={30} className="text-blue-500" />
+            <img
+              src="../images/user-icon.png"
+              alt="User"
+              className="w-10 h-10 rounded-full"
+            />
             <div>
               <p className="font-bold">Victoria Idris</p>
               <p className="text-gray-500 text-sm">
@@ -20,7 +25,7 @@ const AddorderScreen: React.FC = () => {
               </p>
             </div>
           </div>
-          <button className="text-gray-500">▶</button>
+          <FaChevronRight />
         </div>
 
         {/* Added Item */}

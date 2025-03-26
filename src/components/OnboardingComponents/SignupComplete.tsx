@@ -6,7 +6,7 @@ const SignupComplete = () => {
   return (
     <div className="w-full flex flex-col justify-center items-center h-[100%] m-auto">
       <div className="w-[160px] h-[170px] mx-auto">
-        <img src="./images/1171275266.png" className="w-full h-full" alt="" />
+        <img src="../images/1171275266.png" className="w-full h-full" alt="" />
       </div>
       <div className="text-center mt-[20px] flex flex-col justify-center">
         <div className="text-[18px] text-brand">Hi Business Name !</div>

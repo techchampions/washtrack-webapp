@@ -12,56 +12,32 @@ const QuickActions = () => {
   const actions = [
     {
       label: "Inventory",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <BsFillGridFill className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/inventory-icon.png" alt="inventory" />,
       path: "/inventory",
     },
     {
       label: "Orders",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <FaClipboardList className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/order-icon.png" alt="inventory" />,
       path: "/orders",
     },
     {
       label: "Customers",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <FaUsers className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/users-icon.png" alt="inventory" />,
       path: "/customers",
     },
     {
       label: "Expense",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <FaMoneyBill className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/expense-icon.png" alt="inventory" />,
       path: "/expense",
     },
     {
       label: "Revenue",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <FaSackDollar className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/revenue-icon.png" alt="inventory" />,
       path: "/revenue",
     },
     {
       label: "Reports",
-      icon: (
-        <div className="p-2 md:p-4 bg-brand-200 rounded-full">
-          <FaChartBar className="text-quick-action-icon h-6 w-6 md:h-10 md:w-10" />
-        </div>
-      ),
+      icon: <img src="../images/report-icon.png" alt="inventory" />,
       path: "/reports",
     },
   ];

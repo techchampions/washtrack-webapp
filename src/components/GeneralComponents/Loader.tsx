@@ -5,7 +5,7 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({ className = "" }) => {
   return (
-    <div className="flex bg-black/50 justify-center items-center rounded-lg p-2 fixed inset-0">
+    <div className="flex bg-white justify-center items-center rounded-lg p-2 fixed inset-0">
       <svg
         aria-hidden="true"
         role="status"

@@ -17,12 +17,12 @@ const OnboardingComplete = () => {
     <div className="w-full h-full m-auto">
       <div className="flex flex-col items-center justify-center space-y-1 w-full max-w-lg mx-auto p-4 relative">
         <DotLottieReact
-          src="./images/animation.lottie"
+          src="../images/animation.lottie"
           autoplay
           className="absolute w-[600px] top-0"
         />
         <img
-          src="./images/check.png"
+          src="../images/check.png"
           alt=""
           className="h-[150px] w-[150px] mb-5"
         />

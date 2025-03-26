@@ -17,16 +17,13 @@ const OrderItem: React.FC<OrderProps> = ({
   amount,
 }) => {
   return (
-    <div className="bg-brand-100 text-[16px] p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
+    <div className="bg-brand-100 text-[12px] md:text-[16px] p-2 md:p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
       {/* Icon */}
-      <div className="bg-brand-250 p-3 flex justify-center items-center rounded-full border border-brand-border">
-        <BsFileTextFill size={20} className="text-quick-action-icon" />
-        {/* <BsClipboard2Check size={20} className="text-dark-purple" /> */}
-      </div>
+      <img src="../images/order-icon.png" alt="inventory" className="h-12" />
 
       {/* Order Details */}
       <div className="flex flex-col text-left w-full">
-        <p className="text-dark-purple font-semibold">Order #{orderId}</p>
+        <p className="text-quick-action-icon font-semibold">Order #{orderId}</p>
         <p className="text-gray-500">
           {customerName} - {phoneNumber}
         </p>
@@ -35,7 +32,7 @@ const OrderItem: React.FC<OrderProps> = ({
       {/* Order Date & Amount */}
       <div className="flex flex-col text-right">
         <p className="text-gray-500 text-sm">{date}</p>
-        <p className="text-dark-purple font-bold">{amount}</p>
+        <p className="text-quick-action-icon font-bold">{amount}</p>
       </div>
     </div>
   );

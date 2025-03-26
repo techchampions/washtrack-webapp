@@ -5,14 +5,17 @@ import QuickActions from "../components/DashboardComponents/QuickActions";
 import CustomDropdown from "../components/DashboardComponents/CustomDropdown";
 import OrderList from "../components/DashboardComponents/OrderList";
 import Badge from "../components/GeneralComponents/Badge";
+import MainCard from "../components/DashboardComponents/MainCard";
+import SmallMainCard from "../components/DashboardComponents/SmallMaiinCard";
+import SmallMainCardMobile from "../components/DashboardComponents/SmallMainCardMobile";
 
 function HomeScreen() {
   const options = ["Today", "Yesterday", "12th Feb", "13th Feb"];
   const [selectedDay, setSelectedDay] = useState(options[0]);
   return (
-    <div className="w-[90%] mx-auto">
-      <div className="flex flex-col md:flex-row gap-4 h-[200px] md:h-[200px]">
-        <div className="bg-brand text-white text-left py-6 px-10 rounded-lg w-full md:w-[70%] h-full flex flex-col justify-between">
+    <div className="w-full md:w-[90%] mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 h-fit md:h-[200px]">
+        <MainCard>
           <div className="text-black mb-4">
             <CustomDropdown
               options={options}
@@ -27,30 +30,73 @@ function HomeScreen() {
                 <Badge />
               </span>
             </p>
-            <h2 className="text-[60px] font-brand-bold">₦28,000.00</h2>
+            <h2 className="text-[40px] md:text-[60px] font-brand-bold">
+              ₦28,000.00
+            </h2>
           </div>
-        </div>
-        <div className="flex flex-row md:flex-col w-full md:w-[30%] h-full gap-1 justify-between">
-          <div className="bg-brand text-white p-6 rounded-lg flex flex-row justify-start items-center w-[50%] md:w-full h-[49.5%]">
+        </MainCard>
+        <div className="hidden md:flex flex-row md:flex-col w-full md:w-[30%] h-full gap-1 justify-between">
+          <SmallMainCard>
             <div className="bg-white p-1 flex justify-start items-center rounded-full">
               <BiCheckCircle className="h-[30px] w-[30px] text-green-500" />
             </div>
 
-            <div className="w-[70%] flex flex-col">
-              <p>Completed</p>
-              <h2 className="text-2xl font-bold">₦20,000</h2>
+            <div className="w-[70%] flex flex-col text-left">
+              <p className="flex items-center text-lg flex-row gap-2">
+                Completed{" "}
+                <span>
+                  <Badge />
+                </span>
+              </p>
+              <h2 className="text-md lg:text-2xl font-bold">₦ 20,000</h2>
             </div>
-          </div>
-          <div className="bg-brand text-white p-6 rounded-lg flex flex-row justify-start items-center w-[50%] md:w-full h-[49.5%]">
+          </SmallMainCard>
+          <SmallMainCard>
             <div className="bg-white p-1 flex justify-start items-center rounded-full">
               <FaClockRotateLeft className="h-[30px] w-[30px] text-red-500" />
             </div>
-            <div className="w-[70%] flex flex-col">
-              <p>Pending</p>
-              <h2 className="text-2xl font-bold">₦20,000</h2>
+            <div className="w-[70%] flex flex-col text-left">
+              <p className="flex items-center text-lg flex-row gap-2">
+                Pending{" "}
+                <span>
+                  <Badge />
+                </span>
+              </p>
+              <h2 className="text-md lg:text-2xl font-bold">₦ 20,000</h2>
+            </div>
+          </SmallMainCard>
+        </div>
+        <SmallMainCardMobile>
+          <div className="flex justify-center items-center gap-1">
+            <div className="bg-white p-1 flex justify-start items-center rounded-full">
+              <BiCheckCircle className="h-5 w-5 md:h-[30px] md:w-[30px] text-green-500" />
+            </div>
+
+            <div className="w-fill flex flex-col text-left">
+              <p className="flex items-center text-sm md:text-lg flex-row gap-2 text-gray-200">
+                Completed{" "}
+                <span>
+                  <Badge />
+                </span>
+              </p>
+              <h2 className="text-lg md:text-2xl font-bold">₦ 20,000</h2>
             </div>
           </div>
-        </div>
+          <div className="flex justify-center items-center gap-1">
+            <div className="bg-white p-1 flex justify-center items-center rounded-full">
+              <FaClockRotateLeft className="h-5 w-5 md:h-[30px] md:w-[30px] text-red-500" />
+            </div>
+            <div className="w-fill flex flex-col">
+              <p className="flex items-center justify-end text-sm md:text-lg flex-row gap-2 text-gray-200">
+                Pending{" "}
+                <span>
+                  <Badge />
+                </span>
+              </p>
+              <h2 className="text-lg md:text-2xl font-bold">₦ 20,000</h2>
+            </div>
+          </div>
+        </SmallMainCardMobile>
       </div>
 
       {/* Quick Actions */}

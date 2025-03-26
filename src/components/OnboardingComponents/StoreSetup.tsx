@@ -64,7 +64,7 @@ const StoreSetup = () => {
             />
           ) : (
             <img
-              src="./images/profile-img.png"
+              src="../images/profile-img.png"
               className="w-full h-full rounded-full object-cover"
               alt=""
             />
