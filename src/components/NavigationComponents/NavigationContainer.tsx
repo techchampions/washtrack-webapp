@@ -52,7 +52,7 @@ function NavigationContainer() {
           <NavItem
             label="Report"
             icon={<FaChartBar className="text-white" />}
-            path="/dashboard/report"
+            path="/dashboard/reports"
           />
 
           {/* Nested nav */}

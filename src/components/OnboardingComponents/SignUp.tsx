@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
       }}>
       {({ isSubmitting }) => (
         <div className=" w-full">
-          <div className="flex flex-col justify-center mb-1 mt-8">
+          <div className="flex flex-col justify-center mb-12 mt-8">
             <h3 className="text-2xl text-center font-brand-bold text-brand">
               Create Account
             </h3>
@@ -45,9 +45,7 @@ const SignUp: React.FC = () => {
               Sign Up via your Phone Number and Email
             </p>
           </div>
-          <Form className="flex flex-col">
-            <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
-
+          <Form className="flex flex-col mt-4">
             <InputField
               name="businessName"
               placeholder="Business Name"

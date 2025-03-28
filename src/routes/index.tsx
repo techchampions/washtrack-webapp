@@ -51,6 +51,7 @@ import InventoryScreen from "../pages/InventoryScreen";
 import AddorderScreen from "../pages/AddorderScreen";
 import OrdersScreen from "../pages/OrdersScreen";
 import MyStoreScreen from "../pages/MyStoreScreen";
+import ReportScreen from "../pages/ReportScreen";
 
 const DashboardScreen = lazy(() => import("../pages/DashboardScreen"));
 
@@ -86,6 +87,7 @@ const AllRoutes = () => {
               <Route path="add-order" element={<AddorderScreen />} />
               <Route path="my-order" element={<OrdersScreen />} />
               <Route path="my-store" element={<MyStoreScreen />} />
+              <Route path="reports" element={<ReportScreen />} />
             </Route>
           </Route>
 

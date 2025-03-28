@@ -133,6 +133,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import Button from "../components/FormComponents/Button";
+import RightSideBar from "../components/DashboardComponents/RightSideBar";
 
 const AddorderScreen: React.FC = () => {
   const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
@@ -142,7 +143,7 @@ const AddorderScreen: React.FC = () => {
       {/* Left Section */}
       <div className="w-full md:w-2/3">
         {/* Customer Info */}
-        <div className="flex items-center justify-between p-4 bg-brand-100 rounded-lg">
+        <div className="flex items-center justify-between py-2 px-4 bg-brand-100 rounded-lg">
           <div className="flex items-center gap-4">
             <img
               src="../images/user-icon.png"
@@ -164,7 +165,7 @@ const AddorderScreen: React.FC = () => {
           <div className="font-brand-bold text-2xl">Add Item</div>
           <FiPlusCircle className="text-black h-8 w-8" />
         </div>
-        <div className="mt-4 bg-brand-100 rounded-lg flex justify-between p-4 items-center">
+        <div className="mt-4 bg-brand-100 rounded-lg flex justify-between py-2 px-4 items-center">
           <div className="flex items-center gap-4">
             <img src="../images/order-icon.png" className="w-10" alt="" />
             <div className="text-left">
@@ -222,35 +223,7 @@ const AddorderScreen: React.FC = () => {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-full md:w-1/3 flex flex-col gap-4">
-        <div className="px-16 py-12 bg-brand text-white rounded-lg text-center flex items-center justify-between">
-          <div className="leading-5 text-white text-[22px] text-left p-2 rounded-lg font-brand-bold">
-            GET STARTED
-          </div>
-          <img
-            src="../images/white-logo.png"
-            alt=""
-            className="items-end w-16"
-          />
-        </div>
-
-        <p className="font-bold text-black text-left">DOWNLOAD MOBILE APP</p>
-        <div className="flex justify-center gap-2 mt-2">
-          <img
-            src="../images/playstore.png"
-            alt="Google Play"
-            className="w-1/2"
-          />
-          <img src="../images/appstore.png" alt="App Store" className="w-1/2" />
-        </div>
-
-        <p className="font-bold text-black text-left">DO MORE WITH WASHTRACK</p>
-        <div className="p-4 bg-gray-100 rounded-lg text-center">
-          <p className="text-sm text-gray-500">
-            Build with Tech Champions today.
-          </p>
-        </div>
-      </div>
+      <RightSideBar />
     </div>
   );
 };
