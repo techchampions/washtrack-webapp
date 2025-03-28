@@ -1,5 +1,79 @@
-import React from "react";
-import { IoMdMore } from "react-icons/io";
+// import React from "react";
+// import { IoMdMore } from "react-icons/io";
+// import NavItem from "./NavItem";
+// import { FaChartBar, FaHome, FaList } from "react-icons/fa";
+// import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
+// import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
+// import { TbMoneybag } from "react-icons/tb";
+// import { RiAppsLine } from "react-icons/ri";
+// import NavbarAddorder from "./NavbarAddorder";
+
+// function NavigationContainer() {
+//   return (
+//     <div className="flex flex-col px-10 h-screen justify-between">
+//       <div className="w-full py-8">
+//         <img src="../images/logo.png" alt="Wash Track" className="w-full" />
+//         <nav className="space-y-2 text-white py-8">
+//           <NavItem
+//             label="Overview"
+//             icon={<FaHome className="text-white" />}
+//             path="/"
+//           />
+//           <NavItem
+//             label="Add Order"
+//             icon={<MdOutlineAddBox className="text-white" />}
+//             path="/dashboard/add-order"
+//           />
+//           <NavItem
+//             label="Inventory"
+//             icon={<MdOutlineInventory className="text-white" />}
+//             path="/dashboard/inventory"
+//           />
+//           <NavItem
+//             label="My Store"
+//             icon={<LiaStoreAltSolid className="text-white" />}
+//             path="/dashboard/my-store"
+//           />
+//           <NavItem
+//             label="Orders"
+//             icon={<FaList className="text-white" />}
+//             path="/dashboard/my-order"
+//           />
+//           <NavItem
+//             label="Revenue"
+//             icon={<TbMoneybag className="text-white" />}
+//             path="/dashboard/revenue"
+//           />
+//           <NavItem
+//             label="Expense"
+//             icon={<LiaMoneyBillAltSolid className="text-white" />}
+//             path="/dashboard/expense"
+//           />
+//           <NavItem
+//             label="Report"
+//             icon={<FaChartBar className="text-white" />}
+//             path="/dashboard/reports"
+//           />
+
+//           {/* Nested nav */}
+//           <NavItem
+//             label="More"
+//             icon={<RiAppsLine className="text-white" />}
+//             children={[
+//               { label: "Setting", path: "/dashboard/settings" },
+//               { label: "Customer", path: "/dashboard/customers" },
+//               { label: "Outstanding", path: "/dashboard/outstanding" },
+//             ]}
+//           />
+//         </nav>
+//       </div>
+//       <NavbarAddorder />
+//     </div>
+//   );
+// }
+
+// export default NavigationContainer;
+import React, { useState } from "react";
 import NavItem from "./NavItem";
 import { FaChartBar, FaHome, FaList } from "react-icons/fa";
 import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
@@ -7,8 +81,12 @@ import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
 import { TbMoneybag } from "react-icons/tb";
 import { RiAppsLine } from "react-icons/ri";
 import NavbarAddorder from "./NavbarAddorder";
+import Button from "../FormComponents/Button";
+import Modal from "../DashboardComponents/Modal";
 
 function NavigationContainer() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="flex flex-col px-10 h-screen justify-between">
       <div className="w-full py-8">
@@ -19,11 +97,16 @@ function NavigationContainer() {
             icon={<FaHome className="text-white" />}
             path="/"
           />
-          <NavItem
-            label="Add Order"
-            icon={<MdOutlineAddBox className="text-white" />}
-            path="/dashboard/add-order"
-          />
+
+          {/* Replace Add Order NavItem with a button to open modal */}
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
+          >
+            <MdOutlineAddBox className="mr-2 text-white" />
+            Add Order
+          </button>
+
           <NavItem
             label="Inventory"
             icon={<MdOutlineInventory className="text-white" />}
@@ -68,6 +151,38 @@ function NavigationContainer() {
         </nav>
       </div>
       <NavbarAddorder />
+
+      {/* Add Order Modal */}
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <div className="flex flex-col items-center">
+          <img src="../images/1171275266.png" alt="" className="w-[150px]" />
+          <h2 className="text-2xl font-brand-bold mb-4 text-black">
+            Create Order
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Please select if you are creating a new customer or existing
+            customer order
+          </p>
+          <div className="flex flex-col justify-between w-full gap-2">
+            <Button
+              label="Existing User"
+              className="bg-brand text-white px-4 py-2"
+              onClick={() => {
+                setShowModal(false);
+                window.location.href = "/dashboard/add-order";
+              }}
+            />
+            <Button
+              label="New User"
+              className="bg-brand-muted text-white px-4 py-2 w-full"
+              onClick={() => {
+                setShowModal(false);
+                window.location.href = "/dashboard/add-order/existing";
+              }}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

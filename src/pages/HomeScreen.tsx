@@ -12,6 +12,7 @@ import SmallMainCardMobile from "../components/DashboardComponents/SmallMainCard
 function HomeScreen() {
   const options = ["Today", "Yesterday", "12th Feb", "13th Feb"];
   const [selectedDay, setSelectedDay] = useState(options[0]);
+  const [showModal, setshowModal] = useState(false);
   return (
     <div className="w-full md:w-[90%] mx-auto">
       <div className="flex flex-col md:flex-row gap-4 h-fit md:h-[200px]">
@@ -31,7 +32,8 @@ function HomeScreen() {
               </span>
             </p>
             <h2 className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦28,000.00
+              <span className="font-black">₦</span>
+              28,000.00
             </h2>
           </div>
         </MainCard>
@@ -105,7 +107,7 @@ function HomeScreen() {
 
       {/* Recent Orders */}
       <div className="mt-6">
-        <h3 className="text-2xl text-black text-left font-brand-bold mb-4">
+        <h3 className="text-lg md:text-2xl text-black text-left font-brand-bold md-2 md:mb-4">
           Recent Orders
         </h3>
         <OrderList />

@@ -8,16 +8,19 @@
   --color-brand-300: #80deff;
   --color-brand-400: #09b1ef;
   --color-brand-500: #eef6fc;
+  --color-brand-muted: rgba(0, 188, 255, 0.4);
   --color-brand-border: #a8d3f0;
   --color-dark-purple: #4b164c;
 
   --color-quick-action-icon: rgba(9, 39, 101, 1);
   --font-brand-bold: sk-modernist-bold;
 }
+
 @font-face {
   font-family: "sk-modernist-bold";
   src: url("../src/assets/fonts/Sk-Modernist-Bold.otf");
 }
+
 @font-face {
   font-family: "sk-modernist";
   src: url("../src/assets/fonts/Sk-Modernist.ttf");
@@ -43,6 +46,7 @@ a {
   /* color: white; */
   text-decoration: none;
 }
+
 /* a:hover {
   color: #535bf2;
 } */
@@ -54,11 +58,14 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
 input:-webkit-autofill {
   background-color: transparent !important;
   -webkit-box-shadow: 0 0 0 50px white inset !important;
-  -webkit-text-fill-color: black !important; /* Change to your desired text color */
+  -webkit-text-fill-color: black !important;
+  /* Change to your desired text color */
 }
+
 /* h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -88,9 +95,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   /* button {
     background-color: #f9f9f9;
   } */

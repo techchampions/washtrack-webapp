@@ -48,7 +48,7 @@ const InventoryScreen: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-2 md:gap-5 border-b mt-10 mb-4 md:mb-8">
+      <div className="grid grid-cols-4 gap-2 md:gap-5 mt-10 mb-4 md:mb-8">
         {["Current", "Pickup", "Completed", "All"].map((tab) => (
           <button
             key={tab}

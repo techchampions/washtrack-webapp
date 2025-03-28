@@ -44,7 +44,7 @@ const QuickActions = () => {
 
   return (
     <div className="mt-5 mx-auto ">
-      <h2 className="text-2xl font-brand-bold mb-4 text-left text-black">
+      <h2 className="text-lg md:text-2xl font-brand-bold mn-2 md:mb-4 text-left text-black">
         Quick Actions
       </h2>
       <div className="grid grid-cols-4 md:grid-cols-6 gap-6 justify-between">

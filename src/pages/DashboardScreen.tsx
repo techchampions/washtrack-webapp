@@ -2,7 +2,10 @@ import NavigationContainer from "../components/NavigationComponents/NavigationCo
 import Header from "../components/DashboardComponents/Header";
 import { Outlet } from "react-router-dom";
 import MobileNavContainer from "../components/NavigationComponents/MobileNavContainer";
+import { useState } from "react";
+import Modal from "../components/DashboardComponents/Modal";
 function DashboardScreen() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="fixed inset-0 z-50 flex h-screen w-screen">
       {/* Sidebar */}
@@ -11,14 +14,21 @@ function DashboardScreen() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 bg-white overflow-y-auto">
+      <main className="flex-1 p-6 bg-white overflow-y-auto mb-16 md:mb-0">
         {/* Header */}
         <Header />
         <Outlet />
       </main>
-      <div className="fixed bottom-0 w-full">
+      <div className="md:block fixed bottom-0 w-full">
         <MobileNavContainer />
       </div>
+      {showModal && (
+        <Modal show={showModal} onClose={() => setShowModal(false)}>
+          <div className="text-2xl text-black">
+            Create Order for New user or Existing user
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
