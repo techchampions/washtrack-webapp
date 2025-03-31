@@ -44,7 +44,7 @@ const BottomNav = () => {
         className="z-50"
       >
         <div className="flex flex-col items-center">
-          <img src="../images/1171275266.png" alt="" className="w-[150px]" />
+          <img src="/images/1171275266.png" alt="" className="w-[150px]" />
           <h2 className="text-2xl font-brand-bold mb-4 text-black">
             Create Order
           </h2>

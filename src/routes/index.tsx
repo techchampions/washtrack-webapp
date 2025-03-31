@@ -48,10 +48,12 @@ import Onboarding from "../pages/OnboardingScreen";
 import ProtectedRoute from "./ProtectedRoute";
 import HomeScreen from "../pages/HomeScreen";
 import InventoryScreen from "../pages/InventoryScreen";
-import AddorderScreen from "../pages/AddorderScreen";
+import { AddorderNewUser, AddorderExistingUser } from "../pages/AddorderScreen";
 import OrdersScreen from "../pages/OrdersScreen";
 import MyStoreScreen from "../pages/MyStoreScreen";
 import ReportScreen from "../pages/ReportScreen";
+import CustomerScreen from "../pages/CustomerScreen";
+import OrderOverview from "../pages/OrderOverview";
 
 const DashboardScreen = lazy(() => import("../pages/DashboardScreen"));
 
@@ -84,8 +86,17 @@ const AllRoutes = () => {
             <Route element={<DashboardScreen />}>
               <Route index element={<HomeScreen />} />
               <Route path="inventory" element={<InventoryScreen />} />
-              <Route path="add-order" element={<AddorderScreen />} />
+              <Route
+                path="add-order/existing-customer"
+                element={<AddorderExistingUser />}
+              />
+              <Route
+                path="add-order/new-customer"
+                element={<AddorderNewUser />}
+              />
+              <Route path="customers" element={<CustomerScreen />} />
               <Route path="my-order" element={<OrdersScreen />} />
+              <Route path="order/orderID" element={<OrderOverview />} />
               <Route path="my-store" element={<MyStoreScreen />} />
               <Route path="reports" element={<ReportScreen />} />
             </Route>

@@ -7,6 +7,7 @@ interface OrderProps {
   phoneNumber: string;
   date: string;
   amount: string;
+  onClick?: () => void;
 }
 
 const OrderItem: React.FC<OrderProps> = ({
@@ -15,9 +16,13 @@ const OrderItem: React.FC<OrderProps> = ({
   phoneNumber,
   date,
   amount,
+  onClick,
 }) => {
   return (
-    <div className="bg-brand-100 text-[12px] md:text-[16px] p-2 md:p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
+    <div
+      className="bg-brand-100 text-[12px] md:text-[16px] p-2 md:p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4"
+      onClick={onClick}
+    >
       {/* Icon */}
       <img src="../images/order-icon.png" alt="inventory" className="h-12" />
 
