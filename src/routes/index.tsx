@@ -95,7 +95,7 @@ const AllRoutes = () => {
                 element={<AddorderNewUser />}
               />
               <Route path="customers" element={<CustomerScreen />} />
-              <Route path="my-order" element={<OrdersScreen />} />
+              <Route path="orders" element={<OrdersScreen />} />
               <Route path="order/orderID" element={<OrderOverview />} />
               <Route path="my-store" element={<MyStoreScreen />} />
               <Route path="reports" element={<ReportScreen />} />

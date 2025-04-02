@@ -13,7 +13,7 @@ const RightSideBar = () => {
       <p className="font-bold text-black text-left">DOWNLOAD MOBILE APP</p>
       <div className="flex justify-center gap-2 mt-2">
         <img src="/images/playstore.png" alt="Google Play" className="w-1/2" />
-        <img src="../images/appstore.png" alt="App Store" className="w-1/2" />
+        <img src="/images/appstore.png" alt="App Store" className="w-1/2" />
       </div>
 
       <p className="font-bold text-black text-left">DO MORE WITH WASHTRACK</p>

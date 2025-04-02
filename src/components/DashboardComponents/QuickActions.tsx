@@ -13,32 +13,32 @@ const QuickActions = () => {
     {
       label: "Inventory",
       icon: <img src="../images/inventory-icon.png" alt="inventory" />,
-      path: "/inventory",
+      path: "inventory",
     },
     {
       label: "Orders",
       icon: <img src="../images/order-icon.png" alt="inventory" />,
-      path: "/orders",
+      path: "orders",
     },
     {
       label: "Customers",
       icon: <img src="../images/users-icon.png" alt="inventory" />,
-      path: "/customers",
+      path: "customers",
     },
     {
       label: "Expense",
       icon: <img src="../images/expense-icon.png" alt="inventory" />,
-      path: "/expense",
+      path: "expense",
     },
     {
       label: "Revenue",
       icon: <img src="../images/revenue-icon.png" alt="inventory" />,
-      path: "/revenue",
+      path: "revenue",
     },
     {
       label: "Reports",
       icon: <img src="../images/report-icon.png" alt="inventory" />,
-      path: "/reports",
+      path: "reports",
     },
   ];
 
