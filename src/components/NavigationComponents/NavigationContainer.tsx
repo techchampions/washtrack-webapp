@@ -22,7 +22,7 @@ function NavigationContainer() {
           <NavItem
             label="Overview"
             icon={<FaHome className="text-white" />}
-            path="/"
+            path="/dashboard"
           />
 
           {/* Replace Add Order NavItem with a button to open modal */}

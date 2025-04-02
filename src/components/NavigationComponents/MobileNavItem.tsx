@@ -21,7 +21,8 @@ const MobileNavItem: React.FC<NavItemProps> = ({
         `flex flex-col items-center ${
           isActive ? "text-brand" : " text-gray-500"
         }`
-      }>
+      }
+    >
       <div className={`relative `}>
         {icon}
         {badgeCount && badgeCount > 0 && (

@@ -5,7 +5,7 @@ const OrderOverview = () => {
   return (
     <div className="w-full md:w-[90%] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2">
+        <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
           <div className="flex justify-start gap-2 text-black pb-2 ">
             <img src="/images/washing_machine.svg" alt="" />
             <div className="flex flex-col text-left justify-start">
@@ -24,7 +24,7 @@ const OrderOverview = () => {
           </div>
         </div>
 
-        <div className="bg-brand-100 p-4 rounded-lg col-span-2">
+        <div className="bg-brand-100 p-4 rounded-lg md:col-span-2">
           <h3 className="text-black text-lg md:text-2xl text-left font-brand-bold py-2">
             Payment Details
           </h3>
@@ -87,7 +87,7 @@ const OrderOverview = () => {
           </ol>
         </div>
 
-        <div className=" rounded-lg col-span-2 p-4 space-y-2">
+        <div className=" rounded-lg md:col-span-2 p-4 space-y-2">
           <h3 className="text-left text-black font-brand-bold">Items</h3>
           <Item services="Wash and Iron" items="Shirts" quantity={2} />
           <Item services="Wash and Iron" items="Shirts" quantity={2} />

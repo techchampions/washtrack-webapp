@@ -2,7 +2,6 @@ import { FaHome, FaStore, FaPlus } from "react-icons/fa";
 import { MdOutlineInventory } from "react-icons/md";
 import { RiAppsLine } from "react-icons/ri";
 import MobileNavItem from "./MobileNavItem";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Modal from "../DashboardComponents/Modal";
 import Button from "../FormComponents/Button";
@@ -10,10 +9,13 @@ import Button from "../FormComponents/Button";
 const BottomNav = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const navigate = useNavigate();
   return (
     <nav className="fixed flex bottom-0  left-0 right-0 bg-white shadow-lg shadow-black py-4 px-2 md:hidden justify-around">
-      <MobileNavItem label="Home" icon={<FaHome size={24} />} path="/" />
+      <MobileNavItem
+        label="Home"
+        icon={<FaHome size={24} />}
+        path="/dashboard"
+      />
       <MobileNavItem
         label="Inventory"
         icon={<MdOutlineInventory size={24} />}
