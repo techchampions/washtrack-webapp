@@ -1,5 +1,173 @@
+// import { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
+// import { useOnboardingStore } from "../../store/AppStore";
+// import apiClient from "../../utils/AxiosInstance";
+// import Toast from "../GeneralComponents/Toast";
+
+// interface OTPProps {
+//   length?: number;
+// }
+
+// const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
+//   const { setStep } = useOnboardingStore();
+//   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
+//   const [timer, setTimer] = useState<number>(59);
+//   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+//   const [showToast, setShowToast] = useState(false);
+//   const [toastMsg, setToastMsg] = useState("");
+//   const [toastType, setToastType] = useState("");
+
+//   const inputRefs = useRef<(HTMLInputElement | null)[]>(
+//     new Array(length).fill(null)
+//   );
+
+//   useEffect(() => {
+//     if (timer > 0) {
+//       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+//       return () => clearInterval(interval);
+//     }
+//   }, [timer]);
+
+//   useEffect(() => {
+//     // Disable button if OTP is incomplete
+//     setIsDisabled(otp.includes(""));
+//   }, [otp]);
+
+//   const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+//     const value = e.target.value.replace(/[^0-9]/g, "");
+//     if (value.length > 1) return;
+//     const newOtp = [...otp];
+//     newOtp[index] = value;
+//     setOtp(newOtp);
+
+//     if (value && index < length - 1) {
+//       inputRefs.current[index + 1]?.focus();
+//     }
+//   };
+
+//   const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
+//     if (e.key === "Backspace" && !otp[index] && index > 0) {
+//       inputRefs.current[index - 1]?.focus();
+//     }
+//   };
+
+//   const handleSubmit = async () => {
+//     const enteredOtp = otp.join("");
+//     const storedOtp = localStorage.getItem("otp");
+
+//     if (enteredOtp === storedOtp) {
+//       try {
+//         const response = await apiClient.post("/verify-otp", {
+//           otp: enteredOtp,
+//         });
+
+//         if (response.data.success) {
+//           console.log(response.data);
+//           setStep("signup completed");
+//         }
+//       } catch (error) {
+//         setShowToast(true);
+//         setToastType("error");
+//         setToastMsg(`${error}`);
+//         console.error("OTP verification failed:", error);
+//       }
+//     } else {
+//       setShowToast(true);
+//       setToastType("error");
+
+//       setToastMsg("Invalid OTP");
+
+//       // alert("Invalid OTP");
+//     }
+//   };
+
+//   const handleResendOTP =async()=>{
+//     try {
+//       const response = await apiClient.post("/resend-otp");
+//       if (response.data.success) {
+//         setShowToast(true);
+//         setToastType("success");
+//         setToastMsg("OTP resent successfully");
+//         }
+//         } catch (error) {
+//           setShowToast(true);
+//           setToastType("error");
+//           setToastMsg(`${error}`);
+//           }
+//         }
+//           else{
+//             setShowToast(true);
+//             setToastType("error");
+//             setToastMsg("Failed to resend OTP");
+
+//           }
+//           }
+
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center space-y-4 w-full m-auto">
+//       <h2 className="text-3xl font-brand-bold text-brand">
+//         00:{timer < 10 ? `0${timer}` : timer}
+//       </h2>
+//       <p className="text-gray-500 text-sm mb-8 w-[200px]">
+//         Type the verification code sent to your email
+//       </p>
+
+//       <div className="flex space-x-3">
+//         {otp.map((value, index) => (
+//           <input
+//             key={index}
+//             ref={(el) => {
+//               inputRefs.current[index] = el;
+//             }}
+//             type="text"
+//             value={value}
+//             maxLength={1}
+//             placeholder="0"
+//             onChange={(e) => handleChange(index, e)}
+//             onKeyDown={(e) => handleKeyDown(index, e)}
+//             className={`w-12 h-13 border-2 text-center text-lg text-gray-500 font-brand-bold rounded-lg focus:outline-none transition-all mb-20 focus:border-brand active:text-brand ${
+//               value ? "bg-brand text-white border-brand" : "border-gray-300"
+//             }`}
+//           />
+//         ))}
+//       </div>
+//       <div className="flex rounded-full w-62 overflow-hidden gap-2">
+//         <button
+//           className={`w-full py-2 font-medium rounded-sm transition ${
+//             isDisabled
+//               ? "bg-gray-300 cursor-not-allowed"
+//               : "bg-brand text-white hover:bg-blue-600"
+//           }`}
+//           disabled={isDisabled}
+//           onClick={handleSubmit}
+//         >
+//           Proceed
+//         </button>
+//       </div>
+
+//       <p className="text-sm text-gray-500">
+//         Didn’t get the code?{" "}
+//         <button className="text-blue-500" onClick={handleResendOTP}>Send again</button>
+//       </p>
+//       {showToast && (
+//         <Toast
+//           message={toastMsg}
+//           type={toastType}
+//           onClose={() => {
+//             setShowToast(false);
+//           }}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default OTP;
 import { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
 import { useOnboardingStore } from "../../store/AppStore";
+import apiClient from "../../utils/AxiosInstance";
+import Toast from "../GeneralComponents/Toast";
 
 interface OTPProps {
   length?: number;
@@ -10,6 +178,10 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>(
     new Array(length).fill(null)
   );
@@ -22,13 +194,13 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
   }, [timer]);
 
   useEffect(() => {
-    // Disable button if OTP is incomplete
     setIsDisabled(otp.includes(""));
   }, [otp]);
 
   const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
     if (value.length > 1) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -39,9 +211,67 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
   };
 
   const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+    if (e.key === "Backspace") {
+      if (otp[index] !== "") {
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        setOtp(newOtp);
+      } else if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
     }
+  };
+
+  const handleSubmit = async () => {
+    const enteredOtp = otp.join("");
+    const storedOtp = localStorage.getItem("otp");
+    console.log(storedOtp);
+
+    if (enteredOtp === storedOtp) {
+      try {
+        const response = await apiClient.post("/verify-otp", {
+          otp: enteredOtp,
+        });
+
+        if (response.data.success) {
+          setToastMsg("OTP verified successfully!");
+          setToastType("success");
+          setShowToast(true);
+          setStep("signup completed");
+        }
+      } catch (error) {
+        setToastMsg("OTP verification failed. Please try again.");
+        setToastType("error");
+        setShowToast(true);
+        console.error("OTP verification failed:", error);
+      }
+    } else {
+      setToastMsg("Invalid OTP. Please check and try again.");
+      setToastType("error");
+      setShowToast(true);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      const response = await apiClient.post("/resend-otp");
+
+      if (response.data.success) {
+        setToastMsg("OTP resent successfully!");
+        setToastType("success");
+        setShowToast(true);
+        setTimer(59);
+      } else {
+        throw new Error("Failed to resend OTP");
+      }
+    } catch (error) {
+      setToastMsg("Failed to resend OTP. Please try again.");
+      setToastType("error");
+      setShowToast(true);
+    }
+  };
+  const startOver = () => {
+    setStep("signup");
   };
 
   return (
@@ -49,7 +279,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
       <h2 className="text-3xl font-brand-bold text-brand">
         00:{timer < 10 ? `0${timer}` : timer}
       </h2>
-      <p className="text-gray-500 text-sm mb-8 w-[200px]">
+      <p className="text-gray-500 text-sm mb-8 w-[200px] text-center">
         Type the verification code sent to your email
       </p>
 
@@ -57,9 +287,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         {otp.map((value, index) => (
           <input
             key={index}
-            ref={(el) => {
-              inputRefs.current[index] = el;
-            }}
+            ref={(el) => (inputRefs.current[index] = el)}
             type="text"
             value={value}
             maxLength={1}
@@ -72,6 +300,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
           />
         ))}
       </div>
+
       <div className="flex rounded-full w-62 overflow-hidden gap-2">
         <button
           className={`w-full py-2 font-medium rounded-sm transition ${
@@ -80,15 +309,30 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
               : "bg-brand text-white hover:bg-blue-600"
           }`}
           disabled={isDisabled}
-          onClick={() => setStep("signup completed")}>
+          onClick={handleSubmit}
+        >
           Proceed
         </button>
       </div>
 
       <p className="text-sm text-gray-500">
         Didn’t get the code?{" "}
-        <button className="text-blue-500">Send again</button>
+        <button
+          className="text-blue-500"
+          onClick={startOver}
+          disabled={timer > 0}
+        >
+          {timer > 0 ? `Resend in ${timer}s` : "Send again"}
+        </button>
       </p>
+
+      {showToast && (
+        <Toast
+          message={toastMsg}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

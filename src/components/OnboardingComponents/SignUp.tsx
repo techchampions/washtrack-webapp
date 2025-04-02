@@ -3,13 +3,49 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../FormComponents/InputField";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa6";
-import { useOnboardingStore } from "../../store/AppStore";
+import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import Button from "../FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import apiClient from "../../utils/AxiosInstance";
 
 const SignUp: React.FC = () => {
   const { setStep } = useOnboardingStore();
+  const { setToken, setPhoneNumber, setStoreName } = useUserStore();
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleSignup = async (
+    values: {
+      businessName: string;
+      phoneNumber: string;
+      email: string;
+      password: string;
+    },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  ) => {
+    try {
+      const response = await apiClient.post("/register", {
+        store_name: values.businessName,
+        phone_num: values.phoneNumber,
+        email: values.email,
+        password: values.password,
+        user_type: 2,
+      });
+
+      if (response.data.success) {
+        setToken(response.data.token); // Save token in store
+        setStoreName(response.data.user.store_name);
+        setPhoneNumber(response.data.user.phone_num);
+        console.log(response.data);
+        localStorage.setItem("otp", response.data.otp.otp); // Save OTP for verification
+        setStep("verify OTP");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <Formik
       initialValues={{
@@ -31,10 +67,8 @@ const SignUp: React.FC = () => {
           .min(6, "Password must be at least 6 characters")
           .required("Password is required"),
       })}
-      onSubmit={(values) => {
-        console.log("Form submitted:", values);
-        setStep("verify OTP");
-      }}>
+      onSubmit={handleSignup}
+    >
       {({ isSubmitting }) => (
         <div className=" w-full">
           <div className="flex flex-col justify-center mb-12 mt-8">
@@ -94,7 +128,8 @@ const SignUp: React.FC = () => {
                   href="/terms"
                   className="text-brand mx-1"
                   target="_blank"
-                  rel="noreferrer">
+                  rel="noreferrer"
+                >
                   Terms of Service
                 </a>
                 and
@@ -102,7 +137,8 @@ const SignUp: React.FC = () => {
                   href="/terms"
                   className="text-brand mx-1"
                   target="_blank"
-                  rel="noreferrer">
+                  rel="noreferrer"
+                >
                   Privacy Policy
                 </a>
               </p>
@@ -118,7 +154,8 @@ const SignUp: React.FC = () => {
               Have an account?
               <span
                 className="text-brand cursor-pointer ml-1"
-                onClick={() => setStep("login")}>
+                onClick={() => setStep("login")}
+              >
                 Sign In
               </span>
             </p>

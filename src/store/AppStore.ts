@@ -36,28 +36,36 @@ export const useOnboardingStore = create<OnboardingState>()(
 );
 
 type UserState = {
-  username: string;
-  setUsername: (newUsername: string) => void;
+  storeName: string;
+  setStoreName: (newStoreName: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (newIsLoggedIn: boolean) => void;
   firstName: string;
   setFirstName: (newFirstName: string) => void;
   lastName: string;
   setLastName: (newLastName: string) => void;
+  phoneNumber: string;
+  setPhoneNumber: (newPhoneNumber: string) => void;
+  token: string;
+  setToken: (newToken: string) => void;
 };
 
 // Persist user data in localStorage
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      username: "",
-      setUsername: (newUsername) => set({ username: newUsername }),
+      storeName: "",
+      setStoreName: (newStoreName) => set({ storeName: newStoreName }),
       isLoggedIn: false,
       setIsLoggedIn: (newIsLoggedIn) => set({ isLoggedIn: newIsLoggedIn }),
       firstName: "",
       setFirstName: (newFirstName) => set({ firstName: newFirstName }),
       lastName: "",
       setLastName: (newLastName) => set({ lastName: newLastName }),
+      phoneNumber: "",
+      setPhoneNumber: (newPhoneNumber) => set({ phoneNumber: newPhoneNumber }),
+      token: "",
+      setToken: (newToken) => set({ token: newToken }),
     }),
     { name: "user-state" }
   )
