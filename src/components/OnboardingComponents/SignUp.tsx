@@ -10,7 +10,8 @@ import apiClient from "../../utils/AxiosInstance";
 
 const SignUp: React.FC = () => {
   const { setStep } = useOnboardingStore();
-  const { setToken, setPhoneNumber, setStoreName } = useUserStore();
+  const { setToken, setStore, setPlanID, setReferralCode, setPhoneNumber } =
+    useUserStore();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSignup = async (
@@ -33,7 +34,15 @@ const SignUp: React.FC = () => {
 
       if (response.data.success) {
         setToken(response.data.token); // Save token in store
-        setStoreName(response.data.user.store_name);
+        setStore({
+          id: response.data.user.id,
+          name: response.data.user.store_name,
+          address: "",
+          description: "",
+          logoUrl: "",
+        });
+        setPlanID(response.data.user.plan_id);
+        setReferralCode(response.data.user.referral_code);
         setPhoneNumber(response.data.user.phone_num);
         console.log(response.data);
         localStorage.setItem("otp", response.data.otp.otp); // Save OTP for verification
@@ -79,7 +88,7 @@ const SignUp: React.FC = () => {
               Sign Up via your Phone Number and Email
             </p>
           </div>
-          <Form className="flex flex-col mt-4">
+          <Form className="flex flex-col mt-4 space-y-3">
             <InputField
               name="businessName"
               placeholder="Business Name"

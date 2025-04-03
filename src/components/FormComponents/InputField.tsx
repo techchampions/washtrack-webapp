@@ -22,11 +22,12 @@ const InputField: React.FC<InputFieldProps> = ({
   const [field, meta] = useField(name); // Get Formik field state
 
   return (
-    <div className="mb-4 w-full">
+    <div className=" w-full">
       <div
         className={`w-full relative flex flex-row border rounded-lg py-[1px] ${
           meta.touched && meta.error ? "border-red-500" : "border-gray-300"
-        } ${className}`}>
+        } ${className}`}
+      >
         {/* Left Icon */}
         {icon && <div className="flex items-center px-3">{icon}</div>}
 

@@ -1,21 +1,24 @@
 import { useState } from "react";
-import { Formik, Form, FormikHelpers } from "formik";
+import { Formik, Form, FormikHelpers, validateYupSchema } from "formik";
 import * as Yup from "yup";
 import Button from "../FormComponents/Button";
 import InputField from "../FormComponents/InputField";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
-import { useOnboardingStore } from "../../store/AppStore";
+import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import apiClient from "../../utils/AxiosInstance";
 
 // Define TypeScript type for a service
 interface Service {
   serviceName: string;
   price: number | string;
   hours: number | string;
+  serviceType: number | string;
 }
 
 const AddServices = () => {
   const { setStep } = useOnboardingStore();
+  // const { addService, services } = useUserStore();
   const [services, setServices] = useState<Service[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -29,6 +32,38 @@ const AddServices = () => {
       .typeError("Estimated hours must be a number")
       .required("Estimated hours are required"),
   });
+
+  // const handleSubmit = async (
+  //   values: Service,
+  //   { resetForm }: FormikHelpers<Service>
+  // ) => {
+  //   try {
+  //     const payload = {
+  //       name: values.serviceName,
+  //       price: values.price,
+  //       estimated_hours: values.hours,
+  //       service_type: 1,
+  //     };
+  //     const response = await apiClient.post("/create/service", payload);
+
+  //     if (response.status === 201) {
+  //       const newService = response.data; // Assuming API returns the created service
+  //       console.log(response.data);
+
+  //       // Store the service in Zustand
+  //       addService(newService);
+
+  //       // Update local state for UI
+  //       setServices((prev) => [...prev, newService]);
+  //       setShowModal(false);
+  //       resetForm();
+  //       setEditIndex(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating service:", error);
+  //     // alert("Failed to create service. Please try again.");
+  //   }
+  // };
 
   const handleSubmit = (
     values: Service,
@@ -86,7 +121,8 @@ const AddServices = () => {
                 {services.map((service, index) => (
                   <tr
                     key={index}
-                    className="text-gray-700 rounded-lg odd:bg-white even:border even:border-gray-100 hover:bg-blue-50 text-[12px]">
+                    className="text-gray-700 rounded-lg odd:bg-white even:border even:border-gray-100 hover:bg-blue-50 text-[12px]"
+                  >
                     <td className="px-4 py-3 rounded-s-lg">
                       {service.serviceName}
                     </td>
@@ -118,7 +154,8 @@ const AddServices = () => {
             services.length === 0
               ? "hidden"
               : "text-gray-600 text-center text-[10px] mt-6"
-          }`}>
+          }`}
+        >
           Click the “Add a service” button to add the type of services you
           render in your laundry store
         </p>
@@ -148,9 +185,10 @@ const AddServices = () => {
               }
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
-              enableReinitialize>
+              enableReinitialize
+            >
               {() => (
-                <Form>
+                <Form className="space-y-2">
                   <InputField
                     type="text"
                     placeholder="Service name e.g wash, starch, iron"
@@ -179,7 +217,8 @@ const AddServices = () => {
                       setShowModal(false);
                       setEditIndex(null);
                     }}
-                    className="mt-2 text-red-500">
+                    className="mt-2 text-red-500"
+                  >
                     Cancel
                   </button>
                 </Form>

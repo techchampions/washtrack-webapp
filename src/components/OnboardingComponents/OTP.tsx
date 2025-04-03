@@ -261,6 +261,8 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         setToastType("success");
         setShowToast(true);
         setTimer(59);
+        const storedOtp = localStorage.setItem("otp", response.data.otp);
+        console.log(storedOtp);
       } else {
         throw new Error("Failed to resend OTP");
       }
@@ -269,9 +271,6 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
       setToastType("error");
       setShowToast(true);
     }
-  };
-  const startOver = () => {
-    setStep("signup");
   };
 
   return (
@@ -319,7 +318,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         Didn’t get the code?{" "}
         <button
           className="text-blue-500"
-          onClick={startOver}
+          onClick={handleResendOTP}
           disabled={timer > 0}
         >
           {timer > 0 ? `Resend in ${timer}s` : "Send again"}

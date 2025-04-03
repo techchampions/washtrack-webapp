@@ -1,7 +1,7 @@
 import GetStarted from "../components/OnboardingComponents/GetStarted";
 import SignUp from "../components/OnboardingComponents/SignUp";
 import Login from "../components/OnboardingComponents/Login";
-import { useOnboardingStore } from "../store/AppStore";
+import { useOnboardingStore, useUserStore } from "../store/AppStore";
 import OTP from "../components/OnboardingComponents/OTP";
 import StoreSetup from "../components/OnboardingComponents/StoreSetup";
 import SignupComplete from "../components/OnboardingComponents/SignupComplete";
@@ -35,6 +35,16 @@ const Onboarding = () => {
         return <GetStarted />;
     }
   };
+
+  const handleReset = () => {
+    useUserStore.getState().reset(); // Reset user store
+    useOnboardingStore.getState().reset(); // Reset onboarding store
+
+    localStorage.removeItem("user-state"); // Clear persisted user state
+    localStorage.removeItem("onboarding-state"); // Clear persisted onboarding state
+
+    window.location.reload(); // Optional: Refresh page to clear UI state
+  };
   return (
     <div className="fixed inset-0 z-50 h-screen w-full ">
       {/* Background Image */}
@@ -47,6 +57,7 @@ const Onboarding = () => {
         src="./images/logo.png"
         alt="Wash Track"
         className="relative top-[40px] left-[60px] w-[250px] h-[50px] opacity-70"
+        onClick={handleReset}
       />
       <div className="flex w-full justify-center">
         <div className="absolute flex flex-row justify-end items-start my-auto h-screen w-[95%] md:w-[80%]">
