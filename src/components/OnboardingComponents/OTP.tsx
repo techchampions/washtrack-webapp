@@ -246,7 +246,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         console.error("OTP verification failed:", error);
       }
     } else {
-      setToastMsg("Invalid OTP. Please check and try again.");
+      setToastMsg("Invalid OTP!");
       setToastType("error");
       setShowToast(true);
     }
@@ -261,8 +261,8 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         setToastType("success");
         setShowToast(true);
         setTimer(59);
-        const storedOtp = localStorage.setItem("otp", response.data.otp);
-        console.log(storedOtp);
+        localStorage.setItem("otp", response.data.otp);
+        console.log(response.data.otp);
       } else {
         throw new Error("Failed to resend OTP");
       }

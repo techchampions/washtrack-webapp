@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../FormComponents/InputField";
@@ -7,12 +7,70 @@ import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import Button from "../FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiClient from "../../utils/AxiosInstance";
+import Toast from "../GeneralComponents/Toast";
 
 const SignUp: React.FC = () => {
   const { setStep } = useOnboardingStore();
   const { setToken, setStore, setPlanID, setReferralCode, setPhoneNumber } =
     useUserStore();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // const handleSignup = async (
+  //   values: {
+  //     businessName: string;
+  //     phoneNumber: string;
+  //     email: string;
+  //     password: string;
+  //   },
+  //   { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+  // ) => {
+  //   try {
+  //     const response = await apiClient.post("/register", {
+  //       store_name: values.businessName,
+  //       phone_num: values.phoneNumber,
+  //       email: values.email,
+  //       password: values.password,
+  //       user_type: 2,
+  //     });
+
+  //     if (response.data.success) {
+  //       setToken(response.data.token); // Save token in store
+  //       setStore({
+  //         id: response.data.user.id,
+  //         name: response.data.user.store_name,
+  //         address: "",
+  //         description: "",
+  //         logoUrl: "",
+  //       });
+  //       setToastMsg("User registered successfully!");
+  //       setToastType("error");
+  //       setShowToast(true);
+
+  //       setPlanID(response.data.user.plan_id);
+  //       setReferralCode(response.data.user.referral_code);
+  //       setPhoneNumber(response.data.user.phone_num);
+  //       console.log(response.data);
+  //       localStorage.setItem("otp", response.data.otp.otp); // Save OTP for verification
+  //       setStep("verify OTP");
+  //     }
+  //     if (response.data.errors) {
+  //       setToastMsg(response.data.errors);
+  //       setToastType("error");
+  //       setShowToast(true);
+  //     }
+  //   } catch (error) {
+  //     setToastMsg(`${error}`);
+  //     setToastType("error");
+  //     setShowToast(true);
+
+  //     console.error("Signup failed:", error);
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
 
   const handleSignup = async (
     values: {
@@ -41,14 +99,35 @@ const SignUp: React.FC = () => {
           description: "",
           logoUrl: "",
         });
+        setToastMsg("User registered successfully!");
+        setToastType("success");
+        setShowToast(true);
+
         setPlanID(response.data.user.plan_id);
         setReferralCode(response.data.user.referral_code);
         setPhoneNumber(response.data.user.phone_num);
-        console.log(response.data);
-        localStorage.setItem("otp", response.data.otp.otp); // Save OTP for verification
+        localStorage.setItem("otp", response.data.otp.otp);
+        console.log(response.data.otp.otp); // Save OTP for verification
         setStep("verify OTP");
+      } else if (response.data.errors) {
+        const errorMessages = Object.values(response.data.errors)
+          .flat()
+          .join("\n"); // Combine errors into a readable string
+        setToastMsg(errorMessages);
+        setToastType("error");
+        setShowToast(true);
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response && error.response.data.errors) {
+        const errorMessages = Object.values(error.response.data.errors)
+          .flat()
+          .join("\n"); // Extract and format error messages
+        setToastMsg(errorMessages);
+      } else {
+        setToastMsg("Something went wrong. Please try again.");
+      }
+      setToastType("error");
+      setShowToast(true);
       console.error("Signup failed:", error);
     } finally {
       setSubmitting(false);
@@ -169,6 +248,13 @@ const SignUp: React.FC = () => {
               </span>
             </p>
           </Form>
+          {showToast && (
+            <Toast
+              message={toastMsg}
+              type={toastType}
+              onClose={() => setShowToast(false)}
+            />
+          )}
         </div>
       )}
     </Formik>

@@ -10,25 +10,26 @@ import apiClient from "../../utils/AxiosInstance";
 
 // Define TypeScript type for a service
 interface Service {
-  serviceName: string;
+  name: string;
   price: number | string;
-  hours: number | string;
-  serviceType: number | string;
+  estimated_hours: number | string;
+  service_type: number | string;
+  id: string;
 }
 
 const AddServices = () => {
   const { setStep } = useOnboardingStore();
-  // const { addService, services } = useUserStore();
-  const [services, setServices] = useState<Service[]>([]);
+  const { addService, services } = useUserStore();
+  // const [services, setServices] = useState<Service[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const validationSchema = Yup.object().shape({
-    serviceName: Yup.string().required("Service name is required"),
+    name: Yup.string().required("Service name is required"),
     price: Yup.number()
       .typeError("Price must be a number")
       .required("Price is required"),
-    hours: Yup.number()
+    estimated_hours: Yup.number()
       .typeError("Estimated hours must be a number")
       .required("Estimated hours are required"),
   });
@@ -65,32 +66,65 @@ const AddServices = () => {
   //   }
   // };
 
-  const handleSubmit = (
+  const handleSubmit = async (
     values: Service,
     { resetForm }: FormikHelpers<Service>
   ) => {
-    if (editIndex !== null) {
-      // Update existing service
-      const updatedServices = [...services];
-      updatedServices[editIndex] = values;
-      setServices(updatedServices);
-      setEditIndex(null);
-    } else {
-      // Add new service
-      setServices([...services, values]);
+    try {
+      const payload = {
+        name: values.name,
+        price: values.price,
+        estimated_hours: values.estimated_hours,
+        service_type: 1,
+      };
+
+      let response;
+      if (editIndex !== null) {
+        // Update service
+        response = await apiClient.post(`/upate/service`, payload);
+      } else {
+        // Create new service
+        response = await apiClient.post("/create/service", payload);
+      }
+
+      if (response.status === 201 || response.status === 200) {
+        const newService = response.data.service;
+        console.log(newService);
+
+        // Update Zustand store
+        if (editIndex !== null) {
+          const updatedServices = [...services];
+          updatedServices[editIndex] = newService;
+          setServices(updatedServices);
+        } else {
+          addService(newService);
+        }
+
+        setShowModal(false);
+        resetForm();
+        setEditIndex(null);
+      }
+    } catch (error) {
+      console.error("Error saving service:", error);
     }
-
-    setShowModal(false);
-    resetForm();
   };
 
-  const handleDelete = (index: number) => {
-    setServices(services.filter((_, i) => i !== index));
-  };
+  // const handleDelete = (index: number) => {
+  //   setServices(services.filter((_, i) => i !== index));
+  // };
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
     setShowModal(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await apiClient.delete(`/delete/service`, { id: id });
+      removeService(id);
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    }
   };
 
   return (
@@ -123,13 +157,13 @@ const AddServices = () => {
                     key={index}
                     className="text-gray-700 rounded-lg odd:bg-white even:border even:border-gray-100 hover:bg-blue-50 text-[12px]"
                   >
-                    <td className="px-4 py-3 rounded-s-lg">
-                      {service.serviceName}
+                    <td className="px-4 py-3 rounded-s-lg">{service.name}</td>
+                    <td className="px-4 py-3">
+                      ₦{service.price?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3">
-                      ₦{service.price.toLocaleString()}
+                      {service.estimated_hours} hours
                     </td>
-                    <td className="px-4 py-3">{service.hours} hours</td>
                     <td className="px-4 py-3 flex justify-center space-x-2">
                       <FaEdit
                         className="text-blue-500 hover:text-blue-700 cursor-pointer"
@@ -181,7 +215,7 @@ const AddServices = () => {
               initialValues={
                 editIndex !== null
                   ? services[editIndex]
-                  : { serviceName: "", price: "", hours: "" }
+                  : { name: "", price: "", estimated_hours: "" }
               }
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
@@ -192,7 +226,7 @@ const AddServices = () => {
                   <InputField
                     type="text"
                     placeholder="Service name e.g wash, starch, iron"
-                    name="serviceName"
+                    name="name"
                   />
                   <InputField
                     type="number"
@@ -202,7 +236,7 @@ const AddServices = () => {
                   <InputField
                     type="number"
                     placeholder="Estimated Hours"
-                    name="hours"
+                    name="estimated_hours"
                   />
 
                   <Button

@@ -7,11 +7,16 @@ import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import Button from "../FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiClient from "../../utils/AxiosInstance";
+import Toast from "../GeneralComponents/Toast";
 
 const Login: React.FC = () => {
   const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
   const { setIsLoggedIn, setToken, setEmail } = useUserStore();
   const [showPassword, setShowPassword] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+
   const handleLogin = async (
     values: {
       email: string;
@@ -38,6 +43,10 @@ const Login: React.FC = () => {
         //   logoUrl: "",
         // });
         // setPlanID(response.data.user.plan_id);
+        setToastMsg("Loggedin successfully!");
+        setToastType("success");
+        setShowToast(true);
+
         setEmail(values.email);
         // setPhoneNumber(response.data.user.phone_num);
         setStep("Get Started");
@@ -45,10 +54,18 @@ const Login: React.FC = () => {
         setIsLoggedIn(true);
 
         console.log(response.data);
+      } else {
+        setToastMsg(response.data.message);
+        setToastType("error");
+        setShowToast(true);
       }
     } catch (error) {
+      setToastMsg("Invalid Credentials");
+      setToastType("error");
+      setShowToast(true);
       console.error("Login failed:", error);
-    } finally {
+    }
+    {
       setSubmitting(false);
     }
   };
@@ -123,6 +140,13 @@ const Login: React.FC = () => {
               </span>
             </p>
           </Form>
+          {showToast && (
+            <Toast
+              message={toastMsg}
+              type={toastType}
+              onClose={() => setShowToast(false)}
+            />
+          )}
         </div>
       )}
     </Formik>

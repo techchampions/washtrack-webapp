@@ -122,7 +122,15 @@ export const useUserStore = create<UserState>()(
         set({ referralCode: newReferralCode }),
 
       store: null,
-      setStore: (store) => set({ store }),
+      setStore: (storeUpdates) =>
+        set((state) => ({
+          store: {
+            ...state.store, // Keep existing store values
+            ...storeUpdates, // Override with new values
+          },
+        })),
+
+      // setStore: (store) => set({ store }),
 
       items: [],
       setItems: (items) => set({ items }),

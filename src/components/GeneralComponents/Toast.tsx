@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaCheckCircle, FaTimes } from "react-icons/fa";
+import { FaCheckCircle, FaExclamation, FaTimes } from "react-icons/fa";
 
 const Toast = ({ message, type, duration = 5000, onClose }) => {
   const [visible, setVisible] = useState(true);
@@ -16,15 +16,16 @@ const Toast = ({ message, type, duration = 5000, onClose }) => {
   if (!visible) return null;
 
   return (
-    <div className="fixed top-5 right-5 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white  rounded-lg shadow-lg transition-transform transform animate-slideInRight">
+    // <div className="fixed top-5 right-5 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white  rounded-lg shadow-lg transition-transform transform animate-slideInRight">
+    <div className="fixed top-5 left-1/2 transform -translate-x-1/2 flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg transition-transform animate-slideInRight">
       <div
-        className={`inline-flex items-center justify-center w-8 h-8 rounded-full ${
+        className={`inline-flex items-center justify-center w-8 rounded-full p-2 ${
           type === "success"
             ? "text-green-500 bg-green-100"
             : "text-red-500 bg-red-100"
         }`}
       >
-        {type === "success" ? <FaCheckCircle /> : <FaTimes />}
+        {type === "success" ? <FaCheckCircle /> : <FaExclamation />}
       </div>
       <div className="ml-3 text-sm font-medium text-left">{message}</div>
       <button
