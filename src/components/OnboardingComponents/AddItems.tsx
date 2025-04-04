@@ -44,7 +44,7 @@ const AddItems = () => {
 
     try {
       const response = await apiClient.post("/delete/service", {
-        data: { id: serviceId }, // assuming your backend expects this in the body
+        id: serviceId,
       });
 
       if (response.status === 200) {
