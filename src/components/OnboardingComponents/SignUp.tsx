@@ -18,60 +18,6 @@ const SignUp: React.FC = () => {
   const [toastMsg, setToastMsg] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
-  // const handleSignup = async (
-  //   values: {
-  //     businessName: string;
-  //     phoneNumber: string;
-  //     email: string;
-  //     password: string;
-  //   },
-  //   { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-  // ) => {
-  //   try {
-  //     const response = await apiClient.post("/register", {
-  //       store_name: values.businessName,
-  //       phone_num: values.phoneNumber,
-  //       email: values.email,
-  //       password: values.password,
-  //       user_type: 2,
-  //     });
-
-  //     if (response.data.success) {
-  //       setToken(response.data.token); // Save token in store
-  //       setStore({
-  //         id: response.data.user.id,
-  //         name: response.data.user.store_name,
-  //         address: "",
-  //         description: "",
-  //         logoUrl: "",
-  //       });
-  //       setToastMsg("User registered successfully!");
-  //       setToastType("error");
-  //       setShowToast(true);
-
-  //       setPlanID(response.data.user.plan_id);
-  //       setReferralCode(response.data.user.referral_code);
-  //       setPhoneNumber(response.data.user.phone_num);
-  //       console.log(response.data);
-  //       localStorage.setItem("otp", response.data.otp.otp); // Save OTP for verification
-  //       setStep("verify OTP");
-  //     }
-  //     if (response.data.errors) {
-  //       setToastMsg(response.data.errors);
-  //       setToastType("error");
-  //       setShowToast(true);
-  //     }
-  //   } catch (error) {
-  //     setToastMsg(`${error}`);
-  //     setToastType("error");
-  //     setShowToast(true);
-
-  //     console.error("Signup failed:", error);
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
-
   const handleSignup = async (
     values: {
       businessName: string;
@@ -155,9 +101,10 @@ const SignUp: React.FC = () => {
           .min(6, "Password must be at least 6 characters")
           .required("Password is required"),
       })}
+      validateOnMount={true}
       onSubmit={handleSignup}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, isValid }) => (
         <div className=" w-full">
           <div className="flex flex-col justify-center mb-12 mt-8">
             <h3 className="text-2xl text-center font-brand-bold text-brand">
@@ -235,6 +182,7 @@ const SignUp: React.FC = () => {
             <Button
               label="Sign Up"
               type="submit"
+              disabled={isSubmitting || !isValid}
               isLoading={isSubmitting}
               className="mt-[100px]"
             />
