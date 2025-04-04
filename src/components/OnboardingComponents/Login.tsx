@@ -128,6 +128,7 @@ const Login: React.FC = () => {
               label="Sign In"
               type="submit"
               isLoading={isSubmitting}
+              disabled={isSubmitting}
               className="mt-[100px]"
             />
             <p className="text-gray-500 mt-4 text-center font-medium">

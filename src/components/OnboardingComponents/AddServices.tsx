@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Formik, Form, FormikHelpers, validateYupSchema } from "formik";
+import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Button from "../FormComponents/Button";
 import InputField from "../FormComponents/InputField";
@@ -7,6 +7,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import apiClient from "../../utils/AxiosInstance";
+import Toast from "../GeneralComponents/Toast";
 
 // Define TypeScript type for a service
 interface Service {
@@ -19,10 +20,18 @@ interface Service {
 
 const AddServices = () => {
   const { setStep } = useOnboardingStore();
-  const { addService, services } = useUserStore();
+  const { addService, services, setServices } = useUserStore();
   // const [services, setServices] = useState<Service[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+  const showToastMessage = (msg: string, type: "success" | "error") => {
+    setToastMsg(msg);
+    setToastType(type);
+    setShowToast(true);
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Service name is required"),
@@ -34,44 +43,13 @@ const AddServices = () => {
       .required("Estimated hours are required"),
   });
 
-  // const handleSubmit = async (
-  //   values: Service,
-  //   { resetForm }: FormikHelpers<Service>
-  // ) => {
-  //   try {
-  //     const payload = {
-  //       name: values.serviceName,
-  //       price: values.price,
-  //       estimated_hours: values.hours,
-  //       service_type: 1,
-  //     };
-  //     const response = await apiClient.post("/create/service", payload);
-
-  //     if (response.status === 201) {
-  //       const newService = response.data; // Assuming API returns the created service
-  //       console.log(response.data);
-
-  //       // Store the service in Zustand
-  //       addService(newService);
-
-  //       // Update local state for UI
-  //       setServices((prev) => [...prev, newService]);
-  //       setShowModal(false);
-  //       resetForm();
-  //       setEditIndex(null);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating service:", error);
-  //     // alert("Failed to create service. Please try again.");
-  //   }
-  // };
-
   const handleSubmit = async (
     values: Service,
     { resetForm }: FormikHelpers<Service>
   ) => {
     try {
-      const payload = {
+      // Base payload without id
+      const payload: any = {
         name: values.name,
         price: values.price,
         estimated_hours: values.estimated_hours,
@@ -79,8 +57,10 @@ const AddServices = () => {
       };
 
       let response;
+
       if (editIndex !== null) {
-        // Update service
+        // Include ID when updating
+        payload.id = services[editIndex].id;
         response = await apiClient.post(`/upate/service`, payload);
       } else {
         // Create new service
@@ -89,29 +69,31 @@ const AddServices = () => {
 
       if (response.status === 201 || response.status === 200) {
         const newService = response.data.service;
-        console.log(newService);
 
-        // Update Zustand store
         if (editIndex !== null) {
           const updatedServices = [...services];
           updatedServices[editIndex] = newService;
           setServices(updatedServices);
+          setToastMsg("Service updated successfully");
+          setToastType("success");
+          setShowToast(true);
         } else {
           addService(newService);
+          showToastMessage("Service created successfully", "success");
         }
 
         setShowModal(false);
         resetForm();
         setEditIndex(null);
       }
-    } catch (error) {
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Error saving service... try again";
+      showToastMessage(errorMessage, "error");
+
       console.error("Error saving service:", error);
     }
   };
-
-  // const handleDelete = (index: number) => {
-  //   setServices(services.filter((_, i) => i !== index));
-  // };
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -120,8 +102,9 @@ const AddServices = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await apiClient.delete(`/delete/service`, { id: id });
-      removeService(id);
+      await apiClient.post(`/delete/service`, { id });
+      const updatedServices = services.filter((service) => service.id !== id);
+      setServices(updatedServices);
     } catch (error) {
       console.error("Error deleting service:", error);
     }
@@ -171,7 +154,8 @@ const AddServices = () => {
                       />
                       <FaRegTrashCan
                         className="text-red-500 hover:text-red-700 cursor-pointer"
-                        onClick={() => handleDelete(index)}
+                        // onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(service.id)}
                       />
                     </td>
                   </tr>
@@ -206,6 +190,14 @@ const AddServices = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          {showToast && (
+            <Toast
+              message={toastMsg}
+              type={toastType}
+              onClose={() => setShowToast(false)}
+            />
+          )}
+
           <div className="bg-white p-6 rounded-[25px] shadow-lg max-w-md w-[380px]">
             <h3 className="text-[30px] text-left text-black font-bold mb-4">
               {editIndex !== null ? "Edit service" : "Add new service"}
@@ -221,7 +213,7 @@ const AddServices = () => {
               onSubmit={handleSubmit}
               enableReinitialize
             >
-              {() => (
+              {({ isSubmitting }) => (
                 <Form className="space-y-2">
                   <InputField
                     type="text"
@@ -244,6 +236,8 @@ const AddServices = () => {
                     label={
                       editIndex !== null ? "Update service" : "Add service"
                     }
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
                   />
                   <button
                     type="button"

@@ -62,7 +62,7 @@ const Onboarding = () => {
       <div className="flex w-full justify-center">
         <div className="absolute flex flex-row justify-end items-start my-auto h-screen w-[95%] md:w-[80%]">
           {/* Onboarding Content Container */}
-          <div className="w-full md:w-[480px] max-w-[600px] min-h-[600px] md:min-h-[600px] max-h-[80vh] md:max-h-max bg-white py-[20px] px-5 md:px-16 rounded-[25px] shadow-lg flex flex-col items-center justify-start my-auto ">
+          <div className="w-full md:w-[480px] max-w-[600px] min-h-[600px] md:min-h-[600px] max-h-[80vh] md:max-h-max bg-white py-[20px] px-5 md:px-8 rounded-[25px] shadow-lg flex flex-col items-center justify-start my-auto ">
             {stepContainer()}
           </div>
         </div>

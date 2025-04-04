@@ -168,6 +168,7 @@ import { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
 import { useOnboardingStore } from "../../store/AppStore";
 import apiClient from "../../utils/AxiosInstance";
 import Toast from "../GeneralComponents/Toast";
+import Button from "../FormComponents/Button";
 
 interface OTPProps {
   length?: number;
@@ -177,6 +178,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
   const { setStep } = useOnboardingStore();
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const [timer, setTimer] = useState<number>(59);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
@@ -232,6 +234,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         const response = await apiClient.post("/verify-otp", {
           otp: enteredOtp,
         });
+        setIsSubmitting(true);
 
         if (response.data.success) {
           setToastMsg("OTP verified successfully!");
@@ -245,6 +248,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
         setShowToast(true);
         console.error("OTP verification failed:", error);
       }
+      setIsSubmitting(false);
     } else {
       setToastMsg("Invalid OTP!");
       setToastType("error");
@@ -301,7 +305,18 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
       </div>
 
       <div className="flex rounded-full w-62 overflow-hidden gap-2">
-        <button
+        <Button
+          label="Proceed"
+          className={`w-full py-2 font-medium rounded-sm transition ${
+            isDisabled
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-brand text-white hover:bg-blue-600"
+          }`}
+          onClick={handleSubmit}
+          disabled={isDisabled}
+          isLoading={isSubmitting}
+        />
+        {/* <button
           className={`w-full py-2 font-medium rounded-sm transition ${
             isDisabled
               ? "bg-gray-300 cursor-not-allowed"
@@ -311,7 +326,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
           onClick={handleSubmit}
         >
           Proceed
-        </button>
+        </button> */}
       </div>
 
       <p className="text-sm text-gray-500">

@@ -368,7 +368,7 @@ const StoreSetup = () => {
             }
           }}
         >
-          {({ handleChange }) => (
+          {({ handleChange, isSubmitting }) => (
             <Form className="w-full flex flex-col space-y-4">
               {/* Google Places Autocomplete for Store Location */}
               <PlacesAutocomplete
@@ -458,7 +458,12 @@ const StoreSetup = () => {
                 </div>
               </div>
 
-              <Button label="Continue" type="submit" />
+              <Button
+                label="Continue"
+                type="submit"
+                isLoading={isSubmitting}
+                disabled={isSubmitting}
+              />
             </Form>
           )}
         </Formik>
