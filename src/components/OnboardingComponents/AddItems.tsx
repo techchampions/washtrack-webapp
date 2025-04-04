@@ -551,7 +551,7 @@ const AddItems = () => {
                         {values.services.map((_, index) => (
                           <div
                             key={index}
-                            className="border border-gray-300 p-1 rounded-md flex text-left text-black"
+                            className="border border-gray-300 p-1 rounded-md flex items-center text-left text-black"
                           >
                             <p className="text-sm font-medium mb-2 flex-grow">
                               {values.services[index].service_name}
@@ -566,7 +566,7 @@ const AddItems = () => {
                               <InputField
                                 name={`services[${index}].estimated_hours`}
                                 type="number"
-                                placeholder="Estimated Hours"
+                                placeholder="Hours"
                                 className="max-w-[70px]"
                               />
                             </div>
