@@ -138,7 +138,7 @@ const AddServices = () => {
                 {services.map((service, index) => (
                   <tr
                     key={index}
-                    className="text-gray-700 rounded-lg odd:bg-white even:border even:border-gray-100 hover:bg-blue-50 text-[12px]"
+                    className="text-gray-700 text-left rounded-lg odd:bg-white even:border even:border-gray-100 hover:bg-blue-50 text-[12px]"
                   >
                     <td className="px-4 py-3 rounded-s-lg">{service.name}</td>
                     <td className="px-4 py-3">

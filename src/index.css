@@ -26,6 +26,18 @@
   src: url("../src/assets/fonts/Sk-Modernist.ttf");
 }
 
+/* Add this in your global stylesheet or index.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
 :root {
   /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif, sk-modernist; */
   font-family: sk-modernist, sans-serif;

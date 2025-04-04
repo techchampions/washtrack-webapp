@@ -18,11 +18,14 @@ const StoreSetup = () => {
   const { store } = useUserStore();
   const setStore = useUserStore((state) => state.setStore);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [bannerFiles, setBannerFiles] = useState<(File | null)[]>([null, null]);
+  const [bannerFiles, setBannerFiles] = useState<(File | null)[]>([
+    null,
+    null,
+    null,
+  ]);
   const [storeLocation, setStoreLocation] = useState("");
 
   const validationSchema = Yup.object({
-    // storeLocation: Yup.string().required("Store location is required"),
     storeDescription: Yup.string().required("Store description is required"),
   });
 
@@ -219,11 +222,11 @@ const StoreSetup = () => {
                 <p className="text-xs text-gray-400 text-left mb-2">
                   Add your store banner, discounts and Ads here
                 </p>
-                <div className="flex justify-between space-x-2">
-                  {[0, 1].map((index) => (
+                <div className="flex overflow-x-auto space-x-2 pb-2 scrollbar-hide">
+                  {[0, 1, 2].map((index) => (
                     <label
                       key={index}
-                      className="relative cursor-pointer border border-gray-200 rounded-md p-4 w-1/2 h-32 flex items-center justify-center text-black"
+                      className="min-w-[45%] max-w-[45%] flex-shrink-0 relative cursor-pointer border border-gray-200 rounded-md p-4 h-32 flex items-center justify-center text-black"
                     >
                       <input
                         type="file"
