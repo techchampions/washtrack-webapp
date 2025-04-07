@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import OrderList from "../components/DashboardComponents/OrderList";
+import { useUserStore } from "../store/AppStore";
 
 const OrdersScreen = () => {
   const [activeTab, setActiveTab] = useState("Current");
+  const { orders, loadOrders } = useUserStore();
+
   return (
     <div className="w-full md:w-[90%] mx-auto">
       {/* Tabs */}
@@ -22,7 +25,7 @@ const OrdersScreen = () => {
         ))}
       </div>
 
-      <OrderList />
+      <OrderList orders={orders} />
     </div>
   );
 };

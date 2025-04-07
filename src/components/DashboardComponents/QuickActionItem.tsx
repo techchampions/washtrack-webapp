@@ -12,8 +12,9 @@ const QuickActionItem: React.FC<QuickActionProps> = ({ label, icon, path }) => {
       to={path}
       className={` flex-col items-center justify-center p-1 text-black transition ${
         label === "Expense" || label === "Revenue" ? "hidden md:flex" : "flex"
-      }`}>
-      {icon}
+      }`}
+    >
+      <div className="w-[50px]">{icon}</div>
       <span className="mt-2 text-lg font-medium text-black">{label}</span>
     </NavLink>
   );

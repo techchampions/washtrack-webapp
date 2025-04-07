@@ -1,13 +1,3 @@
-// import { Navigate, Outlet } from "react-router-dom";
-// import { useUserStore } from "../store/AppStore";
-// // import { useUserStore } from "../store/AppStore";
-
-// const ProtectedRoute = () => {
-//   const { isLoggedIn } = useUserStore();
-//   return isLoggedIn ? <Navigate to="/dashboard" /> : <Outlet />;
-// };
-
-// export default ProtectedRoute;
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserStore } from "../store/AppStore";
 

@@ -18,8 +18,35 @@ interface Item {
 }
 
 export const AddorderExistingUser: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([]);
+
   const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
   const [showModal, setShowModal] = useState(false);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+
+  const addItems = (values: Item, { resetForm }: FormikHelpers<Item>) => {
+    if (editIndex !== null) {
+      // Update existing service
+      const updatedItems = [...items];
+      updatedItems[editIndex] = values;
+      setItems(updatedItems);
+      setEditIndex(null);
+    } else {
+      // Add new service
+      setItems([...items, values]);
+    }
+
+    setShowModal(false);
+    resetForm();
+  };
+  const handleDeleteItem = (index: number) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  const handleEditItem = (index: number) => {
+    setEditIndex(index);
+    setShowModal(true);
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-6 w-full md:w-[90%] mx-auto">
@@ -45,8 +72,13 @@ export const AddorderExistingUser: React.FC = () => {
 
         {/* Added Item */}
         <div className="flex text-black items-center justify-between w-full py-3 mt-6">
-          <div className="font-brand-bold text-2xl">Add Item</div>
-          <FiPlusCircle className="text-black h-8 w-8" />
+          <div className="font-brand-bold text-[20]">Add Item</div>
+          <FiPlusCircle
+            className="text-black h-8 w-8"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          />
         </div>
         <div className="mt-4 bg-brand-100 rounded-lg flex justify-between py-2 px-4 items-center">
           <div className="flex items-center gap-4">
@@ -63,7 +95,7 @@ export const AddorderExistingUser: React.FC = () => {
 
         {/* Pickup Date with Date Picker */}
         <div className="mt-4">
-          <div className="text-black text-left text-2xl font-brand-bold">
+          <div className="text-black text-left text-[16px] font-brand-bold">
             Pickup Date
           </div>
           <div className="relative mt-2 w-full flex flex-row border border-gray-300 rounded-lg">
@@ -79,10 +111,10 @@ export const AddorderExistingUser: React.FC = () => {
         </div>
 
         {/* Payment Details */}
-        <div className="text-black font-brand-bold text-2xl mb-2 text-left mt-4">
+        <div className="text-black font-brand-bold text-[16px] mb-2 text-left mt-4">
           Payment
         </div>
-        <div className="mt-4 bg-brand-100 p-4 mb-4 rounded-lg">
+        <div className="mt-4 bg-brand-100 text-[12px] p-4 mb-4 rounded-lg">
           <div className="flex justify-between text-black py-2">
             <span>Cost of service</span>
             <span className="font-bold">₦30,000</span>
@@ -107,6 +139,59 @@ export const AddorderExistingUser: React.FC = () => {
 
       {/* Right Sidebar */}
       <RightSideBar />
+
+      {/* Modal */}
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <h3 className="text-[30px] text-left text-black font-bold mb-4">
+          {editIndex !== null ? "Edit Item" : "Add new Item"}
+        </h3>
+
+        <Formik
+          initialValues={
+            editIndex !== null
+              ? items[editIndex]
+              : { name: "", service: "", quantity: "" }
+          }
+          // validationSchema={validationSchema}
+          onSubmit={addItems}
+          enableReinitialize
+        >
+          {() => (
+            <Form className="space-y-2">
+              <InputField
+                type="text"
+                placeholder="Item type e.g T-shirt, Pants, Ankara"
+                name="name"
+              />
+              <InputField
+                type="text"
+                placeholder="Service e.g wash, iron, starch"
+                name="service"
+              />
+              <InputField
+                type="number"
+                placeholder="Quantity"
+                name="quantity"
+              />
+
+              <Button
+                type="submit"
+                label={editIndex !== null ? "Update Item" : "Add Item"}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setShowModal(false);
+                  setEditIndex(null);
+                }}
+                className="mt-2 text-red-500"
+              >
+                Cancel
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
     </div>
   );
 };
@@ -167,7 +252,7 @@ export const AddorderNewUser: React.FC = () => {
             enableReinitialize
           >
             {() => (
-              <Form className="w-full">
+              <Form className="w-full space-y-2">
                 <InputField
                   type="text"
                   placeholder="Enter customer name"
@@ -192,7 +277,7 @@ export const AddorderNewUser: React.FC = () => {
 
         {/* Added Item */}
         <div className="flex text-black items-center justify-between w-full py-3 mt-2">
-          <div className="font-brand-bold text-2xl">Add Item</div>
+          <div className="font-brand-bold text-[16px]">Add Item</div>
           <FiPlusCircle
             className="text-black h-8 w-8"
             onClick={() => {
@@ -248,7 +333,7 @@ export const AddorderNewUser: React.FC = () => {
 
         {/* Pickup Date with Date Picker */}
         <div className="mt-4">
-          <div className="text-black text-left text-2xl font-brand-bold">
+          <div className="text-black text-left text-[16px] font-brand-bold">
             Pickup Date
           </div>
           <div className="relative mt-2 w-full flex flex-row border border-gray-300 rounded-lg">
@@ -264,10 +349,10 @@ export const AddorderNewUser: React.FC = () => {
         </div>
 
         {/* Payment Details */}
-        <div className="text-black font-brand-bold text-2xl mb-2 text-left mt-4">
+        <div className="text-black font-brand-bold text-[16px] mb-2 text-left mt-4">
           Payment
         </div>
-        <div className="mt-4 bg-brand-100 p-4 mb-4 rounded-lg">
+        <div className="mt-4 bg-brand-100 p-4 mb-4 rounded-lg text-[12px]">
           <div className="flex justify-between text-black py-2">
             <span>Cost of service</span>
             <span className="font-bold">₦30,000</span>
@@ -310,7 +395,7 @@ export const AddorderNewUser: React.FC = () => {
           enableReinitialize
         >
           {() => (
-            <Form>
+            <Form className="space-y-2">
               <InputField
                 type="text"
                 placeholder="Item type e.g T-shirt, Pants, Ankara"

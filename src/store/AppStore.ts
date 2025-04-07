@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import apiClient from "../utils/AxiosInstance";
 
 type OnboardingState = {
   step:
@@ -37,6 +38,9 @@ export const useOnboardingStore = create<OnboardingState>()(
   )
 );
 
+// User state types
+// Define the types for your user state here
+
 type Item = {
   id: string;
   name: string;
@@ -71,67 +75,112 @@ type Store = {
   createdAt?: string;
 };
 
+type Plan = {
+  id: string | number;
+  name: string;
+  features: string;
+  price: number;
+  duration: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+};
+
 type UserState = {
   email: string;
-  setEmail: (newEmail: string) => void;
+  setEmail: (email: string) => void;
   phoneNumber: string;
-  setPhoneNumber: (newPhoneNumber: string) => void;
+  setPhoneNumber: (phone: string) => void;
   planID: string;
-  setPlanID: (newPlanID: string) => void;
+  setPlanID: (planId: string) => void;
 
   referralCode: string;
-  setReferralCode: (newReferralCode: string) => void;
+  setReferralCode: (code: string) => void;
+
+  token: string;
+  setToken: (token: string) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (status: boolean) => void;
+
+  currentPlan: Plan | null;
+  availablePlans: Plan[];
+  planStartDate: string;
+  planEndDate: string;
+  loadPlans: () => Promise<void>;
 
   store: Store | null;
-  setStore: (store: Store) => void;
+  loadStore: () => Promise<void>;
+  setStore: (store: Partial<Store>) => void;
 
   items: Item[];
+  loadItems: () => Promise<void>;
   setItems: (items: Item[]) => void;
   addItem: (item: Item) => void;
   removeItem: (id: string) => void;
 
   orders: Order[];
+  loadOrders: () => Promise<void>;
   setOrders: (orders: Order[]) => void;
   addOrder: (order: Order) => void;
   updateOrderStatus: (id: string, status: Order["status"]) => void;
 
   services: Service[];
+  loadServices: () => Promise<void>;
   setServices: (services: Service[]) => void;
   addService: (service: Service) => void;
   removeService: (id: string) => void;
 
-  token: string;
-  setToken: (newToken: string) => void;
-
-  isLoggedIn: boolean;
-  setIsLoggedIn: (status: boolean) => void;
+  reset: () => void;
 };
 
-// Persist user data in localStorage
 export const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       email: "",
-      setEmail: (newEmail) => set({ email: newEmail }),
+      setEmail: (email) => set({ email }),
       phoneNumber: "",
-      setPhoneNumber: (newPhoneNumber) => set({ phoneNumber: newPhoneNumber }),
+      setPhoneNumber: (phone) => set({ phoneNumber: phone }),
       planID: "",
-      setPlanID: (newPlanID) => set({ planID: newPlanID }),
+      setPlanID: (planID) => set({ planID }),
       referralCode: "",
-      setReferralCode: (newReferralCode) =>
-        set({ referralCode: newReferralCode }),
+      setReferralCode: (code) => set({ referralCode: code }),
+      token: "",
+      setToken: (token) => set({ token }),
+      isLoggedIn: false,
+      setIsLoggedIn: (status) => set({ isLoggedIn: status }),
 
+      // PLANS
+      currentPlan: null,
+      availablePlans: [],
+      planStartDate: "",
+      planEndDate: "",
+      loadPlans: async () => {
+        console.log("Fetching plans...");
+        const res = await apiClient.get("/plans");
+        const { current, plans, start_date, end_date } = res.data;
+        set({
+          currentPlan: current,
+          availablePlans: plans,
+          planStartDate: start_date,
+          planEndDate: end_date,
+          email: res.data.email,
+        });
+      },
+
+      // STORE
       store: null,
       setStore: (storeUpdates) =>
         set((state) => ({
           store: {
-            ...state.store, // Keep existing store values
-            ...storeUpdates, // Override with new values
+            ...state.store,
+            ...storeUpdates,
           },
         })),
+      loadStore: async () => {
+        const res = await apiClient.get("/store");
+        set({ store: res.data });
+      },
 
-      // setStore: (store) => set({ store }),
-
+      // ITEMS
       items: [],
       setItems: (items) => set({ items }),
       addItem: (item) => set((state) => ({ items: [...state.items, item] })),
@@ -139,7 +188,13 @@ export const useUserStore = create<UserState>()(
         set((state) => ({
           items: state.items.filter((item) => item.id !== id),
         })),
+      loadItems: async () => {
+        const res = await apiClient.get("/items");
+        console.log("Items: ", res.data.Items);
+        set({ items: res.data.Items });
+      },
 
+      // ORDERS
       orders: [],
       setOrders: (orders) => set({ orders }),
       addOrder: (order) =>
@@ -150,37 +205,231 @@ export const useUserStore = create<UserState>()(
             order.id === id ? { ...order, status } : order
           ),
         })),
+      loadOrders: async () => {
+        const res = await apiClient.get("/orders");
+        set({ orders: res.data });
+      },
 
+      // SERVICES
       services: [],
       setServices: (services) => set({ services }),
       addService: (service) =>
         set((state) => ({ services: [...state.services, service] })),
       removeService: (id) =>
         set((state) => ({
-          services: state.services.filter((service) => service.id !== id),
+          services: state.services.filter((s) => s.id !== id),
         })),
+      loadServices: async () => {
+        const res = await apiClient.get("/services");
+        set({ services: res.data });
+      },
 
-      token: "",
-      setToken: (newToken) => set({ token: newToken }),
-
-      isLoggedIn: false,
-      setIsLoggedIn: (status) => set({ isLoggedIn: status }),
-
-      // 🔴 Reset function
+      // RESET
       reset: () =>
         set({
           email: "",
           phoneNumber: "",
           planID: "",
           referralCode: "",
+          token: "",
+          isLoggedIn: false,
+          currentPlan: null,
+          availablePlans: [],
+          planStartDate: "",
+          planEndDate: "",
           store: null,
           items: [],
           orders: [],
           services: [],
-          token: "",
-          isLoggedIn: false,
         }),
     }),
-    { name: "user-state" }
+    {
+      name: "user-state",
+    }
   )
 );
+
+// type Item = {
+//   id: string;
+//   name: string;
+//   price: number;
+//   description?: string;
+//   imageUrl?: string;
+// };
+
+// type Order = {
+//   id: string;
+//   items: Item[];
+//   totalAmount: number;
+//   status: "pending" | "processing" | "completed" | "cancelled";
+//   createdAt: string;
+// };
+
+// type Service = {
+//   id: string;
+//   name: string;
+//   description?: string;
+//   price?: number;
+// };
+
+// type Store = {
+//   id: string;
+//   name: string;
+//   description?: string;
+//   country?: string;
+//   state?: string;
+//   address?: string;
+//   logoUrl?: string;
+//   createdAt?: string;
+// };
+
+// type Plan = {
+//   id: string | number;
+//   name: string;
+//   features: string;
+//   price: number;
+//   duration: string;
+//   created_at?: string | null;
+//   updated_at?: string | null;
+// };
+
+// type UserState = {
+//   email: string;
+//   setEmail: (newEmail: string) => void;
+//   phoneNumber: string;
+//   setPhoneNumber: (newPhoneNumber: string) => void;
+//   planID: string;
+//   setPlanID: (newPlanID: string) => void;
+
+//   currentPlan: Plan | null;
+//   availablePlans: Plan[];
+//   planStartDate: string;
+//   planEndDate: string;
+
+//   setPlans: (data: {
+//     current: Plan;
+//     plans: Plan[];
+//     start_date: string;
+//     end_date: string;
+//   }) => void;
+
+//   referralCode: string;
+//   setReferralCode: (newReferralCode: string) => void;
+
+//   store: Store | null;
+//   setStore: (store: Store) => void;
+
+//   items: Item[];
+//   setItems: (items: Item[]) => void;
+//   addItem: (item: Item) => void;
+//   removeItem: (id: string) => void;
+
+//   orders: Order[];
+//   setOrders: (orders: Order[]) => void;
+//   addOrder: (order: Order) => void;
+//   updateOrderStatus: (id: string, status: Order["status"]) => void;
+
+//   services: Service[];
+//   setServices: (services: Service[]) => void;
+//   addService: (service: Service) => void;
+//   removeService: (id: string) => void;
+
+//   token: string;
+//   setToken: (newToken: string) => void;
+
+//   isLoggedIn: boolean;
+//   setIsLoggedIn: (status: boolean) => void;
+// };
+
+// // Persist user data in localStorage
+// export const useUserStore = create<UserState>()(
+//   persist(
+//     (set) => ({
+//       email: "",
+//       setEmail: (newEmail) => set({ email: newEmail }),
+//       phoneNumber: "",
+//       setPhoneNumber: (newPhoneNumber) => set({ phoneNumber: newPhoneNumber }),
+//       planID: "",
+//       setPlanID: (newPlanID) => set({ planID: newPlanID }),
+//       referralCode: "",
+//       setReferralCode: (newReferralCode) =>
+//         set({ referralCode: newReferralCode }),
+
+//       store: null,
+//       setStore: (storeUpdates) =>
+//         set((state) => ({
+//           store: {
+//             ...state.store, // Keep existing store values
+//             ...storeUpdates, // Override with new values
+//           },
+//         })),
+
+//       // Plans
+
+//       currentPlan: null,
+//       availablePlans: [],
+//       planStartDate: "",
+//       planEndDate: "",
+
+//       setPlans: ({ current, plans, start_date, end_date }) =>
+//         set({
+//           currentPlan: current,
+//           availablePlans: plans,
+//           planStartDate: start_date,
+//           planEndDate: end_date,
+//         }),
+
+//       // setStore: (store) => set({ store }),
+
+//       items: [],
+//       setItems: (items) => set({ items }),
+//       addItem: (item) => set((state) => ({ items: [...state.items, item] })),
+//       removeItem: (id) =>
+//         set((state) => ({
+//           items: state.items.filter((item) => item.id !== id),
+//         })),
+
+//       orders: [],
+//       setOrders: (orders) => set({ orders }),
+//       addOrder: (order) =>
+//         set((state) => ({ orders: [...state.orders, order] })),
+//       updateOrderStatus: (id, status) =>
+//         set((state) => ({
+//           orders: state.orders.map((order) =>
+//             order.id === id ? { ...order, status } : order
+//           ),
+//         })),
+
+//       services: [],
+//       setServices: (services) => set({ services }),
+//       addService: (service) =>
+//         set((state) => ({ services: [...state.services, service] })),
+//       removeService: (id) =>
+//         set((state) => ({
+//           services: state.services.filter((service) => service.id !== id),
+//         })),
+
+//       token: "",
+//       setToken: (newToken) => set({ token: newToken }),
+
+//       isLoggedIn: false,
+//       setIsLoggedIn: (status) => set({ isLoggedIn: status }),
+
+//       // 🔴 Reset function
+//       reset: () =>
+//         set({
+//           email: "",
+//           phoneNumber: "",
+//           planID: "",
+//           referralCode: "",
+//           store: null,
+//           items: [],
+//           orders: [],
+//           services: [],
+//           token: "",
+//           isLoggedIn: false,
+//         }),
+//     }),
+//     { name: "user-state" }
+//   )
+// );

@@ -21,22 +21,22 @@ function NavigationContainer() {
         <nav className="space-y-2 text-white py-8">
           <NavItem
             label="Overview"
-            icon={<FaHome className="text-white" />}
+            icon={<FaHome className="text-white w-4 h-4" />}
             path="/dashboard"
           />
 
           {/* Replace Add Order NavItem with a button to open modal */}
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
+            className="flex items-center w-full px-3 py-[7px] text-[12px] text-white rounded-md hover:bg-brand-400"
           >
-            <MdOutlineAddBox className="mr-2 text-white" />
+            <MdOutlineAddBox className="mr-2 text-white w-4 h-4" />
             Add Order
           </button>
 
           <NavItem
             label="Inventory"
-            icon={<MdOutlineInventory className="text-white" />}
+            icon={<MdOutlineInventory className="text-white w-4 h-4" />}
             path="/dashboard/inventory"
           />
           {/* <NavItem
@@ -46,12 +46,12 @@ function NavigationContainer() {
           /> */}
           <NavItem
             label="Orders"
-            icon={<FaList className="text-white" />}
+            icon={<FaList className="text-white w-4 h-4" />}
             path="/dashboard/orders"
           />
           <NavItem
             label="Customers"
-            icon={<FaUsers className="text-white" />}
+            icon={<FaUsers className="text-white w-4 h-4" />}
             path="/dashboard/customers"
           />
           {/* <NavItem
@@ -66,14 +66,14 @@ function NavigationContainer() {
           /> */}
           <NavItem
             label="Report"
-            icon={<FaChartBar className="text-white" />}
+            icon={<FaChartBar className="text-white w-4 h-4" />}
             path="/dashboard/reports"
           />
 
           {/* Nested nav */}
           <NavItem
             label="More"
-            icon={<RiAppsLine className="text-white" />}
+            icon={<RiAppsLine className="text-white w-4 h-4" />}
             children={[
               { label: "Setting", path: "/dashboard/settings" },
               { label: "Customer", path: "/dashboard/customers" },

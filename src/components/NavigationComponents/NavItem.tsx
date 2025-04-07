@@ -25,17 +25,19 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
                 ? "bg-brand-400 text-white"
                 : "text-white hover:bg-brand-400"
             }`
-          }>
+          }
+        >
           <div className="flex items-center space-x-2">
             {icon}
-            <span className="text-white text-sm">{label}</span>
+            <span className="text-white text-[12px]">{label}</span>
           </div>
         </NavLink>
       ) : (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400">
-          <div className="flex items-center space-x-2">
+          className="flex items-center justify-between w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
+        >
+          <div className="flex items-center text-[12px] space-x-2">
             {icon}
             <span>{label}</span>
           </div>
@@ -54,12 +56,13 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
               to={child.path}
               end={true}
               className={({ isActive }) =>
-                `block py-[7px] px-2 rounded-md transition text-left text-xs ${
+                `block py-[7px] px-2 rounded-md transition text-left text-[12px] ${
                   isActive
                     ? "bg-brand-400 text-white"
                     : "text-white hover:bg-brand-400"
                 }`
-              }>
+              }
+            >
               {child.label}
             </NavLink>
           ))}

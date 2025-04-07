@@ -2,10 +2,15 @@ import NavigationContainer from "../components/NavigationComponents/NavigationCo
 import Header from "../components/DashboardComponents/Header";
 import { Outlet } from "react-router-dom";
 import MobileNavContainer from "../components/NavigationComponents/MobileNavContainer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../components/DashboardComponents/Modal";
+import { loadEverything } from "../hooks/useAppInitializer";
 function DashboardScreen() {
   const [showModal, setShowModal] = useState(false);
+  useEffect(() => {
+    loadEverything();
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex h-screen w-screen">
       {/* Sidebar */}
