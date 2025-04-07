@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import { FaChevronRight } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import Button from "../components/FormComponents/Button";
 import RightSideBar from "../components/DashboardComponents/RightSideBar";
-import { Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from "yup";
 
 import InputField from "../components/FormComponents/InputField";
 import Modal from "../components/DashboardComponents/Modal";
+import apiClient from "../utils/AxiosInstance";
 
 interface Item {
   name: string;
   service: number | string;
   quantity: number | string;
+  photo?: File | null;
 }
 
 export const AddorderExistingUser: React.FC = () => {
@@ -202,14 +204,64 @@ export const AddorderNewUser: React.FC = () => {
   const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const formikRef = useRef<FormikProps<any>>(null);
 
   const validationSchema = Yup.object({
     customerName: Yup.string().required("Name is required"),
     customerEmail: Yup.string().required("Email is required"),
     phoneNumber: Yup.number().required("Customer's Phone No. is required"),
   });
-  const handleSubmit = () => {
-    console.log("submiting");
+  const handleSubmit = async () => {
+    const values = formikRef.current?.values;
+
+    if (!values) return;
+
+    // Optional: you can manually trigger validation
+    const isValid = await formikRef.current?.validateForm();
+    if (isValid && Object.keys(isValid).length > 0) {
+      console.log("Validation errors:", isValid);
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      formData.append("name", values.customerName);
+      formData.append("email", values.customerEmail);
+      formData.append("phone_number", values.phoneNumber.toString());
+      formData.append("pickup_date", pickupDate?.toISOString() || "");
+      formData.append("order_type", "0");
+      formData.append("is_exist", "1");
+      formData.append("items_id", "357");
+      formData.append("total_amount", "70000");
+      formData.append("paid_amount", "5000");
+      formData.append("payment_type", "cash");
+
+      items.forEach((item, index) => {
+        formData.append(
+          `items[${index}][service_name]`,
+          item.service.toString()
+        );
+        formData.append(`items[${index}][item_type]`, item.name);
+        formData.append(
+          `items[${index}][no_of_items]`,
+          item.quantity.toString()
+        );
+        if (item.photo) {
+          formData.append(`items[${index}][photos]`, item.photo);
+        }
+      });
+
+      const response = await apiClient.post("/order/create", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Order created:", response.data);
+    } catch (error) {
+      console.error("Order creation failed:", error);
+    }
   };
   const addItems = (values: Item, { resetForm }: FormikHelpers<Item>) => {
     if (editIndex !== null) {
@@ -242,13 +294,14 @@ export const AddorderNewUser: React.FC = () => {
         {/* Customer Info */}
         <div className="flex w-full items-center py-2 flex-col">
           <Formik
+            innerRef={formikRef}
             initialValues={{
               customerName: "",
               customerEmail: "",
               phoneNumber: "",
             }}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={() => {}}
             enableReinitialize
           >
             {() => (
@@ -268,8 +321,6 @@ export const AddorderNewUser: React.FC = () => {
                   placeholder="Customer Phone No."
                   name="phoneNumber"
                 />
-
-                {/* <Button type="submit" label={"Add customer"} /> */}
               </Form>
             )}
           </Formik>
@@ -285,18 +336,6 @@ export const AddorderNewUser: React.FC = () => {
             }}
           />
         </div>
-        {/* <div className="mt-4 bg-brand-100 rounded-lg flex justify-between py-2 px-4 items-center">
-          <div className="flex items-center gap-4">
-            <img src="/images/order-icon.png" className="w-10" alt="" />
-            <div className="text-left">
-              <p className="font-semibold text-quick-action-icon">
-                Wash & Iron
-              </p>
-              <p className="text-gray-500 text-sm">Trouser - 2 pieces</p>
-            </div>
-          </div>
-          <button className="text-gray-500">✖</button>
-        </div> */}
         {items.map((items, index) => (
           <div
             className="mt-4 bg-brand-100 rounded-lg flex justify-between py-2 px-4 items-center"
@@ -372,7 +411,7 @@ export const AddorderNewUser: React.FC = () => {
         </div>
 
         {/* Submit Button */}
-        <Button label="Create Order" />
+        <Button label="Create Order" onClick={handleSubmit} />
       </div>
 
       {/* Right Sidebar */}
@@ -410,6 +449,22 @@ export const AddorderNewUser: React.FC = () => {
                 type="number"
                 placeholder="Quantity"
                 name="quantity"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.currentTarget.files?.[0] || null;
+                  setItems((prev) => {
+                    const updated = [...prev];
+                    if (editIndex !== null) {
+                      updated[editIndex].photo = file;
+                    } else {
+                      updated[updated.length - 1].photo = file;
+                    }
+                    return updated;
+                  });
+                }}
               />
 
               <Button

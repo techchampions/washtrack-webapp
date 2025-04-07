@@ -154,7 +154,6 @@ export const useUserStore = create<UserState>()(
       planStartDate: "",
       planEndDate: "",
       loadPlans: async () => {
-        console.log("Fetching plans...");
         const res = await apiClient.get("/plans");
 
         const { current, plans, start_date, end_date } = res.data;
@@ -178,12 +177,10 @@ export const useUserStore = create<UserState>()(
         })),
       loadStore: async () => {
         const res = await apiClient.get("/user-profile");
-        console.log("Store: ", res.data.user.store.store_images);
         const uncleanLogoUrl = res.data.user.store.store_images; // This is the string with escaped characters
         const parsedLogoUrl = JSON.parse(uncleanLogoUrl);
         // Clean up the URL to remove the escape characters
         const cleanLogoUrl = parsedLogoUrl[0].replace(/\\\//g, "/"); // Replace escaped slashes with regular slashes
-        console.log("logo:", cleanLogoUrl);
         set({
           store: {
             id: res.data.user.store.id,
@@ -224,9 +221,9 @@ export const useUserStore = create<UserState>()(
           ),
         })),
       loadOrders: async () => {
-        const res = await apiClient.get("/orders");
+        const res = await apiClient.get("orders/processing");
         console.log("Orders: ", res.data);
-        set({ orders: res.data });
+        // set({ orders: res.data });
       },
 
       // SERVICES
@@ -239,9 +236,9 @@ export const useUserStore = create<UserState>()(
           services: state.services.filter((s) => s.id !== id),
         })),
       loadServices: async () => {
-        const res = await apiClient.get("/service/71");
+        const res = await apiClient.get("/service");
         console.log("Services: ", res.data);
-        set({ services: res.data });
+        // set({ services: res.data });
       },
 
       // RESET
