@@ -78,7 +78,7 @@ const StoreSetup = () => {
       libraries={["places"]} // Ensure 'places' library is loaded
     >
       <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4 pt-0">
-        <h2 className="text-[30px] font-brand-bold text-blue-500">
+        <h2 className="text-[20px] font-brand-bold text-blue-500">
           Setup your store
         </h2>
         <p className="text-gray-500 text-xs text-center">
@@ -93,7 +93,7 @@ const StoreSetup = () => {
             accept="image/*"
             onChange={(e) => handleImageUpload(e, "logo")}
           />
-          <div className="w-24 h-24 flex items-center justify-center bg-blue-100 rounded-full border border-blue-300">
+          <div className="w-18 h-18 flex items-center justify-center bg-blue-100 rounded-full border border-blue-300">
             {logoFile ? (
               <img
                 src={URL.createObjectURL(logoFile)}
@@ -108,7 +108,7 @@ const StoreSetup = () => {
               />
             )}
           </div>
-          <BiSolidCameraPlus className="absolute right-4 bottom-4 text-white" />
+          <BiSolidCameraPlus className="absolute right-2 bottom-2 text-white" />
         </label>
         <p className="text-sm text-gray-500">Upload your store logo</p>
 
@@ -216,7 +216,7 @@ const StoreSetup = () => {
 
               {/* Store Banners */}
               <div className="flex flex-col">
-                <label className="text-md font-semibold text-gray-500 text-left">
+                <label className="text-xs font-semibold text-gray-600 text-left">
                   Upload store banners
                 </label>
                 <p className="text-xs text-gray-400 text-left mb-2">

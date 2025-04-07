@@ -5,8 +5,9 @@ import apiClient from "../../utils/AxiosInstance";
 import Button from "../FormComponents/Button";
 
 function Header() {
-  const { setIsLoggedIn, currentPlan } = useUserStore();
+  const { setIsLoggedIn, currentPlan, store } = useUserStore();
   const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
+
   const handleLogout = () => {
     setStep("Get Started");
     setHasCompletedOnboarding(false);
@@ -42,11 +43,12 @@ function Header() {
       <div className="flex justify-between items-center ">
         <div className="flex flex-row gap-1 items-center">
           <img
-            src="/images/profile-img.png"
+            // src="/images/profile-img.png"
+            src={store?.logoUrl}
             alt=""
-            className="h-10 w-10 rounded-full"
+            className="h-10 w-10 rounded-full object-cover"
           />
-          <h1 className="text-lg font-bold text-black">Victoria's Laundry</h1>
+          <h1 className="text-lg font-bold text-black">{store?.name}</h1>
           <span className="bg-brand-100 text-brand px-4 py-0.5 ml-2 rounded-md">
             {currentPlan?.name}
           </span>

@@ -138,10 +138,10 @@ const AddItems = () => {
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4 relative">
-      <h2 className="text-2xl font-brand-bold text-brand text-center">
+      <h2 className="text-[20px] font-brand-bold text-brand text-center">
         Add your Item Types
       </h2>
-      <p className="text-gray-600 text-center mt-2">
+      <p className="text-gray-600 text-center text-xs mt-2">
         Add the items you deal with below to complete your store setup
       </p>
 
@@ -157,18 +157,18 @@ const AddItems = () => {
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-brand-100 p-3 rounded-md mt-2 text-left flex items-center gap-2 w-full"
+            className="bg-brand-100 p-2 rounded-md mt-2 text-left flex items-center gap-2 w-full"
             onClick={() => {
               setEditIndex(index);
               setShowModal(true);
             }}
           >
-            <div className="bg-brand-200 p-3 rounded-full">
-              <FiFileText className="text-quick-action-icon h-6 w-6" />
+            <div className="bg-brand-200 p-2 rounded-full">
+              <FiFileText className="text-quick-action-icon h-4 w-4" />
             </div>
             <div className="w-full">
-              <p>{item[0]?.item_name}</p>
-              <p className="text-[12px] text-gray-800">
+              <p className="text-sm">{item[0]?.item_name}</p>
+              <p className="text-xs text-gray-800">
                 {item.map((s) => s.service_name).join(", ")}
               </p>
             </div>

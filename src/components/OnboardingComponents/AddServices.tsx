@@ -112,8 +112,8 @@ const AddServices = () => {
 
   return (
     <div className="flex flex-col justify-between h-full w-full max-w-lg mx-auto p-4 relative">
-      <div className="flex flex-col items-center space-y-4">
-        <h2 className="text-2xl font-brand-bold text-brand text-center">
+      <div className="flex flex-col items-center space-y-1.5">
+        <h2 className="text-[20px] font-brand-bold text-brand text-center">
           Add your services
         </h2>
         <p className="text-gray-600 text-center mt-2 text-xs">

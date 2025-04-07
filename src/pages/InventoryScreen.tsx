@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import MainCard from "../components/DashboardComponents/MainCard";
+import { useUserStore } from "../store/AppStore";
 
 const InventoryScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Current");
+  const { orders } = useUserStore();
 
   // Sample Data
-  const orders = [
+  const items = [
     { id: 1, item: "Jeans", quantity: 9 },
     { id: 2, item: "Shirt", quantity: 5 },
     { id: 3, item: "Trouser", quantity: 5 },
@@ -23,7 +25,7 @@ const InventoryScreen: React.FC = () => {
           <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
             <div className="flex flex-col space-y-0 text-left">
               <div className="text-[40px] md:text-[80px] font-brand-bold">
-                200
+                {orders?.total || 0}
               </div>
               <div className="text-md text-white/80">Total Orders</div>
             </div>
@@ -57,7 +59,8 @@ const InventoryScreen: React.FC = () => {
                 ? "bg-brand text-white"
                 : "border border-gray-200 text-gray-400"
             }`}
-            onClick={() => setActiveTab(tab)}>
+            onClick={() => setActiveTab(tab)}
+          >
             {tab}
           </button>
         ))}
@@ -74,13 +77,14 @@ const InventoryScreen: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
+          {items.map((item, index) => (
             <tr
-              key={order.id}
-              className="even:bg-transparent odd:bg-brand-500 text-black font-bold">
+              key={item.id}
+              className="even:bg-transparent odd:bg-brand-500 text-black font-bold"
+            >
               <td className=" px-4 py-2">{index + 1}</td>
-              <td className=" px-4 py-2">{order.item}</td>
-              <td className=" px-4 py-2">{order.quantity}</td>
+              <td className=" px-4 py-2">{item.item}</td>
+              <td className=" px-4 py-2">{item.quantity}</td>
               <td className=" px-4 py-2">
                 <p className="text-brand underline underline-offset-4">View</p>
               </td>

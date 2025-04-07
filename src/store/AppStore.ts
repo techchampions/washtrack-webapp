@@ -156,6 +156,7 @@ export const useUserStore = create<UserState>()(
       loadPlans: async () => {
         console.log("Fetching plans...");
         const res = await apiClient.get("/plans");
+
         const { current, plans, start_date, end_date } = res.data;
         set({
           currentPlan: current,
@@ -176,8 +177,25 @@ export const useUserStore = create<UserState>()(
           },
         })),
       loadStore: async () => {
-        const res = await apiClient.get("/store");
-        set({ store: res.data });
+        const res = await apiClient.get("/user-profile");
+        console.log("Store: ", res.data.user.store.store_images);
+        const uncleanLogoUrl = res.data.user.store.store_images; // This is the string with escaped characters
+        const parsedLogoUrl = JSON.parse(uncleanLogoUrl);
+        // Clean up the URL to remove the escape characters
+        const cleanLogoUrl = parsedLogoUrl[0].replace(/\\\//g, "/"); // Replace escaped slashes with regular slashes
+        console.log("logo:", cleanLogoUrl);
+        set({
+          store: {
+            id: res.data.user.store.id,
+            name: res.data.user.store.store_name,
+            description: res.data.user.store.store_description,
+            country: res.data.user.store.country,
+            state: res.data.user.store.state,
+            address: res.data.user.store.store_location,
+            logoUrl: cleanLogoUrl,
+            createdAt: res.data.user.store.created_at,
+          },
+        });
       },
 
       // ITEMS
@@ -189,9 +207,9 @@ export const useUserStore = create<UserState>()(
           items: state.items.filter((item) => item.id !== id),
         })),
       loadItems: async () => {
-        const res = await apiClient.get("/items");
-        console.log("Items: ", res.data.Items);
-        set({ items: res.data.Items });
+        const res = await apiClient.get("/estore/get-item-service");
+        console.log("Items: ", res.data);
+        // set({ items: res.data.Items });
       },
 
       // ORDERS
@@ -207,6 +225,7 @@ export const useUserStore = create<UserState>()(
         })),
       loadOrders: async () => {
         const res = await apiClient.get("/orders");
+        console.log("Orders: ", res.data);
         set({ orders: res.data });
       },
 
@@ -220,7 +239,8 @@ export const useUserStore = create<UserState>()(
           services: state.services.filter((s) => s.id !== id),
         })),
       loadServices: async () => {
-        const res = await apiClient.get("/services");
+        const res = await apiClient.get("/service/71");
+        console.log("Services: ", res.data);
         set({ services: res.data });
       },
 

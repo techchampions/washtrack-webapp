@@ -106,8 +106,8 @@ const SignUp: React.FC = () => {
     >
       {({ isSubmitting, isValid }) => (
         <div className=" w-full">
-          <div className="flex flex-col justify-center mb-12 mt-8">
-            <h3 className="text-2xl text-center font-brand-bold text-brand">
+          <div className="flex flex-col justify-center mb-10 mt-6">
+            <h3 className="text-[20px] text-center font-brand-bold text-brand">
               Create Account
             </h3>
             <p className="mt-2 text-gray-400">
@@ -184,9 +184,9 @@ const SignUp: React.FC = () => {
               type="submit"
               disabled={isSubmitting || !isValid}
               isLoading={isSubmitting}
-              className="mt-[100px]"
+              className="mt-[70px]"
             />
-            <p className="text-gray-500 mt-4 text-center font-medium">
+            <p className="text-gray-500 mt-4 text-center text-sm font-medium">
               Have an account?
               <span
                 className="text-brand cursor-pointer ml-1"

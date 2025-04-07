@@ -115,7 +115,7 @@ const OrderList = ({ orders }) => {
   const navigate = useNavigate();
 
   return orders.length === 0 ? (
-    <div className="flex text-left text-brand font-brand-bold py-10">
+    <div className="flex text-center justify-center items-center text-brand font-brand-bold py-10 bg-brand-100 px-5 rounded-lg">
       <FaExclamationCircle className="text-3xl text-brand mr-2" />
       You have no Orders
     </div>
