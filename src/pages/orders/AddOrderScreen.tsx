@@ -3,23 +3,20 @@ import DatePicker from "react-datepicker";
 import { FaChevronRight } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
 import { MdOutlineCalendarToday } from "react-icons/md";
-import Button from "../components/FormComponents/Button";
-import RightSideBar from "../components/DashboardComponents/RightSideBar";
+import {Button, InputField} from "../../components/FormComponents";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import * as Yup from "yup";
-
-import InputField from "../components/FormComponents/InputField";
-import Modal from "../components/DashboardComponents/Modal";
-import apiClient from "../utils/AxiosInstance";
+import apiClient from "../../utils";
+import {RightSideBar, Modal } from "../../components/DashboardComponents"
 
 interface Item {
   name: string;
-  service: number | string;
+  service: number | string; 
   quantity: number | string;
   photo?: File | null;
 }
 
-export const AddorderExistingUser: React.FC = () => {
+export const AddOrderExistingUser: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
@@ -198,7 +195,7 @@ export const AddorderExistingUser: React.FC = () => {
   );
 };
 
-export const AddorderNewUser: React.FC = () => {
+export const AddOrderNewUser: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
