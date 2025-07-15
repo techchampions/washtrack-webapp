@@ -31,7 +31,7 @@ import {
   Login,
   Register,
 } from "@/types/OnboardingTypes/registerTypes";
-import { DeleteItemsPayload } from "@/zustand/orderStore";
+//import { DeleteItemsPayload } from "@/zustand/orderStore";
 import apiClient from "./apiClient";
 import {
   OutStandingResponse,
@@ -158,10 +158,10 @@ const updateItems = async (data: FormData) => {
 
   return response.data;
 };
-const deleteItems = async (data: DeleteItemsPayload) => {
+/**const deleteItems = async (data: DeleteItemsPayload) => {
   const response = await apiClient.post(`/api/delete/item`, data);
   return response.data;
-};
+}; **/
 const createOrder = async (data: Orders) => {
   const response = await apiClient.post(`/api/order/create`, data);
   return response.data;

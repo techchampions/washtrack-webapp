@@ -1,4 +1,17 @@
 {
+"compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@pages/*": ["./pages/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@api/*": ["./api/*"],
+      "@utils/*": ["./utils/*"],
+      "@routes/*": ["./routes/*"],
+      "@types/*": ["./types/*"],
+      "@store/*": ["./store/*"],
+      "@assets/*": ["./assets/*"]
+    }
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
