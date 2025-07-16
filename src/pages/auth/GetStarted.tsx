@@ -1,5 +1,5 @@
 import { useOnboardingStore, useUserStore } from "../../store/AppStore";
-import Button from "../FormComponents/Button";
+import Button from "../../components/FormComponents/Button";
 
 function GetStarted() {
   const { setStep } = useOnboardingStore();

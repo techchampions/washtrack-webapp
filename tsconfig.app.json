@@ -31,7 +31,8 @@
       "@routes/*": ["./routes/*"],
       "@types/*": ["./types/*"],
       "@store/*": ["./store/*"],
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./assets/*"],
+      "@components/*": ["./src/components/*"],
     }
   },
   "include": ["src"]

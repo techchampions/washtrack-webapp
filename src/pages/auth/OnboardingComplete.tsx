@@ -1,5 +1,5 @@
 import { useOnboardingStore, useUserStore } from "../../store/AppStore";
-import Button from "../FormComponents/Button";
+import Button from "../../components/FormComponents/Button";
 import { FaCheckCircle } from "react-icons/fa";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useNavigate } from "react-router-dom";

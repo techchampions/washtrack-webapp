@@ -165,10 +165,10 @@
 
 // export default OTP;
 import { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
-import { useOnboardingStore } from "../../store/AppStore";
+import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import apiClient from "../../utils/AxiosInstance";
-import Toast from "../GeneralComponents/Toast";
-import Button from "../FormComponents/Button";
+import Toast from "../../components/GeneralComponents/Toast";
+import Button from "../../components/FormComponents/Button";
 
 interface OTPProps {
   length?: number;
@@ -176,6 +176,7 @@ interface OTPProps {
 
 const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
   const { setStep } = useOnboardingStore();
+  const { resendOTP, otpResponse, verifyOTP} = useAuthStore();
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -231,9 +232,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
 
     if (enteredOtp === storedOtp) {
       try {
-        const response = await apiClient.post("/verify-otp", {
-          otp: enteredOtp,
-        });
+        const response = await verifyOTP({otp: enteredOtp});
         setIsSubmitting(true);
 
         if (response.data.success) {

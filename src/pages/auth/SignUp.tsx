@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import InputField from "../FormComponents/InputField";
+import InputField from "../../components/FormComponents/InputField";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa6";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
-import Button from "../FormComponents/Button";
+import Button from "../../components/FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import apiClient from "../../utils/AxiosInstance";
-import Toast from "../GeneralComponents/Toast";
+import Toast from "../../components/GeneralComponents/Toast";
+import { useAuthStore, useOnboardingStore } from "@/store/onboardingStore"
+
 
 const SignUp: React.FC = () => {
   const { setStep } = useOnboardingStore();
-  const { setToken, setStore, setPlanID, setReferralCode, setPhoneNumber } =
-    useUserStore();
+  // const { setToken, setStore, setPlanID, setReferralCode, setPhoneNumber } =
+  //   useUserStore();
+  const { registerUser, fieldErrors } = useAuthStore();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
@@ -20,61 +21,33 @@ const SignUp: React.FC = () => {
 
   const handleSignup = async (
     values: {
-      businessName: string;
-      phoneNumber: string;
+      store_name: string;
+      phone_num: string;
       email: string;
       password: string;
     },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    try {
-      const response = await apiClient.post("/register", {
-        store_name: values.businessName,
-        phone_num: values.phoneNumber,
-        email: values.email,
-        password: values.password,
-        user_type: 2,
-      });
+    //  setToastMsg("An Error Occured")
+    //   setToastType("error");
+    //   setShowToast(true)
+    console.log(values, "log values signup");
 
-      if (response.data.success) {
-        setToken(response.data.token); // Save token in store
-        setStore({
-          id: response.data.user.id,
-          name: response.data.user.store_name,
-          address: "",
-          description: "",
-          logoUrl: "",
-        });
+    try {
+      const response = await registerUser({ ...values, user_type: 2 });
+      console.log(response, " response sign up")
+      if (response?.success) {
         setToastMsg("User registered successfully!");
         setToastType("success");
         setShowToast(true);
-
-        setPlanID(response.data.user.plan_id);
-        setReferralCode(response.data.user.referral_code);
-        setPhoneNumber(response.data.user.phone_num);
-        localStorage.setItem("otp", response.data.otp.otp);
-        console.log(response.data.otp.otp); // Save OTP for verification
         setStep("verify OTP");
-      } else if (response.data.errors) {
-        const errorMessages = Object.values(response.data.errors)
-          .flat()
-          .join("\n"); // Combine errors into a readable string
-        setToastMsg(errorMessages);
-        setToastType("error");
-        setShowToast(true);
       }
-    } catch (error: any) {
-      if (error.response && error.response.data.errors) {
-        const errorMessages = Object.values(error.response.data.errors)
-          .flat()
-          .join("\n"); // Extract and format error messages
-        setToastMsg(errorMessages);
-      } else {
-        setToastMsg("Something went wrong. Please try again.");
-      }
+    } catch (error) {
+      console.log(fieldErrors, error, "in sign up")
+      setToastMsg("An Error Occured")
       setToastType("error");
-      setShowToast(true);
-      console.error("Signup failed:", error);
+      setShowToast(true)
+    
     } finally {
       setSubmitting(false);
     }
@@ -83,14 +56,14 @@ const SignUp: React.FC = () => {
   return (
     <Formik
       initialValues={{
-        businessName: "",
-        phoneNumber: "",
+        store_name: "",
+        phone_num: "",
         email: "",
         password: "",
       }}
       validationSchema={Yup.object({
-        businessName: Yup.string().required("Business Name is required"),
-        phoneNumber: Yup.string()
+        store_name: Yup.string().required("Business Name is required"),
+        phone_num: Yup.string()
           .matches(/^\d+$/, "Phone number must be numeric")
           .min(10, "Phone number must be at least 10 digits")
           .required("Phone number is required"),
@@ -116,12 +89,12 @@ const SignUp: React.FC = () => {
           </div>
           <Form className="flex flex-col mt-4 space-y-3">
             <InputField
-              name="businessName"
+              name="store_name"
               placeholder="Business Name"
               icon={<FaUser className="text-brand w-5 h-5" />}
             />
             <InputField
-              name="phoneNumber"
+              name="phone_num"
               placeholder="Phone Number"
               icon={<FaPhone className="text-brand w-5 h-5" />}
             />

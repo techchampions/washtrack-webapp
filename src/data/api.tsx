@@ -491,7 +491,7 @@ export const api = {
   addItems,
   getItems,
   updateItems,
-  deleteItems,
+ /* deleteItems,*/
   createExistingOrder,
   getOrders,
   getSingleOrders,

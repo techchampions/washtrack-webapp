@@ -8,9 +8,9 @@ import {
   Register,
   RegisterResponse,
 } from "@/types/OnboardingTypes/registerTypes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosError } from "axios";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface ChangePasswordResponse {
   success: boolean;
@@ -54,8 +54,46 @@ export interface ValidationErrorResponse {
   message?: string;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  // Initial states
+type OnboardingState = {
+  step:
+    | "Get Started"
+    | "signup"
+    | "login"
+    | "verify OTP"
+    | "signup completed"
+    | "setup store"
+    | "add services"
+    | "add items"
+    | "onboarding complete";
+  setStep: (newStep: OnboardingState["step"]) => void;
+  hasCompletedOnboarding: boolean;
+  setHasCompletedOnboarding: (newHasCompletedOnboarding: boolean) => void;
+};
+
+
+export const useOnboardingStore = create<OnboardingState>()(
+  persist(
+    (set) => ({
+      step: "Get Started", // Default step
+      setStep: (newStep) => set({ step: newStep }),
+      hasCompletedOnboarding: false,
+      setHasCompletedOnboarding: (newHasCompletedOnboarding) =>
+        set({ hasCompletedOnboarding: newHasCompletedOnboarding }),
+
+      reset: () =>
+        set({
+          step: "Get Started",
+          hasCompletedOnboarding: false,
+        }),
+    }),
+    { name: "onboarding-state" } // Key for localStorage
+  )
+);
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+        // Initial states
   success: false,
   user: null,
   otpResponse: null,
@@ -66,8 +104,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   fieldErrors: null,
   regsuccess: false,
 
-  // Register User
-  registerUser: async (data) => {
+   registerUser: async (data) => {
     set({ isLoading: true, error: null, fieldErrors: null });
     try {
       const response = await api.registerUser(data);
@@ -87,14 +124,16 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
         fieldErrors: null,
       });
-      await AsyncStorage.setItem("authToken", token);
-      await AsyncStorage.setItem("storeUpdated", "false");
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("storeUpdated", "false");
 
       return response as RegisterResponse
     } catch (error) {
       console.error("Error during registration:", error);
+      console.log(error.response?.data);
 
       if (axios.isAxiosError(error) && error.response?.data) {
+        console.log("axio error ", )
         const errorData = error.response.data as ValidationErrorResponse;
 
         if (errorData.errors) {
@@ -119,22 +158,22 @@ export const useAuthStore = create<AuthState>((set) => ({
           isLoading: false,
         });
       }
+
+      return error;
     }
   },
-  // Verify OTP
-
-  verifyOTP: async (otp) => {
+    verifyOTP: async (otp) => {
     set({ isLoading: true, error: null });
     try {
-      await AsyncStorage.setItem("storeUpdated", "false");
+      localStorage.setItem("storeUpdated", "false");
 
       const data = await api.verifyUser(otp);
 
       if (data?.success) {
         const currentTimestamp = new Date().getTime().toString();
 
-        await AsyncStorage.setItem("otpVerified", "true");
-        await AsyncStorage.setItem("tokenTimestamp", currentTimestamp);
+        localStorage.setItem("otpVerified", "true");
+        localStorage.setItem("tokenTimestamp", currentTimestamp);
         set({
           otpResponse: data,
           isLoading: false,
@@ -208,21 +247,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
 
         // Set all values in a single batch to prevent race conditions
-        await AsyncStorage.multiSet([
-          ["authToken", response.token],
-          ["tokenTimestamp", currentTimestamp],
-          ["otpVerified", response.otpVerified ? "true" : "false"],
-          ["storeUpdated", response.storeUpdated ? "true" : "false"], // Changed from storeCompleted
-        ]);
-
-        // Verify the values were set correctly
-        const verifyValues = await AsyncStorage.multiGet([
-          "authToken",
-          "tokenTimestamp",
-          "otpVerified",
-          "storeUpdated",
-        ]);
-        console.log("Verification of stored values:", verifyValues);
+        localStorage.setItem("authToken", response.token);
+        localStorage.setItem("tokenTimestamp", currentTimestamp);
+        localStorage.setItem("otpVerified", response.otpVerified ? "true" : "false");
+        localStorage.setItem("storeUpdated", response.storeUpdated ? "true" : "false");
+    
 
         set({
           success: true,
@@ -240,13 +269,12 @@ export const useAuthStore = create<AuthState>((set) => ({
           storeUpdated: response.storeUpdated, // Changed from storeCompleted
         };
       } else {
-        // Login failed - clear any existing credentials
-        await AsyncStorage.multiRemove([
-          "authToken",
-          "otpVerified",
-          "storeUpdated",
-          "tokenTimestamp",
-        ]);
+        // Login failed
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("otpVerified")
+        localStorage.removeItem("storeUpdated");
+        localStorage.removeItem("tokenTimestamp");
+    
 
         set({
           success: false,
@@ -272,12 +300,11 @@ export const useAuthStore = create<AuthState>((set) => ({
           : "Failed to login, please check your internet connection.";
 
       // Clear any existing credentials on error
-      await AsyncStorage.multiRemove([
-        "authToken",
-        "otpVerified",
-        "storeCompleted",
-        "tokenTimestamp",
-      ]);
+         // Login failed
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("otpVerified")
+        localStorage.removeItem("storeUpdated");
+        localStorage.removeItem("tokenTimestamp");
 
       set({
         error: errorMessage,
@@ -365,7 +392,7 @@ export const useAuthStore = create<AuthState>((set) => ({
           isLoading: false,
         });
 
-        await AsyncStorage.removeItem("authToken");
+        localStorage.removeItem("authToken");
       } else {
         throw new Error(response.message || "Logout failed");
       }
@@ -431,5 +458,8 @@ fetchFaqs: async () => {
       set({ isLoading: false });
     }
   },
-   
-}));
+  
+    }),
+    {name: "auth-state"},
+  )
+)

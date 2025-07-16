@@ -2,18 +2,18 @@ import { Suspense, lazy } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Loader from "../components/GeneralComponents/Loader";
 import { useOnboardingStore, useUserStore } from "../store/AppStore";
-import Onboarding from "../pages/OnboardingScreen";
+import Onboarding from "../pages/auth/OnboardingScreen";
 import ProtectedRoute from "./ProtectedRoute";
 import {HomeScreen} from "../pages/home";
-import InventoryScreen from "../pages/InventoryScreen";
+import InventoryScreen from "@/pages/inventory/InventoryScreen";
 import { AddOrderNewUser, AddOrderExistingUser } from "../pages/orders";
-import OrdersScreen from "../pages/OrdersScreen";
-import MyStoreScreen from "../pages/MyStoreScreen";
-import ReportScreen from "../pages/ReportScreen";
-import CustomerScreen from "../pages/CustomerScreen";
-import OrderOverview from "../pages/OrderOverview";
+import OrdersScreen from "@/pages/orders/OrdersScreen";
+import MyStoreScreen from "../pages/my-store/MyStoreScreen";
+import ReportScreen from "@/pages/stats/ReportScreen";
+import CustomerScreen from "@/pages/customers/CustomerScreen";
+import OrderOverview from "@/pages/orders/OrderOverview";
 
-const DashboardScreen = lazy(() => import("../pages/DashboardScreen"));
+const DashboardScreen = lazy(() => import("../pages/home/DashboardScreen"));
 
 const AllRoutes = () => {
   const { hasCompletedOnboarding } = useOnboardingStore();

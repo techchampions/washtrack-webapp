@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import MainCard from "../components/DashboardComponents/MainCard";
-import { useUserStore } from "../store/AppStore";
+import MainCard from "@/components/DashboardComponents/MainCard";
+import { useUserStore } from "@/store/AppStore";
 
 const InventoryScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Current");

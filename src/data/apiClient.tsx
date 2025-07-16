@@ -1,9 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosInstance } from "axios";
 
 export const baseURL = import.meta.env.VITE_BASE_URL;
 export const identifier = import.meta.env.VITE_IDENTIFIER;
-
 
 // Define the API Client type for reusability
 const apiClient: AxiosInstance = axios.create({

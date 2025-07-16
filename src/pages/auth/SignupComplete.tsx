@@ -1,5 +1,5 @@
 import { useOnboardingStore } from "../../store/AppStore";
-import Button from "../FormComponents/Button";
+import Button from "../../components/FormComponents/Button";
 
 const SignupComplete = () => {
   const { setStep } = useOnboardingStore();

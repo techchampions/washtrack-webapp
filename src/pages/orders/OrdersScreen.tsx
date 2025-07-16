@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import OrderList from "../components/DashboardComponents/OrderList";
-import { useUserStore } from "../store/AppStore";
+import OrderList from "@/components/DashboardComponents/OrderList";
+import { useUserStore } from "@/store/AppStore";
 
 const OrdersScreen = () => {
   const [activeTab, setActiveTab] = useState("Current");

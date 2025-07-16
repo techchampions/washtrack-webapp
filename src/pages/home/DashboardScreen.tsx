@@ -1,10 +1,10 @@
-import NavigationContainer from "../components/NavigationComponents/NavigationContainer";
-import Header from "../components/DashboardComponents/Header";
+import NavigationContainer from "../../components/NavigationComponents/NavigationContainer";
+import Header from "../../components/DashboardComponents/Header";
 import { Outlet } from "react-router-dom";
-import MobileNavContainer from "../components/NavigationComponents/MobileNavContainer";
+import MobileNavContainer from "../../components/NavigationComponents/MobileNavContainer";
 import { useEffect, useState } from "react";
-import Modal from "../components/DashboardComponents/Modal";
-import { loadEverything } from "../hooks/useAppInitializer";
+import Modal from "../../components/DashboardComponents/Modal";
+import { loadEverything } from "../../hooks/useAppInitializer";
 function DashboardScreen() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {

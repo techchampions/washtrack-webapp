@@ -161,8 +161,8 @@ import {
   // CartesianGrid,
 } from "recharts";
 import { FaSmile } from "react-icons/fa";
-import MainCard from "../components/DashboardComponents/MainCard";
-import Button from "../components/FormComponents/Button";
+import MainCard from "@/components/DashboardComponents/MainCard";
+import Button from "@/components/FormComponents/Button";
 
 // Full dataset (12 months)
 const fullData = [

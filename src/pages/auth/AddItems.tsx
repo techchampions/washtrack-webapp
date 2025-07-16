@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Formik, Form, FieldArray, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import Button from "../FormComponents/Button";
-import InputField from "../FormComponents/InputField";
+import Button from "../../components/FormComponents/Button";
+import InputField from "../../components/FormComponents/InputField";
 import { FaChevronRight, FaTrash } from "react-icons/fa";
 import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import { FiFileText } from "react-icons/fi";
 import apiClient from "../../utils/AxiosInstance";
-import Toast from "../GeneralComponents/Toast";
+import Toast from "../../components/GeneralComponents/Toast";
 
 interface ServiceInput {
   service_id: string;

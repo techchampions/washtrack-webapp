@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import InputField from "../FormComponents/InputField";
+import InputField from "../../components/FormComponents/InputField";
 import { FaEnvelope, FaLock } from "react-icons/fa6";
 import { useOnboardingStore, useUserStore } from "../../store/AppStore";
-import Button from "../FormComponents/Button";
+import Button from "../../components/FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import apiClient from "../../utils/AxiosInstance";
-import Toast from "../GeneralComponents/Toast";
+import Toast from "../../components/GeneralComponents/Toast";
 
 const Login: React.FC = () => {
   const { setStep, setHasCompletedOnboarding } = useOnboardingStore();

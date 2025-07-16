@@ -6,8 +6,8 @@ import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import { FaMapMarkerAlt, FaFileAlt } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { BiSolidCameraPlus } from "react-icons/bi";
-import InputField from "../FormComponents/InputField";
-import Button from "../FormComponents/Button";
+import InputField from "../../components/FormComponents/InputField";
+import Button from "../../components/FormComponents/Button";
 import apiClient from "../../utils/AxiosInstance";
 import { LoadScript } from "@react-google-maps/api";
 

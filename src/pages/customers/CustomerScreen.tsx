@@ -1,5 +1,6 @@
 import React from "react";
-import CustomerList from "../components/DashboardComponents/CustomerList";
+// Update the import path below if the actual path or filename is different
+import CustomerList from "@/components/DashboardComponents/CustomerList";
 
 const CustomerScreen = () => {
   return (

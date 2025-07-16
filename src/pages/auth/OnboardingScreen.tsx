@@ -1,13 +1,13 @@
-import GetStarted from "../components/OnboardingComponents/GetStarted";
-import SignUp from "../components/OnboardingComponents/SignUp";
-import Login from "../components/OnboardingComponents/Login";
-import { useOnboardingStore, useUserStore } from "../store/AppStore";
-import OTP from "../components/OnboardingComponents/OTP";
-import StoreSetup from "../components/OnboardingComponents/StoreSetup";
-import SignupComplete from "../components/OnboardingComponents/SignupComplete";
-import AddServices from "../components/OnboardingComponents/AddServices";
-import AddItems from "../components/OnboardingComponents/AddItems";
-import OnboardingComplete from "../components/OnboardingComponents/OnboardingComplete";
+import GetStarted from "./GetStarted";
+import SignUp from "./SignUp";
+import Login from "./Login";
+import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import OTP from "./OTP";
+import StoreSetup from "./StoreSetup";
+import SignupComplete from "./SignupComplete";
+import AddServices from "./AddServices";
+import AddItems from "./AddItems";
+import OnboardingComplete from "./OnboardingComplete";
 
 const Onboarding = () => {
   const { step } = useOnboardingStore();
