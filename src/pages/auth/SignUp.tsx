@@ -47,7 +47,6 @@ const SignUp: React.FC = () => {
       setToastMsg("An Error Occured")
       setToastType("error");
       setShowToast(true)
-    
     } finally {
       setSubmitting(false);
     }

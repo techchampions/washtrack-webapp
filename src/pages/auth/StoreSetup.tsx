@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PlacesAutocomplete from "react-places-autocomplete";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import { useUserStore } from "../../store/AppStore";
+import {} from "@/store/ProfileStore"
+import {useOnboardingStore} from "@/store/onboardingStore"
 import { FaMapMarkerAlt, FaFileAlt } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { BiSolidCameraPlus } from "react-icons/bi";

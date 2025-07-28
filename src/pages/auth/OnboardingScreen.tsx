@@ -1,16 +1,25 @@
 import GetStarted from "./GetStarted";
 import SignUp from "./SignUp";
 import Login from "./Login";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import {  useUserStore } from "../../store/AppStore";
 import OTP from "./OTP";
 import StoreSetup from "./StoreSetup";
 import SignupComplete from "./SignupComplete";
 import AddServices from "./AddServices";
 import AddItems from "./AddItems";
 import OnboardingComplete from "./OnboardingComplete";
+import {useOnboardingStore} from "@/store/onboardingStore"
+import { useEffect} from 'react'
 
 const Onboarding = () => {
+  
   const { step } = useOnboardingStore();
+
+  useEffect(() => {
+    console.log("Current onboarding step:", step);
+    
+  }, [])
+
   const stepContainer = () => {
     switch (step) {
       case "Get Started":
@@ -45,6 +54,7 @@ const Onboarding = () => {
 
     window.location.reload(); // Optional: Refresh page to clear UI state
   };
+
   return (
     <div className="fixed inset-0 z-50 h-screen w-full overflow-y-auto">
       {/* Background Image */}

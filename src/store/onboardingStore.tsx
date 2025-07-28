@@ -74,7 +74,7 @@ type OnboardingState = {
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
-      step: "Get Started", // Default step
+      step: "Get Started",
       setStep: (newStep) => set({ step: newStep }),
       hasCompletedOnboarding: false,
       setHasCompletedOnboarding: (newHasCompletedOnboarding) =>
@@ -108,8 +108,7 @@ export const useAuthStore = create<AuthState>()(
     set({ isLoading: true, error: null, fieldErrors: null });
     try {
       const response = await api.registerUser(data);
-      const { success, user, otp, token } = response
-
+      const { success, user, otp, token } = response;
       console.log("API response - Success:", success);
       console.log("API response - User:", user);
       console.log("API response - OTP:", otp);
