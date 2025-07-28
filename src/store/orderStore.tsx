@@ -24,6 +24,8 @@ import {
 import { Customer } from "@/types/GeneralTypes/profiletypes";
 import { create } from "zustand";
 import { ItemRecordResponse, ServiceItem } from '../types/GeneralTypes/ordertypes';
+import {persist} from "zustand/middleware"
+
 
 export interface DeleteItemsPayload {
   id: string;
@@ -71,7 +73,9 @@ interface OrderStore {
   clearItems: () => void;
 }
 
-export const useOrderStore = create<OrderStore>((set) => ({
+export const useOrderStore = create<OrderStore>()(
+  persist (
+  (set) => ({
   success: false,
   singleOrder: null,
   item: null,
@@ -180,25 +184,30 @@ export const useOrderStore = create<OrderStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.addServices(data);
-      if (response.success) {
+      console.log("response in addServices....   ",response)
+      if (response.data.success) {
         set((state) => ({
-          services: [...state.services, response.service],
+          services: [...state.services, response.data.service],
           isLoading: false,
         }));
         // console.log("Service added successfully:", response.message);
+        console.log("Service added successfully:", response);
       } else {
-        throw new Error(response.message || "Failed to add service");
+        if(!response.data.response.success) {
+          console.log(response.data.response.message)
+        throw new Error(response.data || "Failed to add service");
+        }
       }
+      // return response;
+
     } catch (error: any) {
-      const errorMessage =
-      error.response && error.response.data && error.response?.data?.message
-        ? error.response.data.message
-        : "Failed to fetch orders";
-      console.error("Error adding service:", error);
+      const errorMessage = error.response.data.message;
+      console.error("Error adding service:", error.response.data.message);
       set({
         error: errorMessage,
         isLoading: false,
       });
+      return error.response;
     }
   },
   updateServices: async (data) => {
@@ -535,4 +544,6 @@ export const useOrderStore = create<OrderStore>((set) => ({
     }
   },
   
-}));
+}), {name: "order-state"}
+
+));

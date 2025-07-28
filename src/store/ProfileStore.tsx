@@ -64,8 +64,6 @@ export const useProfileStore = create<ProfileState>((set) => ({
     set({ isLoading: true, error: null, message: null });
 
     try {
-
-
       const response = await api.editProfile(profileData);
       
       if (response.message === "Information updated successfully") {

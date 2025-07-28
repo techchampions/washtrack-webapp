@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import Button from "../../components/FormComponents/Button";
 import InputField from "../../components/FormComponents/InputField";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import { useUserStore } from "../../store/AppStore";
 import apiClient from "../../utils/AxiosInstance";
 import Toast from "../../components/GeneralComponents/Toast";
+import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore"
+import { useOrderStore } from "@/store/orderStore";
+
 
 // Define TypeScript type for a service
 interface Service {
@@ -20,18 +23,25 @@ interface Service {
 
 const AddServices = () => {
   const { setStep } = useOnboardingStore();
-  const { addService, services, setServices } = useUserStore();
-  // const [services, setServices] = useState<Service[]>([]);
+  const { services, fetchServices, addServices, updateServices, deleteServices, isLoading } = useOrderStore();
+
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("success");
-  const showToastMessage = (msg: string, type: "success" | "error") => {
-    setToastMsg(msg);
-    setToastType(type);
-    setShowToast(true);
-  };
+  // const showToastMessage = (msg: string, type: "success" | "error") => {
+  //   setToastMsg(msg);
+  //   setToastType(type);
+  //   setShowToast(true);
+  // };
+
+  // useEffect(() => {
+
+  //   setToastMsg("I am here")
+  //   setToastType("error");
+  //   setShowToast(true)
+  // }, [services])
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Service name is required"),
@@ -43,12 +53,47 @@ const AddServices = () => {
       .required("Estimated hours are required"),
   });
 
-  const handleSubmit = async (
+
+
+  const handleSubmit = async (values: Service,
+    { resetForm }: FormikHelpers<Service>
+  ) => {
+
+    try {
+      const payload: any = {
+        name: values.name,
+        price: values.price,
+        estimated_hours: values.estimated_hours,
+        service_type: 1,
+      }
+
+      let response;
+
+      response = await addServices(payload);
+      console.log(response, "-------response")
+
+      if(response.success) {
+      setToastMsg("Success Message")
+      setToastType("success");
+      setShowToast(true)
+      } else if (!response.success) {
+        throw new Error(response.data)
+      }
+
+    } catch (err) {
+      console.log(err.message, "...-------errrrr-----")
+
+    } finally {
+
+    }
+  }
+
+  const handleSubmit1 = async (
     values: Service,
     { resetForm }: FormikHelpers<Service>
   ) => {
     try {
-      // Base payload without id
+
       const payload: any = {
         name: values.name,
         price: values.price,
@@ -59,39 +104,41 @@ const AddServices = () => {
       let response;
 
       if (editIndex !== null) {
-        // Include ID when updating
         payload.id = services[editIndex].id;
-        response = await apiClient.post(`/upate/service`, payload);
-      } else {
-        // Create new service
-        response = await apiClient.post("/create/service", payload);
-      }
-
-      if (response.status === 201 || response.status === 200) {
-        const newService = response.data.service;
-
-        if (editIndex !== null) {
-          const updatedServices = [...services];
-          updatedServices[editIndex] = newService;
-          setServices(updatedServices);
-          setToastMsg("Service updated successfully");
-          setToastType("success");
-          setShowToast(true);
-        } else {
-          addService(newService);
-          showToastMessage("Service created successfully", "success");
+        response = await updateServices(payload);
+        if (response.data?.success) {
+          // showToastMessage(response.data?.message, "success");
+          setToastMsg(response.data.message)
+          setToastType('success')
+          setShowToast(true)
         }
-
-        setShowModal(false);
-        resetForm();
-        setEditIndex(null);
+      } else {
+        console.log("I am here")
+        response = await addServices(payload);
+        console.log("respnose in handle submit", response);
+        if (response?.data?.success) {
+          setToastMsg(response.data.message)
+          setToastType("success");
+          setShowToast(true)
+        }
+        // if (!response.data.success) {
+        //   throw new Error(response.data.response.message);
+        // }
       }
-    } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Error saving service... try again";
-      showToastMessage(errorMessage, "error");
 
+
+
+    } catch (error: any) {
+      setToastMsg(error)
+      setToastType("error");
+      setShowToast(true)
       console.error("Error saving service:", error);
+
+    } finally {
+      await fetchServices(1);
+      setShowModal(false);
+      resetForm();
+      setEditIndex(null);
     }
   };
 
@@ -102,9 +149,8 @@ const AddServices = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await apiClient.post(`/delete/service`, { id });
-      const updatedServices = services.filter((service) => service.id !== id);
-      setServices(updatedServices);
+      const response = await deleteServices(id);
+
     } catch (error) {
       console.error("Error deleting service:", error);
     }
@@ -112,6 +158,7 @@ const AddServices = () => {
 
   return (
     <div className="flex flex-col justify-between h-full w-full max-w-lg mx-auto p-4 relative">
+
       <div className="flex flex-col items-center space-y-1.5">
         <h2 className="text-[20px] font-brand-bold text-brand text-center">
           Add your services
@@ -168,11 +215,10 @@ const AddServices = () => {
 
       <div className="flex flex-col gap-0.5">
         <p
-          className={`${
-            services.length === 0
-              ? "hidden"
-              : "text-gray-600 text-center text-[10px] mt-6"
-          }`}
+          className={`${services.length === 0
+            ? "hidden"
+            : "text-gray-600 text-center text-[10px] mt-6"
+            }`}
         >
           Click the “Add a service” button to add the type of services you
           render in your laundry store
@@ -180,9 +226,8 @@ const AddServices = () => {
 
         <Button
           label="Next"
-          className={`${
-            services.length === 0 ? "hidden bg-blue-200" : "bg-brand"
-          }`}
+          className={`${services.length === 0 ? "hidden bg-blue-200" : "bg-brand"
+            }`}
           disabled={services.length === 0}
           onClick={() => setStep("add items")}
         />
@@ -190,13 +235,6 @@ const AddServices = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          {showToast && (
-            <Toast
-              message={toastMsg}
-              type={toastType}
-              onClose={() => setShowToast(false)}
-            />
-          )}
 
           <div className="bg-white p-6 rounded-[25px] shadow-lg max-w-md w-[380px]">
             <h3 className="text-[30px] text-left text-black font-bold mb-4">
@@ -254,6 +292,14 @@ const AddServices = () => {
             </Formik>
           </div>
         </div>
+      )}
+
+      {showToast && (
+        <Toast
+          message={toastMsg}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
       )}
     </div>
   );

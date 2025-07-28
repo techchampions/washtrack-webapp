@@ -115,7 +115,7 @@ const getServices = async (type: number) => {
 };
 const addServices = async (data: Services) => {
   const response = await apiClient.post(`/api/create/service`, data);
-  return response.data;
+  return response;
 };
 const updateServices = async (data: EditServices) => {
   const response = await apiClient.post(`/api/upate/service`, data);

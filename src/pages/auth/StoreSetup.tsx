@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { useUserStore } from "../../store/AppStore";
-import {} from "@/store/ProfileStore"
-import {useOnboardingStore} from "@/store/onboardingStore"
+import { } from "@/store/ProfileStore"
+
 import { FaMapMarkerAlt, FaFileAlt } from "react-icons/fa";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { BiSolidCameraPlus } from "react-icons/bi";
 import InputField from "../../components/FormComponents/InputField";
 import Button from "../../components/FormComponents/Button";
-import apiClient from "../../utils/AxiosInstance";
+// import apiClient from "../../utils/AxiosInstance";
 import { LoadScript } from "@react-google-maps/api";
+import { useEstoreStore } from "@/store/eStore";
+import { useOnboardingStore } from "@/store/onboardingStore";
+import Toast from "@/components/GeneralComponents/Toast";
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U"; // Will put in .env later
 
@@ -19,6 +22,10 @@ const StoreSetup = () => {
   const { setStep } = useOnboardingStore();
   const { store } = useUserStore();
   const setStore = useUserStore((state) => state.setStore);
+
+    const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [bannerFiles, setBannerFiles] = useState<(File | null)[]>([
     null,
@@ -26,6 +33,7 @@ const StoreSetup = () => {
     null,
   ]);
   const [storeLocation, setStoreLocation] = useState("");
+  const { createEStore } = useEstoreStore();
 
   const validationSchema = Yup.object({
     storeDescription: Yup.string().required("Store description is required"),
@@ -73,6 +81,8 @@ const StoreSetup = () => {
       }
     });
   };
+
+  useEffect(() => { console.log("inside setup file")}, [])
 
   return (
     <LoadScript
@@ -142,30 +152,28 @@ const StoreSetup = () => {
                 }
               });
 
-              const response = await apiClient.post(
-                "/profile/update",
-                formData,
-                {
-                  headers: { "Content-Type": "multipart/form-data" },
-                }
-              );
+              const response = await createEStore(formData);
 
               console.log("Store Setup Success:", response.data);
-              setStore({
-                id: response.data["store detaills"].id.toString(),
-                name: response.data["store detaills"].store_name,
-                description: response.data["store detaills"].description,
-                address: response.data["store detaills"].store_location,
-                state: response.data["store detaills"].state, // Save state
-                country: response.data["store detaills"].country, // Save country
-                logoUrl: response.data["store detaills"].store_images[0] || "",
-              });
+              // setStore({
+              //   id: response.data["store detaills"].id.toString(),
+              //   name: response.data["store detaills"].store_name,
+              //   description: response.data["store detaills"].description,
+              //   address: response.data["store detaills"].store_location,
+              //   state: response.data["store detaills"].state, // Save state
+              //   country: response.data["store detaills"].country, // Save country
+              //   logoUrl: response.data["store detaills"].store_images[0] || "",
+              // });
               setStep("add services");
             } catch (error) {
               console.error(
                 "Store Setup Error:",
                 error.response?.data || error
               );
+
+              setToastMsg("Please enter all digits of the OTP");
+              setToastType("error");
+              setShowToast(true);
             }
           }}
         >
@@ -271,6 +279,13 @@ const StoreSetup = () => {
           )}
         </Formik>
       </div>
+      {showToast && (
+        <Toast
+          message={toastMsg}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </LoadScript>
   );
 };

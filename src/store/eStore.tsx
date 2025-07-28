@@ -12,8 +12,9 @@ import {
   UpdateService,
 } from "@/types/GeneralTypes/estoreTypes";
 import { OnlineServices } from "@/types/GeneralTypes/ordertypes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface SuccessResponse {
   success: boolean;
@@ -45,7 +46,9 @@ interface EstoreState {
   updateStoreSetUp: () => Promise<void>;
 }
 
-export const useEstoreStore = create<EstoreState>((set, get) => ({
+export const useEstoreStore = create<EstoreState>()(
+  persist(
+    (set, get) => ({
   estoreData: null,
   isLoading: false,
   error: null,
@@ -136,8 +139,10 @@ export const useEstoreStore = create<EstoreState>((set, get) => ({
       throw new Error(errorMessage); // Rethrow the error for the caller
     }
   },
+
   createEStore: async (data) => {
     set({ isLoading: true, error: null });
+    
     try {
       console.log("Creating store with data:", data);
       const response = await api.createEStore(data);
@@ -157,6 +162,7 @@ export const useEstoreStore = create<EstoreState>((set, get) => ({
       set({ error: error, isLoading: false });
     }
   },
+
   fetchStoreItem: async (data) => {
     set({ isLoading: true, error: null });
     try {
@@ -283,4 +289,6 @@ export const useEstoreStore = create<EstoreState>((set, get) => ({
   setCurrentStatus: (status: string) => {
     set({ currentStatus: status });
   },
-}));
+}), {name: "estore-state"}
+
+));
