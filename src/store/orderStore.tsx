@@ -201,13 +201,14 @@ export const useOrderStore = create<OrderStore>()(
       // return response;
 
     } catch (error: any) {
+      console.log("I am here.... in state management", error)
       const errorMessage = error.response.data.message;
       console.error("Error adding service:", error.response.data.message);
       set({
         error: errorMessage,
         isLoading: false,
       });
-      return error.response;
+      return error;
     }
   },
   updateServices: async (data) => {

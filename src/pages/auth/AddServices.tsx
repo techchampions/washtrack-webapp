@@ -23,7 +23,7 @@ interface Service {
 
 const AddServices = () => {
   const { setStep } = useOnboardingStore();
-  const { services, fetchServices, addServices, updateServices, deleteServices, isLoading } = useOrderStore();
+  const { services, fetchServices, addServices, updateServices, deleteServices, isLoading, error } = useOrderStore();
 
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -70,18 +70,33 @@ const AddServices = () => {
       let response;
 
       response = await addServices(payload);
-      console.log(response, "-------response")
 
-      if(response.success) {
-      setToastMsg("Success Message")
-      setToastType("success");
-      setShowToast(true)
-      } else if (!response.success) {
-        throw new Error(response.data)
+      if (editIndex !== null) {
+        payload.id = services[editIndex].id;
+        response = await updateServices(payload);
+
+      } else {
+        response = await addServices(payload);
+      }
+
+
+      if (response.data.success) {
+        console
+        console.log(response, "-------response")
+        setToastMsg(response.data.message)
+        setToastType("success");
+        setShowToast(true)
+      }
+      else if (!response?.success || !response?.data?.success) {
+        console.error("i am here add services file", response)
+        throw new Error();
       }
 
     } catch (err) {
-      console.log(err.message, "...-------errrrr-----")
+      console.log(err, "...-------errrrr-----")
+      setToastMsg(error)
+      setToastType("error");
+      setShowToast(true)
 
     } finally {
 
