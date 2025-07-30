@@ -31,7 +31,7 @@ import {
   Login,
   Register,
 } from "@/types/OnboardingTypes/registerTypes";
-//import { DeleteItemsPayload } from "@/zustand/orderStore";
+import { DeleteItemsPayload } from "@/store/orderStore";
 import apiClient from "./apiClient";
 import {
   OutStandingResponse,
@@ -123,7 +123,7 @@ const updateServices = async (data: EditServices) => {
 };
 const deleteServices = async (id: DeleteServices) => {
   const response = await apiClient.post(`/api/delete/service`, id);
-  return response.data;
+  return response;
 };
 const addOnlineServices = async (data: OnlineServices) => {
   const response = await apiClient.post(`/api/create/service`, data);
@@ -158,10 +158,10 @@ const updateItems = async (data: FormData) => {
 
   return response.data;
 };
-/**const deleteItems = async (data: DeleteItemsPayload) => {
+const deleteItems = async (data: DeleteItemsPayload) => {
   const response = await apiClient.post(`/api/delete/item`, data);
   return response.data;
-}; **/
+};
 const createOrder = async (data: Orders) => {
   const response = await apiClient.post(`/api/order/create`, data);
   return response.data;
@@ -227,7 +227,7 @@ const getStoreItem = async (id: string) => {
 
 const updateStoreItem = async (data: UpdateService[]) => {
   const response = await apiClient.put(`/api/item-services/update`, data);
-  return response.data;
+  return response;
 };
 const updateStoreSetUp = async () => {
   const response = await apiClient.post(`/api/update-store-setup`);
@@ -402,7 +402,7 @@ const getSubscriptionsHistory = async () => {
 };
 const postStoreItem = async (data: ItemService) => {
   const response = await apiClient.post(`/api/item-services/create`, data);
-  return response.data;
+  return response;
 };
 const upgradePlan = async (data: PaymentTypes) => {
   const response = await apiClient.post(`/api/make-payment`, data);
@@ -491,7 +491,7 @@ export const api = {
   addItems,
   getItems,
   updateItems,
- /* deleteItems,*/
+  deleteItems,
   createExistingOrder,
   getOrders,
   getSingleOrders,

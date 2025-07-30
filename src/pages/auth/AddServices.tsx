@@ -30,18 +30,12 @@ const AddServices = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [toastType, setToastType] = useState<"success" | "error">("success");
-  // const showToastMessage = (msg: string, type: "success" | "error") => {
-  //   setToastMsg(msg);
-  //   setToastType(type);
-  //   setShowToast(true);
-  // };
-
-  // useEffect(() => {
-
-  //   setToastMsg("I am here")
-  //   setToastType("error");
-  //   setShowToast(true)
-  // }, [services])
+  const showToastMessage = (msg: string, type: "success" | "error") => {
+    setToastMsg(msg);
+    setToastType(type);
+    setShowToast(true);
+  };
+  const TYPE_ID = 1;
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Service name is required"),
@@ -78,10 +72,7 @@ const AddServices = () => {
       } else {
         response = await addServices(payload);
       }
-
-
       if (response.data.success) {
-        console
         console.log(response, "-------response")
         setToastMsg(response.data.message)
         setToastType("success");
@@ -99,75 +90,30 @@ const AddServices = () => {
       setShowToast(true)
 
     } finally {
-
-    }
-  }
-
-  const handleSubmit1 = async (
-    values: Service,
-    { resetForm }: FormikHelpers<Service>
-  ) => {
-    try {
-
-      const payload: any = {
-        name: values.name,
-        price: values.price,
-        estimated_hours: values.estimated_hours,
-        service_type: 1,
-      };
-
-      let response;
-
-      if (editIndex !== null) {
-        payload.id = services[editIndex].id;
-        response = await updateServices(payload);
-        if (response.data?.success) {
-          // showToastMessage(response.data?.message, "success");
-          setToastMsg(response.data.message)
-          setToastType('success')
-          setShowToast(true)
-        }
-      } else {
-        console.log("I am here")
-        response = await addServices(payload);
-        console.log("respnose in handle submit", response);
-        if (response?.data?.success) {
-          setToastMsg(response.data.message)
-          setToastType("success");
-          setShowToast(true)
-        }
-        // if (!response.data.success) {
-        //   throw new Error(response.data.response.message);
-        // }
-      }
-
-
-
-    } catch (error: any) {
-      setToastMsg(error)
-      setToastType("error");
-      setShowToast(true)
-      console.error("Error saving service:", error);
-
-    } finally {
-      await fetchServices(1);
+      await fetchServices(TYPE_ID);
       setShowModal(false);
       resetForm();
       setEditIndex(null);
     }
-  };
+  }
+
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
     setShowModal(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (serviceId: number) => {
     try {
-      const response = await deleteServices(id);
+      const response = await deleteServices({ id: serviceId })
 
-    } catch (error) {
-      console.error("Error deleting service:", error);
+      if (response.status === 200) {
+
+        showToastMessage("Service deleted successfully", "success");
+      }
+    } catch (err) {
+      console.error("Error deleting service:", err);
+      showToastMessage("Failed to delete service", "error");
     }
   };
 

@@ -1,35 +1,18 @@
-import { useState, useEffect } from "react";
-import { useOrderStore } from "@/store/orderStore";
-import { useEstoreStore } from "@/store/eStore"
-import { useOnboardingStore } from "@/store/onboardingStore";
-import Button from "@/components/FormComponents/Button"
-import InputField from "@/components/FormComponents/InputField";
-import { FiFileText } from "react-icons/fi";
-import { FaChevronRight, FaTrash } from "react-icons/fa";
-import Toast from "@/components/GeneralComponents/Toast";
-import { Service } from "@/types/GeneralTypes/ordertypes";
-import { Form, FieldArray, Formik } from "formik";
+import { useState } from "react";
+import { Formik, Form, FieldArray, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import Button from "../../components/FormComponents/Button";
+import InputField from "../../components/FormComponents/InputField";
+import { FaChevronRight, FaTrash } from "react-icons/fa";
+import { useUserStore } from "../../store/AppStore";
+import { useOnboardingStore } from "@/store/onboardingStore"
+import { useEstoreStore } from "@/store/eStore";
+import { useOrderStore } from "@/store/orderStore"
+import { FiFileText } from "react-icons/fi";
+import apiClient from "../../utils/AxiosInstance";
+import Toast from "../../components/GeneralComponents/Toast";
+import { ItemService, UpdateService } from "@/types/GeneralTypes/estoreTypes";
 
-// {
-//     "id": 195,
-//     "store_id": 189,
-//     "name": "Shirt",
-//     "services": [
-//         {
-//             "id": 475,
-//             "service_name": "wash",
-//             "item_id": 195,
-//             "price": 500
-//         },
-//         {
-//             "id": 476,
-//             "service_name": "Iron",
-//             "item_id": 195,
-//             "price": 900
-//         }
-//     ]
-// }
 interface ServiceInput {
   service_id: string;
   service_name: string;
@@ -41,7 +24,13 @@ interface ItemFormValues {
   item_name: string;
   services: ServiceInput[];
 }
-const AddItemServices = () => {
+
+const AddItems = () => {
+  const { setStep } = useOnboardingStore();
+  const { items, setItems, addItem, removeService } = useUserStore();
+  const { services, deleteServices, isLoading, error } = useOrderStore();
+  const { updateStoreItem, postStoreItem, storeItems } = useEstoreStore()
+
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
@@ -52,63 +41,90 @@ const AddItemServices = () => {
     setToastType(type);
     setShowToast(true);
   };
-  const { setStep } = useOnboardingStore();
-  const { fetchStoreItems, storeItems, fetchStoreItem } = useEstoreStore();
 
-  const { services } = useOrderStore();
+  const handleDeleteService = async (serviceId: string) => {
 
-  useEffect(() => {
+    try {
+      const response = await deleteServices({ id: serviceId })
 
-    console.log("Services in Services:", services);
-  }, [services])
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      await fetchStoreItems();
-    };
-    fetchItems();
-  }, []);
+      if (response.status === 200) {
+        showToastMessage("Service deleted successfully", "success");
+      }
+    } catch (err: any) {
+      console.error("Error deleting service:", err);
+      showToastMessage(err.message, "error");
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     item_name: Yup.string().required("Item name is required"),
   });
 
+  const handleSubmit = async (
+    values: ItemFormValues,
+    { resetForm }: FormikHelpers<ItemFormValues>
+  ) => {
+    try {
+      if (editIndex !== null) {
+        // EDIT mode
+        const currentItemServices = items[editIndex]; // this is an array of services for the item being edited
+        const payload = values.services.map((service, idx) => {
+          const original = currentItemServices.find(
+            (s) => s.service_id === service.service_id
+          );
 
+          return {
+            id: original?.id,
+            item_id: original?.item_id,
+            user_id: original?.user_id,
+            store_id: original?.store_id,
+            item_name: values.item_name,
+            service_id: service.service_id,
+            service_name: service.service_name,
+            price: Number(service.price),
+            estimated_hours: Number(service.estimated_hours),
+          }
+        });
 
-  const handleDeleteService = () => {
+        const response = await updateStoreItem(payload);
 
-    return;
-  }
+        // const response = await apiClient.put("/item-services/update", payload); // note corrected "upate" typo
 
-  const handleSubmit = () => {
-    return;
-  }
+        if (response.status === 200) {
+          // const updatedItem = response.data.item_services;
 
-  const getServicesItem = (data: any) => {
-    const item = data[editIndex];
-    const itemServices = item.services || [];
-    const obj = {service_id: ""};
+          showToastMessage(response.data.message, "success");
 
-    Object.keys(item).forEach(key => {
-      if(key === "services") {
-        Object.keys(item[key]).forEach(serviceKey => {
-          obj.service_id = item[key]['item_id']
-        })
+          setShowModal(false);
+          setEditIndex(null);
+          resetForm();
+        }
+      } else {
+        // CREATE mode
+        const payload: ItemService = {
+          item_name: values.item_name,
+          services: values.services.map((s) => ({
+            service_id: Number(s.service_id),
+            service_name: s.service_name,
+            price: Number(s.price),
+            estimated_hours: Number(s.estimated_hours),
+          })),
+        };
+        const response = await postStoreItem(payload);
+
+        if (response.status === 201 || response.status === 200) {
+          showToastMessage(response.message, "success");
+          setShowModal(false);
+          resetForm();
+        } else {
+          console.log(response, "Error in add item post func");
+        }
       }
-    })
-
-  }
-
-          // return {
-          //           service_id: service.id,
-          //           service_name: service.service_name,
-          //           price:
-          //             existing !== null ? existing.price : service.price ?? "", // 👈 fallback to global state price
-          //           estimated_hours:
-          //             existing !== null
-          //               ? existing.estimated_hours
-          //               : service.estimated_hours ?? "", // 👈 fallback to global state hours
-          //         };
+    } catch (error: any) {
+      const errorMessage = error.message;
+      showToastMessage(errorMessage, "error");
+    }
+  };
 
   return (
     <div className="flex flex-col items-center space-y-4 w-full max-w-lg mx-auto p-4 relative">
@@ -128,7 +144,7 @@ const AddItemServices = () => {
       />
 
       <div className="mt-1 w-full flex flex-col justify-start text-black h-[200px] max-w-full min-w-[300px] overflow-y-auto">
-        {storeItems?.itemType.map((item, index) => (
+        {items.map((item, index) => (
           <div
             key={index}
             className="bg-brand-100 p-2 rounded-md mt-2 text-left flex items-center gap-2 w-full"
@@ -141,9 +157,9 @@ const AddItemServices = () => {
               <FiFileText className="text-quick-action-icon h-4 w-4" />
             </div>
             <div className="w-full">
-              <p className="text-sm">{item.name}</p>
+              <p className="text-sm">{item[0]?.item_name}</p>
               <p className="text-xs text-gray-800">
-                {item["services"].map((s) => s.service_name).join(", ")}
+                {item.map((s) => s.service_name).join(", ")}
               </p>
             </div>
             <div className="float-right">
@@ -160,11 +176,10 @@ const AddItemServices = () => {
 
       <Button
         label="Next"
-        className={`${services.length === 0 ? "hidden bg-blue-200" : "bg-brand"}`}
-        disabled={services.length === 0}
+        className={`${items.length === 0 ? "hidden bg-blue-200" : "bg-brand"}`}
+        disabled={items.length === 0}
         onClick={() => setStep("onboarding complete")}
       />
-
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
@@ -185,28 +200,33 @@ const AddItemServices = () => {
               key={editIndex !== null ? `edit-${editIndex}` : "create"}
               initialValues={{
                 item_name:
-                  editIndex !== null ? storeItems?.itemType[editIndex][0]?.name : "",
+                  editIndex !== null ? items[editIndex][0]?.item_name : "",
+                // services: services.map((service) => {
+                //   const existing =
+                //     editIndex !== null
+                //       ? items[editIndex].find(
+                //           (s) => s.service_id === service.id
+                //         )
+                //       : null;
 
-                services2: editIndex !== null && Object.keys(storeItems?.itemType[editIndex]),
-                  
-                services: services.map((service, index) => {
-                  console.log("Service in AddService:", service, index);
-                  console.log(editIndex, "Edit Index in AddServices:", editIndex);
-                  console.log("Store Items in AddServices:", storeItems?.itemType[editIndex] );
+                //   return {
+                //     service_id: service.id,
+                //     service_name: service.name,
+                //     price: existing ? existing.price : "",
+                //     estimated_hours: existing ? existing.estimated_hours : "",
+                //   };
+                // }),
+                services: services.map((service) => {
                   const existing =
                     editIndex !== null
-                      ? storeItems?.itemType[editIndex]['services'].find(
-                        (s) => s.item_id === service.id
+                      ? items[editIndex].find(
+                        (s) => s.service_id === service.id
                       )
                       : null;
 
-                      console.log("Existing Service:", existing);
-                  // console.log("Service in AddServices:", service);
-                  
-
                   return {
                     service_id: service.id,
-                    service_name: service.service_name,
+                    service_name: service.name,
                     price:
                       existing !== null ? existing.price : service.price ?? "", // 👈 fallback to global state price
                     estimated_hours:
@@ -258,7 +278,7 @@ const AddItemServices = () => {
                               onClick={(e) => {
                                 e.stopPropagation(); // prevent opening modal
                                 handleDeleteService(
-                                  values.services[index].id
+                                  values.services[index].service_id
                                 );
                               }}
                             />
@@ -291,10 +311,8 @@ const AddItemServices = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
-}
+};
 
-export default AddItemServices;
+export default AddItems;
