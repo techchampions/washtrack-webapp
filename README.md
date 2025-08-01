@@ -52,3 +52,31 @@ export default tseslint.config({
   },
 })
 ```
+
+
+ services: services.map((service, index) => {
+                  console.log("Service in AddService:", service, index);
+                  console.log(editIndex, "Edit Index in AddServices:", editIndex);
+                  console.log("Store Items in AddServices:", storeItems?.itemType[editIndex] );
+                  const existing =
+                    editIndex !== null
+                      ? storeItems?.itemType[editIndex]['services'].find(
+                        (s) => s.item_id === service.id
+                      )
+                      : null;
+
+                      console.log("Existing Service:", existing);
+                  // console.log("Service in AddServices:", service);
+                  
+
+                  return {
+                    service_id: service.id,
+                    service_name: service.service_name,
+                    price:
+                      existing !== null ? existing.price : service.price ?? "", // 👈 fallback to global state price
+                    estimated_hours:
+                      existing !== null
+                        ? existing.estimated_hours
+                        : service.estimated_hours ?? "", // 👈 fallback to global state hours
+                  };
+                }),

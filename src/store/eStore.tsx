@@ -247,14 +247,15 @@ export const useEstoreStore = create<EstoreState>()(
           if (response.data.success) {
             await get().fetchStoreItems();
             set({ isLoading: false });
+            return response.data;
           } else {
-            const errorMessage = response.data.response.message;
-            throw new Error(errorMessage);
+            const error = response.data.response;
+            throw new Error(error);
           }
         } catch (error: any) {
-          const errorMessage = error.message;
-          console.error("Error updating store item:", errorMessage);
-          set({ error: errorMessage, isLoading: false });
+          // const errorMessage = error;
+          console.error("Error updating store item:", error);
+          set({ error: error, isLoading: false });
           throw error;
         }
       },

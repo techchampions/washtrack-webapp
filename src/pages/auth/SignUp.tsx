@@ -37,14 +37,15 @@ const SignUp: React.FC = () => {
       const response = await registerUser({ ...values, user_type: 2 });
       console.log(response, " response sign up")
       if (response?.success) {
-        setToastMsg("User registered successfully!");
+        setToastMsg(response.message);
         setToastType("success");
         setShowToast(true);
         setStep("verify OTP");
       }
     } catch (error) {
       console.log(fieldErrors, error, "in sign up")
-      setToastMsg("An Error Occured")
+     
+      setToastMsg(error.response?.data?.message)
       setToastType("error");
       setShowToast(true)
     } finally {

@@ -48,7 +48,7 @@ import { PaymentTypes } from "@/types/GeneralTypes/type";
 // Function to handle user registration
 const registerUser = async (data: Register) => {
   const response = await apiClient.post("/api/register", data);
-  return response.data; // Assumes server responds with user and other relevant info
+  return response; // Assumes server responds with user and other relevant info
 };
 const verifyUser = async (data: OTP) => {
   const response = await apiClient.post("/api/verify-otp", data);

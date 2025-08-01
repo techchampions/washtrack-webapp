@@ -1,18 +1,20 @@
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import Button from "../../components/FormComponents/Button";
 import { FaCheckCircle } from "react-icons/fa";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useNavigate } from "react-router-dom";
+import {useOnboardingStore, useAuthStore} from "@/store/onboardingStore"
+
 
 const OnboardingComplete = () => {
   const { setHasCompletedOnboarding } = useOnboardingStore();
-  const { setIsLoggedIn } = useUserStore();
+  const { setIsLoggedIn } = useAuthStore();
   const navigate = useNavigate();
   const handleCompleteOnboarding = () => {
     setHasCompletedOnboarding(true);
     setIsLoggedIn(true);
     navigate("/dashboard");
   };
+  
   return (
     <div className="w-full h-full m-auto">
       <div className="flex flex-col items-center justify-center space-y-1 w-full max-w-lg mx-auto p-4 relative">

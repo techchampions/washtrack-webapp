@@ -157,12 +157,15 @@ export const useOrderStore = create<OrderStore>()(
         set({ isLoading: true, error: null });
         try {
           const response = await api.getServices(type);
+          console.log(response,"responses......")
           if (response.success && Array.isArray(response.service)) {
+            console.log(response,"======response service======")
             // Ensure services is an array and has the correct structure
             const validServices = response.service.filter(
               (service: { name: any }) =>
                 service && typeof service.name === "string"
             );
+            console.log(validServices, "valid service")
             set({ services: validServices, isLoading: false });
           } else {
             throw new Error(response.message || "Failed to fetch services");

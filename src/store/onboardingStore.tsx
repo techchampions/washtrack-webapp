@@ -33,14 +33,16 @@ interface AuthState {
   isLoading: boolean;
   regsuccess: boolean
   error: string | null;
+   isLoggedIn: boolean;
   fieldErrors: {
     [key: string]: string[];
   } | null;
 
   // Actions
+  setIsLoggedIn: (status: boolean) => void;
   verifyOTP: (otp: OTP) => Promise<void>;
   resendOTP: () => Promise<void>;
-  registerUser: (data: Register) => Promise<RegisterResponse | void >;
+  registerUser: (data: Register) => Promise<RegisterResponse | void>;
   loginUser: (data: Login) => Promise<LoginResponse>;
   forgotPassword: (email: ForgotPassword) => Promise<void>;
   changePassword: (email: ChangePassword) => Promise<ChangePasswordResponse>;
@@ -56,15 +58,15 @@ export interface ValidationErrorResponse {
 
 type OnboardingState = {
   step:
-    | "Get Started"
-    | "signup"
-    | "login"
-    | "verify OTP"
-    | "signup completed"
-    | "setup store"
-    | "add services"
-    | "add items"
-    | "onboarding complete";
+  | "Get Started"
+  | "signup"
+  | "login"
+  | "verify OTP"
+  | "signup completed"
+  | "setup store"
+  | "add services"
+  | "add items"
+  | "onboarding complete";
   setStep: (newStep: OnboardingState["step"]) => void;
   hasCompletedOnboarding: boolean;
   setHasCompletedOnboarding: (newHasCompletedOnboarding: boolean) => void;
@@ -93,372 +95,383 @@ export const useOnboardingStore = create<OnboardingState>()(
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
-        // Initial states
-  success: false,
-  user: null,
-  otpResponse: null,
-  token: null,
-  isAuthenticated: false,
-  isLoading: false,
-  error: null,
-  fieldErrors: null,
-  regsuccess: false,
+      // Initial states
+      success: false,
+      user: null,
+      otpResponse: null,
+      token: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
+      fieldErrors: null,
+      regsuccess: false,
+      isLoggedIn: false,
+      setIsLoggedIn: (status) => set({ isLoggedIn: status }),
 
-   registerUser: async (data) => {
-    set({ isLoading: true, error: null, fieldErrors: null });
-    try {
-      const response = await api.registerUser(data);
-      const { success, user, otp, token } = response;
-      console.log("API response - Success:", success);
-      console.log("API response - User:", user);
-      console.log("API response - OTP:", otp);
-      console.log("API response - Token:", token);
+      registerUser: async (data) => {
+        set({ isLoading: true, error: null, fieldErrors: null });
+        try {
+          const response = await api.registerUser(data);
+          if (response.data.success) {
+            console.log(response, "API response in registerUser");
+            const { success, user, otp, token } = response.data;
+            console.log("API response - Success:", success);
+            console.log("API response - User:", user);
+            console.log("API response - OTP:", otp);
+            console.log("API response - Token:", token);
+            set({ isLoading: false });
+            set({
+              success,
+              user,
+              otpResponse: otp,
+              token,
+              isAuthenticated: true,
+              isLoading: false,
+              fieldErrors: null,
+            });
+            localStorage.setItem("authToken", token);
+            localStorage.setItem("storeUpdated", "false");
 
-      set({
-        success,
-        user,
-        otpResponse: otp,
-        token,
-        isAuthenticated: true,
-        isLoading: false,
-        fieldErrors: null,
-      });
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("storeUpdated", "false");
+            return response.data as RegisterResponse
+          } else {
+            const error = response.data.response;
+            throw new Error(error);
+          }
 
-      return response as RegisterResponse
-    } catch (error) {
-      console.error("Error during registration:", error);
-      console.log(error.response?.data);
 
-      if (axios.isAxiosError(error) && error.response?.data) {
-        console.log("axio error ", )
-        const errorData = error.response.data as ValidationErrorResponse;
 
-        if (errorData.errors) {
-          // Set field-specific errors
-          set({
-            fieldErrors: errorData.errors,
-            error: null,
-            isLoading: false,
-          });
-        } else {
-          // Set general error
-          set({
-            error: errorData.message || "Failed to register user",
-            fieldErrors: null,
-            isLoading: false,
-          });
+        } catch (error) {
+          console.error("Error during registration:", error);
+          console.log(error.response?.data);
+
+          if (axios.isAxiosError(error) && error.response?.data) {
+            console.log("axio error ",)
+            const errorData = error.response.data as ValidationErrorResponse;
+
+            if (errorData.errors) {
+              // Set field-specific errors
+              set({
+                fieldErrors: errorData.errors,
+                error: null,
+                isLoading: false,
+              });
+            } else {
+              // Set general error
+              set({
+                error: error.response.data.message,
+                fieldErrors: null,
+                isLoading: false,
+              });
+            }
+          } else {
+            set({
+              error: error.response.data.message,
+              fieldErrors: null,
+              isLoading: false,
+            });
+          }
+
+          throw error;
         }
-      } else {
-        set({
-          error: "An unexpected error occurred",
-          fieldErrors: null,
-          isLoading: false,
-        });
-      }
+      },
+      verifyOTP: async (otp) => {
+        set({ isLoading: true, error: null });
+        try {
+          localStorage.setItem("storeUpdated", "false");
 
-      return error;
-    }
-  },
-    verifyOTP: async (otp) => {
-    set({ isLoading: true, error: null });
-    try {
-      localStorage.setItem("storeUpdated", "false");
+          const data = await api.verifyUser(otp);
 
-      const data = await api.verifyUser(otp);
+          if (data?.success) {
+            const currentTimestamp = new Date().getTime().toString();
 
-      if (data?.success) {
-        const currentTimestamp = new Date().getTime().toString();
+            localStorage.setItem("otpVerified", "true");
+            localStorage.setItem("tokenTimestamp", currentTimestamp);
+            set({
+              otpResponse: data,
+              isLoading: false,
+              isAuthenticated: true,
+              error: null,
+            });
+          } else {
+            set({
+              error: data?.message || "OTP verification failed",
+              isLoading: false,
+              isAuthenticated: false,
+            });
+            throw new Error(data?.message || "OTP verification failed");
+          }
+        } catch (err) {
+          const error = err as AxiosError<{ message: string }>;
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to verify OTP";
 
-        localStorage.setItem("otpVerified", "true");
-        localStorage.setItem("tokenTimestamp", currentTimestamp);
-        set({
-          otpResponse: data,
-          isLoading: false,
-          isAuthenticated: true,
-          error: null,
-        });
-      } else {
-        set({
-          error: data?.message || "OTP verification failed",
-          isLoading: false,
-          isAuthenticated: false,
-        });
-        throw new Error(data?.message || "OTP verification failed");
-      }
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to verify OTP";
+          set({
+            error: errorMessage,
+            isLoading: false,
+            isAuthenticated: false,
+          });
+          throw error;
+        }
+      },
 
-      set({
-        error: errorMessage,
-        isLoading: false,
-        isAuthenticated: false,
-      });
-      throw error;
-    }
-  },
+      // Resend OTP
+      resendOTP: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          // Call the resendCode API
+          const verificationData = { otp: null }; // Only email needed
+          const response = await api.resendCode(verificationData);
 
-  // Resend OTP
-  resendOTP: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      // Call the resendCode API
-      const verificationData = { otp: null }; // Only email needed
-      const response = await api.resendCode(verificationData);
+          // Assuming the new OTP is returned in the response
+          const newOTP = response.otp;
+          console.log("New OTP received:", newOTP);
 
-      // Assuming the new OTP is returned in the response
-      const newOTP = response.otp;
-      console.log("New OTP received:", newOTP);
+          // Update Zustand state
+          set({ otpResponse: newOTP, isLoading: false });
+        } catch (error: any) {
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to resend OTP";
+          console.error("Error resending OTP:", errorMessage);
+          set({ error: errorMessage, isLoading: false });
+        }
+      },
+      loginUser: async (data) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await api.login(data);
+          console.log("Login response:", response); // Debug log
 
-      // Update Zustand state
-      set({ otpResponse: newOTP, isLoading: false });
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to resend OTP";
-      console.error("Error resending OTP:", errorMessage);
-      set({ error: errorMessage, isLoading: false });
-    }
-  },
-  loginUser: async (data) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await api.login(data);
-      console.log("Login response:", response); // Debug log
+          // Only proceed if we have a successful login with valid data
+          if (response.success && response.token) {
+            // Set the current timestamp FIRST to prevent expiration issues
+            const currentTimestamp = new Date().getTime().toString();
 
-      // Only proceed if we have a successful login with valid data
-      if (response.success && response.token) {
-        // Set the current timestamp FIRST to prevent expiration issues
-        const currentTimestamp = new Date().getTime().toString();
+            // Debug logs
+            console.log("Setting authentication data:", {
+              token: response.token,
+              otpVerified: response.otpVerified,
+              storeUpdated: response.storeUpdated, // Changed from storeCompleted
+              timestamp: currentTimestamp,
+            });
 
-        // Debug logs
-        console.log("Setting authentication data:", {
-          token: response.token,
-          otpVerified: response.otpVerified,
-          storeUpdated: response.storeUpdated, // Changed from storeCompleted
-          timestamp: currentTimestamp,
-        });
+            // Set all values in a single batch to prevent race conditions
+            localStorage.setItem("authToken", response.token);
+            localStorage.setItem("tokenTimestamp", currentTimestamp);
+            localStorage.setItem("otpVerified", response.otpVerified ? "true" : "false");
+            localStorage.setItem("storeUpdated", response.storeUpdated ? "true" : "false");
 
-        // Set all values in a single batch to prevent race conditions
-        localStorage.setItem("authToken", response.token);
-        localStorage.setItem("tokenTimestamp", currentTimestamp);
-        localStorage.setItem("otpVerified", response.otpVerified ? "true" : "false");
-        localStorage.setItem("storeUpdated", response.storeUpdated ? "true" : "false");
-    
 
-        set({
-          success: true,
-          token: response.token,
-          isAuthenticated: response.otpVerified,
-          isLoading: false,
-          error: null,
-        });
+            set({
+              success: true,
+              token: response.token,
+              isAuthenticated: response.otpVerified,
+              isLoading: false,
+              error: null,
+            });
 
-        return {
-          success: true,
-          message: "Login successful",
-          token: response.token,
-          otpVerified: response.otpVerified,
-          storeUpdated: response.storeUpdated, // Changed from storeCompleted
-        };
-      } else {
-        // Login failed
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("otpVerified")
-        localStorage.removeItem("storeUpdated");
-        localStorage.removeItem("tokenTimestamp");
-    
+            return {
+              success: true,
+              message: "Login successful",
+              token: response.token,
+              otpVerified: response.otpVerified,
+              storeUpdated: response.storeUpdated, // Changed from storeCompleted
+            };
+          } else {
+            // Login failed
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("otpVerified")
+            localStorage.removeItem("storeUpdated");
+            localStorage.removeItem("tokenTimestamp");
 
-        set({
-          success: false,
-          token: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: response.message || "Login failed",
-        });
 
-        return {
-          success: false,
-          message: response.message || "Login failed",
-          token: "",
-          otpVerified: false,
-          storeUpdated: false,
-        };
-      }
-    } catch (error: any) {
-      console.log("login error zuzstand",error);
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to login, please check your internet connection.";
+            set({
+              success: false,
+              token: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: response.message || "Login failed",
+            });
 
-      // Clear any existing credentials on error
-         // Login failed
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("otpVerified")
-        localStorage.removeItem("storeUpdated");
-        localStorage.removeItem("tokenTimestamp");
+            return {
+              success: false,
+              message: response.message || "Login failed",
+              token: "",
+              otpVerified: false,
+              storeUpdated: false,
+            };
+          }
+        } catch (error: any) {
+          console.log("login error zuzstand", error);
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to login, please check your internet connection.";
 
-      set({
-        error: errorMessage,
-        isLoading: false,
-        isAuthenticated: false,
-        token: null,
-        success: false,
-      });
+          // Clear any existing credentials on error
+          // Login failed
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("otpVerified")
+          localStorage.removeItem("storeUpdated");
+          localStorage.removeItem("tokenTimestamp");
 
-      throw new Error(errorMessage);
-    }
-  },
+          set({
+            error: errorMessage,
+            isLoading: false,
+            isAuthenticated: false,
+            token: null,
+            success: false,
+          });
 
-  forgotPassword: async (email) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await api.forgotPassword(email);
+          throw new Error(errorMessage);
+        }
+      },
 
-      // Handle the response based on success status
-      if (response.success) {
-        // Success scenario
-        console.log("Password reset instructions sent to email");
+      forgotPassword: async (email) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await api.forgotPassword(email);
 
-        // Optionally, display an alert or notification for the user here
-        // Example: Alert.alert('Success', 'Password reset instructions sent to your email.');
-      } else {
-        // Failure scenario
-        throw new Error(
-          response.message || "Failed to send reset instructions"
-        );
-      }
-    } catch (error: any) {
-      // Handle the error and display the error message
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to verify otp";
-      set({ error: errorMessage, isLoading: false });
-      throw new Error(errorMessage);
-    } finally {
-      // Ensure isLoading is set to false regardless of success or failure
-      set({ isLoading: false });
-    }
-  },
-  changePassword: async (data) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await api.changePassword(data);
-      console.log("API Response:", response);
+          // Handle the response based on success status
+          if (response.success) {
+            // Success scenario
+            console.log("Password reset instructions sent to email");
 
-      // Validate response structure and return it
-      if (response && typeof response.success === "boolean") {
-        return response; // Explicitly return the response object
-      } else {
-        throw new Error("Invalid response structure from API.");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to change password";
-      set({ error: errorMessage, isLoading: false });
+            // Optionally, display an alert or notification for the user here
+            // Example: Alert.alert('Success', 'Password reset instructions sent to your email.');
+          } else {
+            // Failure scenario
+            throw new Error(
+              response.message || "Failed to send reset instructions"
+            );
+          }
+        } catch (error: any) {
+          // Handle the error and display the error message
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to verify otp";
+          set({ error: errorMessage, isLoading: false });
+          throw new Error(errorMessage);
+        } finally {
+          // Ensure isLoading is set to false regardless of success or failure
+          set({ isLoading: false });
+        }
+      },
+      changePassword: async (data) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await api.changePassword(data);
+          console.log("API Response:", response);
 
-      throw new Error(errorMessage); // Propagate the error
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-  logoutUser: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      // Call the logout API endpoint
-      const response = await api.logout();
+          // Validate response structure and return it
+          if (response && typeof response.success === "boolean") {
+            return response; // Explicitly return the response object
+          } else {
+            throw new Error("Invalid response structure from API.");
+          }
+        } catch (error: any) {
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to change password";
+          set({ error: errorMessage, isLoading: false });
 
-      if (response.success) {
-        console.log("Logout successful:", response.message);
+          throw new Error(errorMessage); // Propagate the error
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      logoutUser: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          // Call the logout API endpoint
+          const response = await api.logout();
 
-        // Clear Zustand state and AsyncStorage
-        set({
-          user: null,
-          otpResponse: null,
-          token: null,
-          isAuthenticated: false,
-          error: null,
-          isLoading: false,
-        });
+          if (response.success) {
+            console.log("Logout successful:", response.message);
 
-        localStorage.removeItem("authToken");
-      } else {
-        throw new Error(response.message || "Logout failed");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to logout user";
+            // Clear Zustand state and AsyncStorage
+            set({
+              user: null,
+              otpResponse: null,
+              token: null,
+              isAuthenticated: false,
+              error: null,
+              isLoading: false,
+            });
 
-      console.error("Error during logout:", errorMessage);
+            localStorage.removeItem("authToken");
+          } else {
+            throw new Error(response.message || "Logout failed");
+          }
+        } catch (error: any) {
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Failed to logout user";
 
-      set({ error: errorMessage, isLoading: false });
-      throw new Error(errorMessage); // Optionally re-throw for UI handling
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+          console.error("Error during logout:", errorMessage);
 
- contactInfo: async () => {
-    set({ isLoading: true, error: null });
-    try { 
-      const response = await api.contactInfo();
-      if (response && typeof response.success === "boolean") {
-        return response;
-      } else {
-        throw new Error("Invalid response structure from API.");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Error getting contact info";
+          set({ error: errorMessage, isLoading: false });
+          throw new Error(errorMessage); // Optionally re-throw for UI handling
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
-      console.error("Error contact info:",errorMessage);
+      contactInfo: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await api.contactInfo();
+          if (response && typeof response.success === "boolean") {
+            return response;
+          } else {
+            throw new Error("Invalid response structure from API.");
+          }
+        } catch (error: any) {
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Error getting contact info";
 
-      set({ error: errorMessage, isLoading: false });
-      throw new Error(errorMessage);
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-     
-fetchFaqs: async () => {
-    set({ isLoading: true, error: null });
-    try { 
-      const response = await api.fetchFaqs();
-      if (response && typeof response.success === "boolean") {
-        return response;
-      } else {
-        throw new Error("Invalid response.");
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Error getting faqs info";
+          console.error("Error contact info:", errorMessage);
 
-      console.error("Error getting faqs info:",errorMessage);
+          set({ error: errorMessage, isLoading: false });
+          throw new Error(errorMessage);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
 
-      set({ error: errorMessage, isLoading: false });
-      throw new Error(errorMessage);
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-  
+      fetchFaqs: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await api.fetchFaqs();
+          if (response && typeof response.success === "boolean") {
+            return response;
+          } else {
+            throw new Error("Invalid response.");
+          }
+        } catch (error: any) {
+          const errorMessage =
+            error.response && error.response.data && error.response?.data?.message
+              ? error.response.data.message
+              : "Error getting faqs info";
+
+          console.error("Error getting faqs info:", errorMessage);
+
+          set({ error: errorMessage, isLoading: false });
+          throw new Error(errorMessage);
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
     }),
-    {name: "auth-state"},
+    { name: "auth-state" },
   )
 )
