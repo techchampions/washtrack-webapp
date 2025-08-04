@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import { FiBell, FiSettings } from "react-icons/fi";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import apiClient from "../../utils/AxiosInstance";
 import Button from "../FormComponents/Button";
 
 function Header() {
-  const { setIsLoggedIn, currentPlan, store } = useUserStore();
-  const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
 
-  const handleLogout = () => {
+  const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
+  const logoutUser = useAuthStore((state) => state.logoutUser); // Access logout function from store
+
+  const handleLogout = async () => {
+    await logoutUser(); 
     setStep("Get Started");
     setHasCompletedOnboarding(false);
-    setIsLoggedIn(false);
   };
+
   // useEffect(() => {
   //   const fetchPlans = async () => {
   //     try {

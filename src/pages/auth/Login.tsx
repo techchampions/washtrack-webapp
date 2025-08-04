@@ -3,15 +3,14 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import InputField from "../../components/FormComponents/InputField";
 import { FaEnvelope, FaLock } from "react-icons/fa6";
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
 import Button from "../../components/FormComponents/Button";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import apiClient from "../../utils/AxiosInstance";
 import Toast from "../../components/GeneralComponents/Toast";
+import { useAuthStore, useOnboardingStore } from "@/store/onboardingStore";
 
 const Login: React.FC = () => {
   const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
-  const { setIsLoggedIn, setToken, setEmail } = useUserStore();
+  const { loginUser } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
@@ -24,43 +23,24 @@ const Login: React.FC = () => {
     },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
+    const dto = {
+      email: values.email,
+      password: values.password,
+    };
     try {
-      const response = await apiClient.post("/login", {
-        // store_name: values.businessName,
-        // phone_num: values.phoneNumber,
-        email: values.email,
-        password: values.password,
-        // user_type: 2,
-      });
+      const response = await loginUser(dto);
+      console.log(response, "---------- In login ------");
 
-      if (response.data.success) {
-        setToken(response.data.token); // Save token in store
-        // setStore({
-        //   id: response.data.user.id,
-        //   name: response.data.user.store_name,
-        //   address: "",
-        //   description: "",
-        //   logoUrl: "",
-        // });
-        // setPlanID(response.data.user.plan_id);
-        setToastMsg("Loggedin successfully!");
+      if (response.status == 200) {
+       
+        setToastMsg(response.message);
         setToastType("success");
         setShowToast(true);
-
-        setEmail(values.email);
-        // setPhoneNumber(response.data.user.phone_num);
         setStep("Get Started");
         setHasCompletedOnboarding(true);
-        setIsLoggedIn(true);
-
-        console.log(response.data);
-      } else {
-        setToastMsg(response.data.message);
-        setToastType("error");
-        setShowToast(true);
       }
     } catch (error) {
-      setToastMsg("Invalid Credentials");
+      setToastMsg(error.response.data.message);
       setToastType("error");
       setShowToast(true);
       console.error("Login failed:", error);

@@ -31,9 +31,9 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  regsuccess: boolean
-  error: string | null;
-   isLoggedIn: boolean;
+  regSuccess: boolean;
+  error: string | null | unknown;
+  isLoggedIn: boolean;
   fieldErrors: {
     [key: string]: string[];
   } | null;
@@ -43,7 +43,7 @@ interface AuthState {
   verifyOTP: (otp: OTP) => Promise<void>;
   resendOTP: () => Promise<void>;
   registerUser: (data: Register) => Promise<RegisterResponse | void>;
-  loginUser: (data: Login) => Promise<LoginResponse>;
+  loginUser: (data: Login) => Promise<void>;
   forgotPassword: (email: ForgotPassword) => Promise<void>;
   changePassword: (email: ChangePassword) => Promise<ChangePasswordResponse>;
   logoutUser: () => Promise<void>;
@@ -58,20 +58,19 @@ export interface ValidationErrorResponse {
 
 type OnboardingState = {
   step:
-  | "Get Started"
-  | "signup"
-  | "login"
-  | "verify OTP"
-  | "signup completed"
-  | "setup store"
-  | "add services"
-  | "add items"
-  | "onboarding complete";
+    | "Get Started"
+    | "signup"
+    | "login"
+    | "verify OTP"
+    | "signup completed"
+    | "setup store"
+    | "add services"
+    | "add items"
+    | "onboarding complete";
   setStep: (newStep: OnboardingState["step"]) => void;
   hasCompletedOnboarding: boolean;
   setHasCompletedOnboarding: (newHasCompletedOnboarding: boolean) => void;
 };
-
 
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
@@ -82,12 +81,14 @@ export const useOnboardingStore = create<OnboardingState>()(
       setHasCompletedOnboarding: (newHasCompletedOnboarding) =>
         set({ hasCompletedOnboarding: newHasCompletedOnboarding }),
 
+      // RESET
       reset: () =>
         set({
           step: "Get Started",
           hasCompletedOnboarding: false,
         }),
     }),
+
     { name: "onboarding-state" } // Key for localStorage
   )
 );
@@ -104,7 +105,7 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       error: null,
       fieldErrors: null,
-      regsuccess: false,
+      regSuccess: false,
       isLoggedIn: false,
       setIsLoggedIn: (status) => set({ isLoggedIn: status }),
 
@@ -132,20 +133,17 @@ export const useAuthStore = create<AuthState>()(
             localStorage.setItem("authToken", token);
             localStorage.setItem("storeUpdated", "false");
 
-            return response.data as RegisterResponse
+            return response.data as RegisterResponse;
           } else {
             const error = response.data.response;
             throw new Error(error);
           }
-
-
-
         } catch (error) {
           console.error("Error during registration:", error);
           console.log(error.response?.data);
 
           if (axios.isAxiosError(error) && error.response?.data) {
-            console.log("axio error ",)
+            console.log("axio error ");
             const errorData = error.response.data as ValidationErrorResponse;
 
             if (errorData.errors) {
@@ -203,7 +201,9 @@ export const useAuthStore = create<AuthState>()(
         } catch (err) {
           const error = err as AxiosError<{ message: string }>;
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to verify OTP";
 
@@ -232,7 +232,9 @@ export const useAuthStore = create<AuthState>()(
           set({ otpResponse: newOTP, isLoading: false });
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to resend OTP";
           console.error("Error resending OTP:", errorMessage);
@@ -243,90 +245,67 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await api.login(data);
-          console.log("Login response:", response); // Debug log
+          console.log("Login response:", response);
 
-          // Only proceed if we have a successful login with valid data
-          if (response.success && response.token) {
+          if (response.data.success) {
+            console.log(response, "----------response login-------------");
             // Set the current timestamp FIRST to prevent expiration issues
             const currentTimestamp = new Date().getTime().toString();
 
-            // Debug logs
             console.log("Setting authentication data:", {
-              token: response.token,
-              otpVerified: response.otpVerified,
-              storeUpdated: response.storeUpdated, // Changed from storeCompleted
+              token: response.data.token,
+              otpVerified: response.data.otpVerified,
+              storeUpdated: response.data.storeUpdated,
               timestamp: currentTimestamp,
             });
 
-            // Set all values in a single batch to prevent race conditions
-            localStorage.setItem("authToken", response.token);
+            //todo:  Set all values in a single batch to prevent race conditions
+            localStorage.setItem("authToken", response.data.token);
             localStorage.setItem("tokenTimestamp", currentTimestamp);
-            localStorage.setItem("otpVerified", response.otpVerified ? "true" : "false");
-            localStorage.setItem("storeUpdated", response.storeUpdated ? "true" : "false");
-
+            localStorage.setItem(
+              "otpVerified",
+              response.data.otpVerified ? "true" : "false"
+            );
+            localStorage.setItem(
+              "storeUpdated",
+              response.data.storeUpdated ? "true" : "false"
+            );
 
             set({
               success: true,
-              token: response.token,
-              isAuthenticated: response.otpVerified,
+              token: response.data.token,
+              isAuthenticated: response.data.otpVerified,
               isLoading: false,
               error: null,
+              isLoggedIn: true,
             });
 
             return {
               success: true,
               message: "Login successful",
-              token: response.token,
-              otpVerified: response.otpVerified,
-              storeUpdated: response.storeUpdated, // Changed from storeCompleted
-            };
-          } else {
-            // Login failed
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("otpVerified")
-            localStorage.removeItem("storeUpdated");
-            localStorage.removeItem("tokenTimestamp");
-
-
-            set({
-              success: false,
-              token: null,
-              isAuthenticated: false,
+              token: response.data.token,
+              otpVerified: response.data.otpVerified,
+              storeUpdated: response.data.storeUpdated, // Changed from storeCompleted
+              isLoggedIn: true,
               isLoading: false,
-              error: response.message || "Login failed",
-            });
-
-            return {
-              success: false,
-              message: response.message || "Login failed",
-              token: "",
-              otpVerified: false,
-              storeUpdated: false,
+              ...response,
             };
           }
-        } catch (error: any) {
-          console.log("login error zuzstand", error);
-          const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
-              ? error.response.data.message
-              : "Failed to login, please check your internet connection.";
-
-          // Clear any existing credentials on error
-          // Login failed
+        } catch (error: unknown) {
           localStorage.removeItem("authToken");
-          localStorage.removeItem("otpVerified")
+          localStorage.removeItem("otpVerified");
           localStorage.removeItem("storeUpdated");
           localStorage.removeItem("tokenTimestamp");
 
           set({
-            error: errorMessage,
+            error: error,
             isLoading: false,
             isAuthenticated: false,
             token: null,
             success: false,
           });
 
-          throw new Error(errorMessage);
+          throw new error();
         }
       },
 
@@ -351,7 +330,9 @@ export const useAuthStore = create<AuthState>()(
         } catch (error: any) {
           // Handle the error and display the error message
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to verify otp";
           set({ error: errorMessage, isLoading: false });
@@ -375,7 +356,9 @@ export const useAuthStore = create<AuthState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to change password";
           set({ error: errorMessage, isLoading: false });
@@ -394,7 +377,6 @@ export const useAuthStore = create<AuthState>()(
           if (response.success) {
             console.log("Logout successful:", response.message);
 
-            // Clear Zustand state and AsyncStorage
             set({
               user: null,
               otpResponse: null,
@@ -402,15 +384,18 @@ export const useAuthStore = create<AuthState>()(
               isAuthenticated: false,
               error: null,
               isLoading: false,
+              isLoggedIn: false,
             });
 
             localStorage.removeItem("authToken");
           } else {
-            throw new Error(response.message || "Logout failed");
+            throw new Error(response.message);
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to logout user";
 
@@ -434,7 +419,9 @@ export const useAuthStore = create<AuthState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Error getting contact info";
 
@@ -458,7 +445,9 @@ export const useAuthStore = create<AuthState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Error getting faqs info";
 
@@ -470,8 +459,20 @@ export const useAuthStore = create<AuthState>()(
           set({ isLoading: false });
         }
       },
-
+      reset: () =>
+        set({
+          token: "",
+          isLoggedIn: false,
+          success: false,
+          user: null,
+          otpResponse: null,
+          isAuthenticated: false,
+          isLoading: false,
+          error: null,
+          fieldErrors: null,
+          regSuccess: false,
+        }),
     }),
-    { name: "auth-state" },
+    { name: "auth-state" }
   )
-)
+);

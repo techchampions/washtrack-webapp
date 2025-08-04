@@ -61,7 +61,7 @@ const resendCode = async (data: OTP) => {
 const login = async (data: Login) => {
   const response = await apiClient.post("/api/login", data);
 
-  return response.data; // Assumes server responds with user and other relevant info
+  return response; // Assumes server responds with user and other relevant info
 };
 const forgotPassword = async (data: ForgotPassword) => {
   const response = await apiClient.post("/api/forget-password", data);

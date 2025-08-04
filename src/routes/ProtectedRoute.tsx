@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUserStore } from "../store/AppStore";
+import { useAuthStore } from "@/store/onboardingStore";
 
 const ProtectedRoute = () => {
-  const { isLoggedIn } = useUserStore();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   // Redirect UNAUTHENTICATED users to login
   return isLoggedIn ? <Outlet /> : <Navigate to="/" replace />;

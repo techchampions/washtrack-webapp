@@ -1,10 +1,10 @@
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Loader from "../components/GeneralComponents/Loader";
-import { useOnboardingStore, useUserStore } from "../store/AppStore";
+import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import Onboarding from "../pages/auth/OnboardingScreen";
 import ProtectedRoute from "./ProtectedRoute";
-import {HomeScreen} from "../pages/home";
+import { HomeScreen } from "../pages/home";
 import InventoryScreen from "@/pages/inventory/InventoryScreen";
 import { AddOrderNewUser, AddOrderExistingUser } from "../pages/orders";
 import OrdersScreen from "@/pages/orders/OrdersScreen";
@@ -17,7 +17,7 @@ const DashboardScreen = lazy(() => import("../pages/home/DashboardScreen"));
 
 const AllRoutes = () => {
   const { hasCompletedOnboarding } = useOnboardingStore();
-  const { isLoggedIn } = useUserStore();
+  const { isLoggedIn } = useAuthStore();
 
   return (
     <BrowserRouter>
