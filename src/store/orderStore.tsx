@@ -517,7 +517,7 @@ export const useOrderStore = create<OrderStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const response = await api.getVendorOrders(filter); // Pass filter to API call
+          const response = await api.getVendorOrders(filter); 
 
           const vendorOrdersResponse: VendorOrdersResponse = {
             ...response, // assuming `response` matches the `VendorOrdersResponse` type

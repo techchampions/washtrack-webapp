@@ -10,7 +10,7 @@ import OrderList from "../../components/DashboardComponents/OrderList";
 import CustomDropdown from "../../components/DashboardComponents/CustomDropdown";
 
 export default function HomeScreen() {
-  const { orders, loadOrders } = useUserStore();
+  // const { orders, loadOrders } = useUserStore();
   const [selectedDay, setSelectedDay] = useState("Today");
 
   useEffect(() => {

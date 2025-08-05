@@ -1,13 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FiBell, FiSettings } from "react-icons/fi";
 import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import Button from "../FormComponents/Button";
 import { useProfileStore } from "@/store/ProfileStore";
+import { useOrderStore } from "@/store/orderStore";
 
 function Header() {
   const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
   const logoutUser = useAuthStore((state) => state.logoutUser);
   const {getUserProfile, user, storeDetails, logoUrl} = useProfileStore();
+    const { fetchVendorOrders, vendorOrders } = useOrderStore();
+      const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [ordersData, setOrdersData] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+     const loadOrders = async () => {
+    try {
+      const data = await fetchVendorOrders(selectedFilter);
+      setOrdersData(data || {});
+    } catch (error) {
+      console.error("Error fetching vendor orders:", error);
+      setOrdersData({});
+    } finally {
+      setIsLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   const handleLogout = async () => {
     await logoutUser(); 
@@ -16,6 +35,7 @@ function Header() {
   };
 
   useEffect(() => {
+    loadOrders();
     getUserProfile();
 
   }, [])

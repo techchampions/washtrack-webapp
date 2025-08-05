@@ -5,10 +5,11 @@ import MobileNavContainer from "../../components/NavigationComponents/MobileNavC
 import { useEffect, useState } from "react";
 import Modal from "../../components/DashboardComponents/Modal";
 import { loadEverything } from "../../hooks/useAppInitializer";
+
 function DashboardScreen() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
-    loadEverything();
+    // loadEverything();
   }, []);
 
   return (
