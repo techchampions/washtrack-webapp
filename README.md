@@ -80,3 +80,13 @@ export default tseslint.config({
                         : service.estimated_hours ?? "", // 👈 fallback to global state hours
                   };
                 }),
+
+
+
+
+
+
+
+
+
+                

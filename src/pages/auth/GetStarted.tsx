@@ -1,9 +1,9 @@
-import { useOnboardingStore, useUserStore } from "../../store/AppStore";
+import {useOnboardingStore, useAuthStore} from "@/store/onboardingStore"
 import Button from "../../components/FormComponents/Button";
 
 function GetStarted() {
   const { setStep } = useOnboardingStore();
-  const { isLoggedIn } = useUserStore();
+  const { isLoggedIn } = useAuthStore();
   const handleGetStarted = () => {
     setStep("signup");
   };

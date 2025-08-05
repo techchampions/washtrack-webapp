@@ -78,7 +78,7 @@ const logout = async () => {
 };
 const getProfile = async () => {
   const response = await apiClient.get("/api/user-profile");
-  return response.data;
+  return response;
 };
 const editProfile = async (data: Partial<UserProfile>) => {
   const response = await apiClient.post("/api/profile/update", data);

@@ -47,6 +47,7 @@ interface AuthState {
   forgotPassword: (email: ForgotPassword) => Promise<void>;
   changePassword: (email: ChangePassword) => Promise<ChangePasswordResponse>;
   logoutUser: () => Promise<void>;
+  reset: () => void;
 }
 
 export interface ValidationErrorResponse {
@@ -70,6 +71,7 @@ type OnboardingState = {
   setStep: (newStep: OnboardingState["step"]) => void;
   hasCompletedOnboarding: boolean;
   setHasCompletedOnboarding: (newHasCompletedOnboarding: boolean) => void;
+  reset: () => void;
 };
 
 export const useOnboardingStore = create<OnboardingState>()(

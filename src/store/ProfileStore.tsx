@@ -13,8 +13,10 @@ export interface ProfileState {
   user: UserProfile | null;
   isLoading: boolean;
   error: string | null;
+  errorMessage?: string | null
   message: string | null; // To store success messages
   storeDetails: UserProfile["store"] | null; // Store details from API response
+  logoUrl: string | undefined,
 
   // Actions
   getUserProfile: () => Promise<void>;
@@ -33,6 +35,8 @@ export const useProfileStore = create<ProfileState>((set) => ({
   error: null,
   message: null,
   storeDetails: null,
+  errorMessage: null,
+  logoUrl: null,
 
   // Fetch user profile
   getUserProfile: async () => {
@@ -40,22 +44,24 @@ export const useProfileStore = create<ProfileState>((set) => ({
 
     try {
       const response = await api.getProfile();
-      console.log(response)
-      set({
-        user: response.user,
-        storeDetails: response.user.store,
+      console.log(response, "----------get user profile")
+      if(response.data.success) {
+         const uncleanLogoUrl = response.data.user.store.store_images;
+        const parsedLogoUrl = JSON.parse(uncleanLogoUrl);
+        const cleanLogoUrl = parsedLogoUrl[0].replace(/\\\//g, "/");
+  set({
+        user: response.data.user,
+        storeDetails: response.data.user.store,
+        logoUrl: cleanLogoUrl,
         isLoading: false,
+        message: response.data.message
       });
+      }
     } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data && error.response?.data?.message
-          ? error.response.data.message
-          : "Failed to fetch orders";
-      console.error("Failed to fetch profile:", error);
-      set({
-        error: errorMessage,
-        isLoading: false,
-      });
+       error = error.response.data;
+          console.error("Error getUserProfile:", error);
+          set({ error: error,errorMessage: error.response.message, isLoading: false });
+          throw new error;
     }
   },
 

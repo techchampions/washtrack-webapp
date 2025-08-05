@@ -8,16 +8,13 @@ import AddServices from "./AddServices";
 import AddItems from "./AddItems";
 import OnboardingComplete from "./OnboardingComplete";
 import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
-import { useEffect } from "react";
+import { useEffect, useCallback, useState } from "react";
 
 const Onboarding = () => {
   const step = useOnboardingStore((state) => state.step);
+  const [renderStepContainer, setStepContainer] = useState<any>(null)
 
-  useEffect(() => {
-    console.log("Current onboarding step:", step);
-  }, []);
-
-  const stepContainer = () => {
+   const stepContainer = () => {
     switch (step) {
       case "Get Started":
         return <GetStarted />;
@@ -52,7 +49,10 @@ const Onboarding = () => {
     window.location.reload(); // Optional: Refresh page to clear UI state
   };
 
-  return (
+
+  useEffect(() => {
+     console.log(step,"------step------------")
+    setStepContainer(<>
     <div className="fixed inset-0 z-50 h-screen w-full overflow-y-auto">
       {/* Background Image */}
       <img
@@ -70,11 +70,35 @@ const Onboarding = () => {
         <div className="absolute flex flex-row justify-end items-start my-auto h-screen w-[95%] md:w-[80%]">
           {/* Onboarding Content Container */}
           <div className="w-full md:w-[480px] max-w-[600px] min-h-[600px] md:min-h-[600px] max-h-[80vh] md:max-h-max bg-white py-[20px] px-5 md:px-8 rounded-[25px] shadow-lg flex flex-col items-center justify-start my-auto ">
-            {stepContainer()}
+            {
+              stepContainer()
+            }
+            
           </div>
         </div>
       </div>
     </div>
+    </>)
+  }, [step, ]);
+
+  // const AuthFlowContent = useCallback(() => {
+  //  console.log("Current onboarding step:", step);
+    
+  //   setStepContainer(<>
+  //    {stepContainer()}
+  //   </>)
+
+    
+  // }, [step])
+
+
+
+ 
+  return (
+    <>
+  {renderStepContainer}
+
+    </>
   );
 };
 
