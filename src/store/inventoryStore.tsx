@@ -1,4 +1,4 @@
-import { api } from "@/data/api"; // Assuming apiClient is properly configured for API calls
+import { api } from "@/api/api"; // Assuming apiClient is properly configured for API calls
 import { create } from "zustand";
 
 export interface InventoryItem {

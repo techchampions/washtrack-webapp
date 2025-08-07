@@ -1,12 +1,12 @@
 import GetStarted from "./GetStarted";
-import SignUp from "./SignUp";
-import Login from "./Login";
+import SignUp from "./SignupPage";
+import Login from "./LoginPage";
 import OTP from "./OTP";
-import StoreSetup from "./StoreSetup";
+import StoreSetup from "../onboarding/StoreSetup";
 import SignupComplete from "./SignupComplete";
-import AddServices from "./AddServices";
-import AddItems from "./AddItems";
-import OnboardingComplete from "./OnboardingComplete";
+import AddServices from "../onboarding/AddServices";
+import AddItems from "../onboarding/AddItems";
+import OnboardingComplete from "../onboarding/OnboardingComplete";
 import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import { useEffect, useCallback, useState } from "react";
 

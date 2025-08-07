@@ -1,5 +1,5 @@
-import { useUserStore } from "../../store/AppStore";
-import { useOnboardingStore } from "../../store/AppStore";
+import { useUserStore } from "../store/AppStore";
+import { useOnboardingStore } from "../store/AppStore";
 
 export const handleLogout = () => {
   useUserStore.getState().reset(); // Reset user store

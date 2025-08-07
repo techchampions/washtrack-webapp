@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { SearchOrderResponse } from "@/types/GeneralTypes/searchTypes";
 import { create } from "zustand";
 

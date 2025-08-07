@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { User } from "@/types/OnboardingTypes/mainTypes";
 import { OTP } from "@/types/OnboardingTypes/otpTypes";
 import {
@@ -7,7 +7,7 @@ import {
   Login,
   Register,
   RegisterResponse,
-} from "@/types/OnboardingTypes/registerTypes";
+} from "@/types/auth.types";
 import axios, { AxiosError } from "axios";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -91,7 +91,7 @@ export const useOnboardingStore = create<OnboardingState>()(
         }),
     }),
 
-    { name: "onboarding-state" } // Key for localStorage
+    { name: "onboarding-storage" } // Key for localStorage
   )
 );
 
@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthState>()(
               isLoading: false,
               fieldErrors: null,
             });
-            localStorage.setItem("authToken", token);
+            localStorage.setItem("auth-token", token);
             localStorage.setItem("storeUpdated", "false");
 
             return response.data as RegisterResponse;
@@ -262,7 +262,7 @@ export const useAuthStore = create<AuthState>()(
             });
 
             //todo:  Set all values in a single batch to prevent race conditions
-            localStorage.setItem("authToken", response.data.token);
+            localStorage.setItem("auth-token", response.data.token);
             localStorage.setItem("tokenTimestamp", currentTimestamp);
             localStorage.setItem(
               "otpVerified",
@@ -294,7 +294,7 @@ export const useAuthStore = create<AuthState>()(
             };
           }
         } catch (error: unknown) {
-          localStorage.removeItem("authToken");
+          localStorage.removeItem("auth-token");
           localStorage.removeItem("otpVerified");
           localStorage.removeItem("storeUpdated");
           localStorage.removeItem("tokenTimestamp");
@@ -389,7 +389,7 @@ export const useAuthStore = create<AuthState>()(
               isLoggedIn: false,
             });
 
-            localStorage.removeItem("authToken");
+            localStorage.removeItem("auth-token");
           } else {
             throw new Error(response.message);
           }
@@ -475,6 +475,6 @@ export const useAuthStore = create<AuthState>()(
           regSuccess: false,
         }),
     }),
-    { name: "auth-state" }
+    { name: "auth-storage" }
   )
 );

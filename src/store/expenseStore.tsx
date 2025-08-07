@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { CreateExpensePayload, CreateExpenseResponse } from "@/types/GeneralTypes/ExpenseTypes";
 import { create } from "zustand";
 

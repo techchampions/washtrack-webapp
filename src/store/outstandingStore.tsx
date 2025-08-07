@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { OutstandingItem } from "@/types/GeneralTypes/outstandingTypes";
 import { create } from "zustand";
 

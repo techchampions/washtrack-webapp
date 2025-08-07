@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { RevenueItem } from "@/types/GeneralTypes/revenueTypes";
 import { create } from "zustand";
 

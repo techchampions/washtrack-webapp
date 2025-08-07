@@ -30,7 +30,7 @@ import {
   ForgotPassword,
   Login,
   Register,
-} from "@/types/OnboardingTypes/registerTypes";
+} from "@/types/auth.types";
 import { DeleteItemsPayload } from "@/store/orderStore";
 import apiClient from "./apiClient";
 import {

@@ -1,4 +1,4 @@
-import { api } from "@/data/api"; // Assuming `api` contains `getProfile` and `editProfile` methods
+import { api } from "@/api/api"; // Assuming `api` contains `getProfile` and `editProfile` methods
 import {
   Customer,
   Order,

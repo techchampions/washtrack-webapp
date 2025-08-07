@@ -3,8 +3,8 @@ import { MdOutlineInventory } from "react-icons/md";
 import { RiAppsLine } from "react-icons/ri";
 import MobileNavItem from "./MobileNavItem";
 import { useState } from "react";
-import Modal from "../DashboardComponents/Modal";
-import Button from "../FormComponents/Button";
+import Modal from "../../DashboardComponents/Modal";
+import Button from "../../FormComponents/Button";
 
 const BottomNav = () => {
   const [showModal, setShowModal] = useState(false);

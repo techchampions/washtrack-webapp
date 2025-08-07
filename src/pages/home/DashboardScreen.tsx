@@ -9,7 +9,7 @@ import { loadEverything } from "../../hooks/useAppInitializer";
 function DashboardScreen() {
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
-    // loadEverything();
+    loadEverything();
   }, []);
 
   return (

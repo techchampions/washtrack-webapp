@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { AddItemResponse } from "@/types/GeneralTypes/estoreTypes";
 import {
   AllItems,

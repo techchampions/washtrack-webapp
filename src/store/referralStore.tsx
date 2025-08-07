@@ -1,4 +1,4 @@
-import { api } from "@/data/api";
+import { api } from "@/api/api";
 import { create } from "zustand";
 
 // Define the structure of the referral data
