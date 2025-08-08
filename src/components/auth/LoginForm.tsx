@@ -32,7 +32,7 @@ const initialValues: LoginCredentials & { rememberMe: boolean } = {
 
 export const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const { mutate: login, isPending, error, loading } = useLogin();
+  const { mutate: login, isPending, error } = useLogin();
 
   const handleSubmit = (values: LoginCredentials & { rememberMe: boolean }) => {
     login({
