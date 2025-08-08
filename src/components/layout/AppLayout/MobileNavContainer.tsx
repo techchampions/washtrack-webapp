@@ -1,7 +1,7 @@
 import { FaHome, FaStore, FaPlus } from "react-icons/fa";
 import { MdOutlineInventory } from "react-icons/md";
 import { RiAppsLine } from "react-icons/ri";
-import MobileNavItem from "./MobileNavItem";
+import MobileNavItem from "../Header/MobileNavItem";
 import { useState } from "react";
 import Modal from "../../DashboardComponents/Modal";
 import Button from "../../FormComponents/Button";

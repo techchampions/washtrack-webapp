@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import NavItem from "./NavItem";
+import NavItem from "../Header/NavItem";
 import { FaChartBar, FaHome, FaList, FaUsers } from "react-icons/fa";
 import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
 import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
 import { TbMoneybag } from "react-icons/tb";
 import { RiAppsLine } from "react-icons/ri";
-import NavbarAddorder from "./NavbarAddorder";
+import NavbarAddorder from "../Header/NavbarAddorder";
 import Button from "../FormComponents/Button";
 import Modal from "../DashboardComponents/Modal";
 import { useNavigate } from "react-router-dom";

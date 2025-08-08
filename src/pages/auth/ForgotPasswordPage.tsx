@@ -1,0 +1,13 @@
+import React from "react";
+
+
+const ForgotPasswordPage: React.FC = () => {
+
+  return (
+    <div>
+      <h1> Page In progress</h1>
+    </div>
+  )
+}
+
+export default ForgotPasswordPage;

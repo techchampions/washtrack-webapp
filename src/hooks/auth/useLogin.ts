@@ -9,26 +9,28 @@ import { showError, showSuccess } from '@/utils/toast';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser, setToken, setError } = useAuthStore();
+  const { setUser, setToken, setError, setLoading } = useAuthStore();
 
   const mutation = useMutation<AuthResponse, Error, LoginCredentials>({
     mutationFn: authService.login,
-    onSuccess: (data) => {
-      // Store user data and token
-      setUser(data.user);
-      setToken(data.token);
-      
-      // Clear any previous errors
+    onMutate: () => {
       setError(null);
+      setLoading(true);
+    },
+    onSuccess: (response) => {
+       console.log("✅ Login success:", response.data);
+       showSuccess(response.data.message);
       
-      // Show success message
-      showSuccess(`Welcome back, ${data.user.firstName}!`);
-      
-      // Redirect based on user status
-      if (!data.user.isVerified) {
+      // Store user data and token
+      // setUser(response.user);
+      setToken(response.token);
+      setError(null);
+    
+
+     /* if (!data.user.isVerified) {
         navigate('/auth/verify-email', { replace: true });
       } else {
-        // Check if user needs to complete onboarding
+      
         const hasAddress = data.user.addresses && data.user.addresses.length > 0;
         
         if (!hasAddress) {
@@ -36,21 +38,27 @@ export const useLogin = () => {
         } else {
           navigate('/dashboard', { replace: true });
         }
-      }
+      } */
+
     },
     onError: (error) => {
       // Handle specific error cases
-      if (error.message.includes('not verified')) {
+      console.error("❌ Login error:", error.response.data.message);
+      if (error.response.data.message.includes('not verified')) {
         showError('Please verify your email address before signing in.');
         navigate('/auth/verify-email');
-      } else if (error.message.includes('invalid credentials')) {
+      } else if (error.response.data.message.includes('invalid credentials')) {
         showError('Invalid email or password. Please try again.');
       } else {
-        showError(error.message || 'Login failed. Please try again.');
+        showError(error.response.data.message || 'Login failed. Please try again.');
       }
       
       setError(error.message);
     },
+    onSettled: () => {
+       console.log("🔁 Login request settled (success or error)");
+       setLoading(false);
+    }
   });
 
   return {
