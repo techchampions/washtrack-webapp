@@ -21,6 +21,27 @@ export default defineConfig({
       "@types/*": resolve(__dirname, './src/types/*'),
       "@assets/*": resolve(__dirname, './src/assets/*'),
       "@routes/*": resolve(__dirname, './src/routes/*'),
+      "@services/*": resolve(__dirname, './src/services/*'),
+      "@constants/*": resolve(__dirname, './src/constants/*'),
     },
   },
+  server: {
+    port: 3000,
+    open: true
+  },
+
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          forms: ['formik', 'yup'],
+          query: ['@tanstack/react-query']
+        }
+      }
+    }
+  }
 })
