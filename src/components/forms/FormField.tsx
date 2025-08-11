@@ -33,6 +33,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   const inputId = `field-${name}`;
 
   const baseInputStyles = `
+  bg-white text-sm
     block w-full rounded-lg border-gray-300 shadow-sm
     transition-colors duration-200
     focus:border-gray-200 focus:ring-gray-200
@@ -40,7 +41,7 @@ export const FormField: React.FC<FormFieldProps> = ({
     ${hasError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}
     ${icon ? 'pl-10' : 'pl-4'}
     ${rightIcon ? 'pr-10' : 'pr-4'}
-    py-3
+    py-2.5
   `;
 
   const checkboxStyles = `
@@ -82,7 +83,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   }
 
   return (
-    <div className={`space-y-1 ${containerClassName}`}>
+    <div className={`max-h-13 ${containerClassName}`}>
       {label && (
         <label 
           htmlFor={inputId} 
@@ -119,7 +120,7 @@ export const FormField: React.FC<FormFieldProps> = ({
       </div>
       
       {hasError && (
-        <p className={`text-sm text-red-600 ${errorClassName}`}>
+        <p className={`text-xs leading-tight my-[1.5]  text-red-600 ${errorClassName}`}>
           {meta.error}
         </p>
       )}

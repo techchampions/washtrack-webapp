@@ -30,7 +30,7 @@ const NotFoundPage = React.lazy(() => import('@/pages/NotFoundPage'));
 
 export const AppRoutes: React.FC = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense>
       <Routes>
         {/* Public Routes - Only accessible when not authenticated */}
         <Route path="/auth" element={<PublicRoute />}>

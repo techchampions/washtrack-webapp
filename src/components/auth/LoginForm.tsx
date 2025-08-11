@@ -9,6 +9,8 @@ import { useLogin } from '@/hooks/auth/useLogin';
 import { LoginCredentials } from '@/types/auth.types';
 import { FaEnvelope, FaLock } from 'react-icons/fa6';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import logoImage from "@/assets/images/logo.png";
+
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -42,24 +44,33 @@ export const LoginForm: React.FC = () => {
     });
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     // Reset form state on mount
     console.log(isPending, "--------isloading--------");
   }, [isPending]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-transparent px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl md:shadow-xl">
-       
+    <div className="flex items-center justify-center bg-transparent">
 
-         <div className="flex flex-col justify-start text-left ">
-            <h3 className="text-4xl font-brand-bold text-brand text-left">
-              Welcome
-            </h3>
-            <p className="mt-2 text-gray-400 text-left">
-              Sign In via your Email Address
-            </p>
-          </div> 
+      <div className="py-10 space-y-8 bg-white px-8 rounded-2xl md:shadow-xl px-15">
+
+        <div className=' justify-center items-center h-0  p-0 m-0 flex'>
+          <img
+            src={logoImage}
+            alt="Wash Track"
+            className="w-25 h-25 p-0 m-0"
+          />
+          <div className='ml-5' />
+        </div>
+
+        <div className="my-4 flex flex-col justify-start justify-center items-center mt-6">
+          <h3 className="text-2xl font-brand-bold text-brand text-left">
+            Welcome
+          </h3>
+          <p className="mt-[1.5] text-gray-400 text-left">
+            Sign in with your Email Address
+          </p>
+        </div>
 
         {/* Error Message */}
         {error && (
@@ -74,26 +85,25 @@ export const LoginForm: React.FC = () => {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            
+
             <Form className="mt-8 space-y-6">
-              <div className="space-y-4">
+              <div className="space-y-5 p-0 m-0 mb-2">
                 <FormField
                   name="email"
                   type="email"
                   placeholder="Email Address"
-                  icon={<FaEnvelope className="text-brand w-5 h-5" />} 
+                  icon={<FaEnvelope className="text-brand w-3 h-3" />}
                   autoComplete="email"
                   errorClassName='text-left'
-                  inputClassName="bg-white border text-gray-900 text-sm rounded-lg block w-full p-2.5 outline-none resize-none"
+                  inputClassName=" bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
-
                 <FormField
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  inputClassName="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full p-2.5 outline-none resize-none"
-
+                  inputClassName="text-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-2.5 outline-none resize-none"
+                  // containerClassName='border'
                   placeholder="Password"
-                   icon={<FaLock className="text-brand w-5 h-5" />}
+                  icon={<FaLock className="text-brand w-3 h-3" />}
                   rightIcon={
                     <button
                       type="button"
@@ -101,18 +111,18 @@ export const LoginForm: React.FC = () => {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-5 w-5 text-gray-500 cursor-pointer" />
+                        <FaEyeSlash className="h-3 w-3 text-gray-500 cursor-pointer" />
                       ) : (
-                        <FaEye className="h-5 w-5 text-gray-500 cursor-pointer" />
+                        <FaEye className="h-3 w-3 text-gray-500 cursor-pointer" />
                       )}
                     </button>
                   }
-                  autoComplete="current-password"
+                  autoComplete="password"
                   errorClassName='text-left'
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-0 m-0">
                 {/* <FormField
                   name="rememberMe"
                   type="checkbox"
@@ -122,23 +132,24 @@ export const LoginForm: React.FC = () => {
 
                 <Link
                   to="/auth/forgot-password"
-                  className="text-sm text-brand hover:text-indigo-500 font-medium"
+                  className="text-sm text-brand font-medium"
                 >
                   Forgot password?
                 </Link>
               </div>
 
               <Button
+                style={{ "borderRadius": "40px" }}
                 type="submit"
-                className="w-full"
-                size="lg"
+                className="w-full p-0 m-0  mb-1 mt-10"
+                size="md"
                 loading={isPending}
                 disabled={isPending}
               >
                 Sign In
               </Button>
 
-              <div className="text-center">
+              <div className="text-center p-0 m-0">
                 <span className="text-sm text-gray-600">
                   Don't have an account?{' '}
                   <Link
@@ -150,7 +161,7 @@ export const LoginForm: React.FC = () => {
                 </span>
               </div>
             </Form>
-            
+
           )}
         </Formik>
 

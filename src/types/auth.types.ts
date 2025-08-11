@@ -8,7 +8,7 @@ export interface SignupData {
   email: string;
   password: string;
   phone_num: string;
-  referral_code: string;
+  referral_code?: string;
 }
 
 export interface ForgotPasswordData{

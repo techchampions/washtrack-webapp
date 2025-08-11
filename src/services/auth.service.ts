@@ -3,7 +3,6 @@ import {
     LoginCredentials,
     SignupData,
     ForgotPasswordData,
-    ResetPasswordData,
     ChangePasswordData,
     AuthResponse,
     AuthUser,
@@ -51,7 +50,7 @@ class AuthService {
 
     async getCurrentUser(): Promise<AuthUser> {
         const response = await apiClient.get<{ user: AuthUser }>('/api/user-profile');
-        return response
+        return response;
     }
 
 }

@@ -16,6 +16,8 @@
 
   --color-quick-action-icon: rgba(9, 39, 101, 1);
   --font-brand-bold: sk-modernist-bold;
+
+  --spacing: 0.28rem;
 }
 
 @font-face {
