@@ -11,6 +11,7 @@ import { AuthResponse, SignupData } from '@/types/auth.types';
 import { useMutation } from "@tanstack/react-query";
 import { authService } from '@/services/auth.service';
 import { showError, showSuccess } from '@/utils/toast';
+import {useNavigate, useLocation} from "react-router-dom";
 
 const signupSchema = Yup.object().shape({
     store_name: Yup.string()
@@ -47,6 +48,7 @@ const initialValues: SignupData = {
 };
 
 export const SignupForm: React.FC = () => {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = React.useState(false);
     const mutation = useMutation<AuthResponse, Error, SignupData>({
         mutationFn: authService.signup,
@@ -61,8 +63,12 @@ export const SignupForm: React.FC = () => {
         }
         mutation.mutate(payload, {
             onSuccess: (response) => {
-                console.log(response.data.message, "in sign up screen")
+
                 showSuccess(response.data.message)
+                if(response.data.status === 200) {
+                    console.log(response.data.message, "in sign up screen")
+                    navigate("auth/otp")
+                }
             },
             onError: (error: any) => {
                 console.log(error.response)
@@ -87,15 +93,11 @@ export const SignupForm: React.FC = () => {
 
     };
 
-    useEffect(() => {
-        console.log(mutation.isPending, "--------isloading--------");
-    }, [mutation.isPending]);
-
     return (
         <div className="flex items-center justify-center bg-transparent">
 
             <div className="min-h-[70%] max-w-[70%] space-y-2 bg-white p-8 rounded-2xl md:shadow-xl px-15">
-               
+
                 <div className=' justify-center items-center h-0  p-0 m-0 flex '>
                     <img
                         src={logoImage}
@@ -190,39 +192,49 @@ export const SignupForm: React.FC = () => {
                                 />
                             </div>
 
-                            <div className="flex items-center m-0 p-0">
-                                <input
-                                    type="checkbox"
-                                    name="agree"
-                                    className="mr-2 text-brand bg-brand"
-                                    required
-                                />
-                                <p className="text-gray-500 text-[10px]">
-                                    By continuing, you agree to our
+                            <div className="flex flex-row w-full">
+                                <div className=''>
+                                    <input
+                                        type="checkbox"
+                                        name="agree"
+                                        className=" text-brand bg-brand"
+                                        required
+                                    />
+                                </div>
+
+                                <div className='ml-1 text-left text-xs w-full'>
+                                    <span className="text-gray-500">
+                                        By continuing, you agree to our
+                                    </span>
+                                    <span>
                                     <a
                                         href="/terms"
-                                        className="text-brand mx-1"
+                                        className="text-brand"
                                         target="_blank"
                                         rel="noreferrer"
                                     >
                                         Terms of Service
                                     </a>
-                                    and
-                                    <a
+                                    </span>
+
+                                   <span className='mx-1 text-gray-500'>and</span>
+                                    <span><a
                                         href="/terms"
-                                        className="text-brand mx-1"
+                                        className="text-brand"
                                         target="_blank"
                                         rel="noreferrer"
                                     >
                                         Privacy Policy
                                     </a>
-                                </p>
+                                    </span>
+
+                                </div>
                             </div>
 
                             <Button
                                 style={{ "borderRadius": "40px" }}
                                 type="submit"
-                                className="w-full p-0 m-0 mt-3 mb-1"
+                                className="w-full p-0 m-0 mb-1"
                                 size="md"
                                 loading={mutation.isPending}
                                 disabled={mutation.isPending}
@@ -242,10 +254,8 @@ export const SignupForm: React.FC = () => {
                                 </span>
                             </div>
                         </Form>
-
                     )}
                 </Formik>
-
             </div>
         </div>
     );

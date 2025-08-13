@@ -4,13 +4,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
 import { AppLayout } from '@/components/layout/AppLayout/AppLayout';
-import { Loading } from '@/components/common/Loading/Loading';
+// import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
 const LoginPage = React.lazy(() => import('@/pages/auth/LoginPage'));
 const SignupPage = React.lazy(() => import('@/pages/auth/SignupPage'));
 const ForgotPasswordPage = React.lazy(() => import('@/pages/auth/ForgotPasswordPage'));
-// const VerifyEmailPage = React.lazy(() => import('@/pages/auth/VerifyEmailPage'));
+const VerifyEmailPage = React.lazy(() => import('@/pages/auth/VerifyEmailPage'));
 
 // Onboarding pages
 const WelcomePage = React.lazy(() => import('@/pages/onboarding/WelcomePage'));
@@ -36,6 +36,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/auth" element={<PublicRoute />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
+          <Route path="verify-email" element={<VerifyEmailPage/>} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route index element={<Navigate to="/auth/login" replace />} />
         </Route>

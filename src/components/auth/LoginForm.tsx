@@ -154,7 +154,7 @@ export const LoginForm: React.FC = () => {
                   Don't have an account?{' '}
                   <Link
                     to="/auth/signup"
-                    className="font-medium text-brand"
+                    className="font-medium text-brand focus:ring-brand hover:brand"
                   >
                     Sign up
                   </Link>
