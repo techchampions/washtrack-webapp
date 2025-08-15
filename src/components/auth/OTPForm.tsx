@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import landingBannerImage from "@/assets/images/landing-banner-image.png";
 
-// Timer Component
+import { showSuccess, showError } from '@/utils/toast';
+
+
 const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   
@@ -32,7 +33,7 @@ const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
   );
 };
 
-// Code Input Component
+
 const CodeInput = ({ value, onChange, length = 4 }) => {
   const [focusedIndex, setFocusedIndex] = useState(0);
 
@@ -82,7 +83,7 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
   );
 };
 
-// Keypad Component
+
 const Keypad = ({ onKeyPress }) => {
   const keys = [
     ['1', '2', '3'],
@@ -129,7 +130,7 @@ const Keypad = ({ onKeyPress }) => {
   );
 };
 
-// Action Button Component
+
 const ActionButton = ({ onClick, disabled, loading, children, variant = 'primary' }) => {
   const baseClasses = "w-full py-1 rounded-full font-semibold text-lg transition-all duration-200 disabled:opacity-50";
 
@@ -172,7 +173,7 @@ const Header = ({ onBack, title }) => {
   );
 };
 
-// Main Verification Screen Component
+
 const OTPForm = ({ onSubmit, isLoading}) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState('');
@@ -190,22 +191,21 @@ const OTPForm = ({ onSubmit, isLoading}) => {
   const handleProceed = async () => {
     if (code.length !== 4) return;
     // onSubmit(code)
-
-    const enteredOtp = parseInt(code.join(""), 10); 
-
+   
+    console.log(code, "-----code----------");
     setLoading(true);
     setError('');
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // make api request for otp confirmation
   
       if (code === '7890') {
-        alert('Verification successful!');
+      showSuccess("Successful");
       } else {
-        setError('Invalid verification code. Please try again.');
+        showError('Invalid verification code. Please try again.');
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      showError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -222,22 +222,14 @@ const OTPForm = ({ onSubmit, isLoading}) => {
 
   };
 
-
-
   return (
-    <div className="bg-white pb-9">
-      <div>
-      <img
-        src={landingBannerImage}
-        alt="Background"
-        className="absolute inset-0 w-full h-full object-cover z-10"
-      />
-      </div>
+    <div className="pb-9 border border-red-500 flex-2  justify-center items-center h-full">
+     
 
-      <div className="relative flex-1 flex items-center justify-center px-6 lg:px-12 z-50">
+      <div className="relative border border-red-500  flex-1 flex items-center  h-screen justify-center px-6 lg:px-12 z-50">
         <div className="w-full max-w-md">
 
-          <div className="bg-white rounded-3xl shadow-xl lg:p-8 lg:px-12">
+          <div className="bg-white rounded-3xl shadow-xl lg:p-8 lg:px-12 border border-red-500">
         
             <div className="text-center mb-6">
               <CountdownTimer initialTime={timer} onExpire={handleTimerExpire} />
@@ -246,7 +238,11 @@ const OTPForm = ({ onSubmit, isLoading}) => {
                 sent you to your email
               </p>
             </div>
-
+ <div className="mb-8 text-center">
+            <p className="text-gray-500 text-xs">    
+              This code will expire in <span className="font-semibold">1 minutes</span>
+            </p>
+          </div>
             <CodeInput
               value={code}
               onChange={setCode}
@@ -272,11 +268,7 @@ const OTPForm = ({ onSubmit, isLoading}) => {
               </button>
             </div>
           </div>
-          <div className="mt-8 text-center">
-            <p className="text-gray-500 text-xs">    
-              This code will expire in <span className="font-semibold">5 minutes</span>
-            </p>
-          </div>
+         
         </div>
       </div>
     </div>
