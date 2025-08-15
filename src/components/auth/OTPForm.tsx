@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-
-import { showSuccess, showError } from '@/utils/toast';
-
+import { useNavigate } from 'react-router-dom';
 
 const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
-  
+
   useEffect(() => {
     if (timeLeft <= 0) {
       onExpire?.();
@@ -98,7 +96,7 @@ const Keypad = ({ onKeyPress }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto lg:ml-7">
+    <div className="grid grid-cols-3 gap-y-0 w-3/4  gap-x-0 place-items-center mx-auto">
       {keys.flat().map((key, index) => {
         if (key === '') {
           return <div key={index} className="w-16 h-16 bg-white"></div>;
@@ -174,11 +172,12 @@ const Header = ({ onBack, title }) => {
 };
 
 
-const OTPForm = ({ onSubmit, isLoading}) => {
+const OTPForm = ({ onSubmit }:{onSubmit:(code: string) => Promise<void>}) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleKeyPress = (key) => {
     if (key === 'backspace') {
@@ -190,29 +189,13 @@ const OTPForm = ({ onSubmit, isLoading}) => {
 
   const handleProceed = async () => {
     if (code.length !== 4) return;
-    // onSubmit(code)
-   
-    console.log(code, "-----code----------");
-    setLoading(true);
-    setError('');
-
-    try {
-      // make api request for otp confirmation
-  
-      if (code === '7890') {
-      showSuccess("Successful");
-      } else {
-        showError('Invalid verification code. Please try again.');
-      }
-    } catch (err) {
-      showError('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    onSubmit(code)
+    navigate('auth/auth-flow-complete');
+    
   };
 
   const handleSendAgain = () => {
-     setTimer(59);
+    setTimer(59);
     setCode('');
     setError('');
   };
@@ -223,55 +206,56 @@ const OTPForm = ({ onSubmit, isLoading}) => {
   };
 
   return (
-    <div className="pb-9 border border-red-500 flex-2  justify-center items-center h-full">
-     
+    <>
+      {/* <div className="relative border border-red-500  flex-1 flex items-center  h-screen justify-center px-6 lg:px-12 z-50"> */}
 
-      <div className="relative border border-red-500  flex-1 flex items-center  h-screen justify-center px-6 lg:px-12 z-50">
-        <div className="w-full max-w-md">
+      {/* <div className="flex flex-2 items-center justify-center border border-red-500 w-screen h-screen"> */}
 
-          <div className="bg-white rounded-3xl shadow-xl lg:p-8 lg:px-12 border border-red-500">
-        
-            <div className="text-center mb-6">
-              <CountdownTimer initialTime={timer} onExpire={handleTimerExpire} />
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Type the verification code<br />
-                sent you to your email
-              </p>
-            </div>
- <div className="mb-8 text-center">
-            <p className="text-gray-500 text-xs">    
-              This code will expire in <span className="font-semibold">1 minutes</span>
-            </p>
-          </div>
-            <CodeInput
-              value={code}
-              onChange={setCode}
-            />
+      <div className="bg-white lg:max-w-md md:max-w-sm sm:max-w-xs  rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
 
-            <Keypad onKeyPress={handleKeyPress} />
+        <div className="text-center mb-6">
+          <CountdownTimer initialTime={timer} onExpire={handleTimerExpire} />
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Type the verification code<br />
+            sent you to your email
+          </p>
+        </div>
+        <div className="mb-8 text-center">
+          <p className="text-gray-500 text-xs">
+            This code will expire in <span className="font-semibold">1 minutes</span>
+          </p>
+        </div>
+        <CodeInput
+          value={code}
+          onChange={setCode}
+        />
 
-            <ActionButton
-              onClick={handleProceed}
-              disabled={code.length !== 4}
-              loading={loading}
-            >
-              Proceed
-            </ActionButton>
+        <Keypad onKeyPress={handleKeyPress} />
 
-            <div className="text-center mt-6">
-              <span className="text-gray-500 text-sm">Didn't get code? </span>
-              <button
-                onClick={handleSendAgain}
-                className="text-brand text-sm font-medium hover:text-brand transition-colors"
-              >
-                Send again
-              </button>
-            </div>
-          </div>
-         
+        <div className='lg:px-12 md:px-8'>
+        <ActionButton
+          onClick={handleProceed}
+          disabled={code.length !== 4}
+          loading={loading}
+        >
+          Proceed
+        </ActionButton>
+        </div>
+
+        <div className="text-center mt-6">
+          <span className="text-gray-500 text-sm">Didn't get code? </span>
+          <button
+            onClick={handleSendAgain}
+            className="text-brand text-sm font-medium hover:text-brand transition-colors"
+          >
+            Send again
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* </div> */}
+      {/* </div> */}
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
 import React from "react";
-
+import CongratsScreen from "@/components/onboarding/Congratulations";
 
 const WelcomePage: React.FC = () => {
 
   return (
-    <div>
-      <div>Welcome Page In progress</div>
+    <div className="min-h-screen flex w-full bg-white">
+      <CongratsScreen />
     </div>
   )
 }
