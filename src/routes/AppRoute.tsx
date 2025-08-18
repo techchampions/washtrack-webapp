@@ -13,7 +13,6 @@ const ForgotPasswordPage = React.lazy(() => import('@/pages/auth/ForgotPasswordP
 const VerifyEmailPage = React.lazy(() => import('@/pages/auth/VerifyEmailPage'));
 const AuthFlowCompletePage = React.lazy(() => import('@/pages/auth/AuthFlowCompletePage'));
 
-
 // Onboarding pages
 const WelcomePage = React.lazy(() => import('@/pages/onboarding/WelcomePage'));
 const StoreProfileSetupPage = React.lazy(() => import('@/pages/onboarding/StoreProfileSetupPage'));
@@ -41,7 +40,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="signup" element={<SignupPage />} />
           <Route path="verify-email" element={<VerifyEmailPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route index element={<Navigate to="/auth/auth-flow-complete" />} />
+          <Route path="auth-flow-complete" element={<AuthFlowCompletePage />} />
           <Route index element={<Navigate to="/auth/login" replace />} />
         </Route>
 
@@ -83,7 +82,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/privacy" element={<div>Privacy Policy</div>} />
 
         {/* 404 Page */}
-        <Route path="*" element={<NotFoundPage />} />
+         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

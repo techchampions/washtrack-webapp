@@ -48,7 +48,7 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
   };
 
   const handleKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !value[index] && index > 0) {
+       if (e.key === 'Backspace' && !value[index] && index > 0) {
       setFocusedIndex(index - 1);
     }
   };
@@ -172,12 +172,12 @@ const Header = ({ onBack, title }) => {
 };
 
 
-const OTPForm = ({ onSubmit }:{onSubmit:(code: string) => Promise<void>}) => {
+const OTPForm = ({ onSubmit, resendOtp }: { onSubmit: (code: string) => Promise<void> }) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+
 
   const handleKeyPress = (key) => {
     if (key === 'backspace') {
@@ -187,52 +187,38 @@ const OTPForm = ({ onSubmit }:{onSubmit:(code: string) => Promise<void>}) => {
     }
   };
 
-  const handleProceed = async () => {
+  const handleProceed = () => {
     if (code.length !== 4) return;
     onSubmit(code)
-    navigate('auth/auth-flow-complete');
-    
   };
 
   const handleSendAgain = () => {
     setTimer(59);
     setCode('');
     setError('');
-  };
-
-  const handleTimerExpire = () => {
-    console.log("expired")
-
+    resendOtp();
   };
 
   return (
-    <>
-      {/* <div className="relative border border-red-500  flex-1 flex items-center  h-screen justify-center px-6 lg:px-12 z-50"> */}
-
-      {/* <div className="flex flex-2 items-center justify-center border border-red-500 w-screen h-screen"> */}
-
-      <div className="bg-white lg:max-w-md md:max-w-sm sm:max-w-xs  rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
-
-        <div className="text-center mb-6">
-          <CountdownTimer initialTime={timer} onExpire={handleTimerExpire} />
-          <p className="text-gray-600 text-sm leading-relaxed">
-            Type the verification code<br />
-            sent you to your email
-          </p>
-        </div>
-        <div className="mb-8 text-center">
-          <p className="text-gray-500 text-xs">
-            This code will expire in <span className="font-semibold">1 minutes</span>
-          </p>
-        </div>
-        <CodeInput
-          value={code}
-          onChange={setCode}
-        />
-
-        <Keypad onKeyPress={handleKeyPress} />
-
-        <div className='lg:px-12 md:px-8'>
+    <div className="bg-white lg:max-w-md md:max-w-sm sm:max-w-xs  rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
+      <div className="text-center mb-6">
+        <CountdownTimer initialTime={timer} onExpire={handleSendAgain} />
+        <p className="text-gray-600 text-sm leading-relaxed">
+          Type the verification code<br />
+          sent you to your email
+        </p>
+      </div>
+      <div className="mb-8 text-center">
+        <p className="text-gray-500 text-xs">
+          This code will expire in <span className="font-semibold">1 minutes</span>
+        </p>
+      </div>
+      <CodeInput
+        value={code}
+        onChange={setCode}
+      />
+      <Keypad onKeyPress={handleKeyPress} />
+      <div className='lg:px-12 md:px-8'>
         <ActionButton
           onClick={handleProceed}
           disabled={code.length !== 4}
@@ -240,22 +226,19 @@ const OTPForm = ({ onSubmit }:{onSubmit:(code: string) => Promise<void>}) => {
         >
           Proceed
         </ActionButton>
-        </div>
-
-        <div className="text-center mt-6">
-          <span className="text-gray-500 text-sm">Didn't get code? </span>
-          <button
-            onClick={handleSendAgain}
-            className="text-brand text-sm font-medium hover:text-brand transition-colors"
-          >
-            Send again
-          </button>
-        </div>
       </div>
 
-      {/* </div> */}
-      {/* </div> */}
-    </>
+      <div className="text-center mt-6">
+        <span className="text-gray-500 text-sm">Didn't get code? </span>
+        <button
+          onClick={handleSendAgain}
+          className="text-brand text-sm font-medium hover:text-brand transition-colors"
+        >
+          Send again
+        </button>
+      </div>
+    </div>
+
   );
 };
 

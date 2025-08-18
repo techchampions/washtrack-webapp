@@ -1,18 +1,19 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { Loading } from '@/components/common/Loading/Loading';
+// import { Loading } from '@/components/common/Loading/Loading';
 
 export const PrivateRoute: React.FC = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
   // Show loading while checking authentication
-  if (isLoading) {
-    return <Loading />;
-  }
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
 
   // Redirect to login if not authenticated
+  console.log(isAuthenticated)
   if (!isAuthenticated) {
     return (
       <Navigate 

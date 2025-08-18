@@ -6,6 +6,8 @@ interface AuthState {
   user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
+  storeUpdated: boolean;
+  otpVerified: boolean;
   isLoading?: boolean;
   error?: string | null;
 }
@@ -30,6 +32,8 @@ const initialState: AuthState = {
   isAuthenticated: false,
   isLoading: false,
   error: null,
+  otpVerified: false,
+  storeUpdated: false,
 };
 
 
@@ -37,15 +41,19 @@ export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
       ...initialState,
-
       isLoading: false,
-
       logout: () => {
         set({
           ...initialState,
         });
         
         localStorage.removeItem('auth-storage');
+      },
+      setOtpVerified: (verified: boolean) => {
+        set({ otpVerified: verified }); 
+      },
+      setStoreUpdated: (updated: boolean) => {
+        set({ storeUpdated: updated });
       },
 
       setUser: (user: AuthUser) => {

@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
+import React, { useState, useRef, useEffect, ChangeEvent, KeyboardEvent } from "react";
 import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
-import apiClient from "../../utils/AxiosInstance";
 import Toast from "../../components/GeneralComponents/Toast";
 import Button from "../../components/FormComponents/Button";
-
+import { useVerifyEmail } from "@/hooks/auth/useVerifyEmail";
 interface OTPProps {
   length?: number;
 }
 
 const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
+  const { mutate: verifyEmail, isPending, status, data } = useVerifyEmail();
   const { setStep } = useOnboardingStore();
-  const { resendOTP, otpResponse, verifyOTP} = useAuthStore();
+  const { resendOTP, otpResponse, verifyOTP } = useAuthStore();
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -59,51 +59,41 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const enteredOtp = parseInt(otp.join(""), 10);
 
-    if(isNaN(enteredOtp) || otp.some((digit) => digit === "")) {
+    if (isNaN(enteredOtp) || otp.some((digit) => digit === "")) {
       setToastMsg("Please enter all digits of the OTP");
       setToastType("error");
       setShowToast(true);
-      
-    return;
+      return;
     }
 
-    try {
-      setIsSubmitting(true);
-      const response = await verifyOTP({otp: enteredOtp});
-      
-      console.log(response, "....response...");
-      const state = useAuthStore.getState();
-      console.log(state.isAuthenticated, "  state.isauntenticated");
-
-       if (state.isAuthenticated) {
-        console.log("OTP Verified successfully!");
-          setToastMsg("OTP verified successfully!");
-          setToastType("success");
-          setShowToast(true);
-          setStep("signup completed");
+    verifyEmail(
+      { otp: enteredOtp },
+     {
+       onSuccess: (resp) => {
+        console.log(resp)
+      },
+      onError: (resp) => {
+        console.log(resp)
       }
-
-    } catch(error: any) {
-
-       setToastMsg(`${error.message}`);
-        setToastType("error");
-        setShowToast(true);
-        console.error("OTP verification failed:", error);
-
-    } finally {
-      setIsSubmitting(false)
-    }
-
+     }
+    )
+  
   };
+
+  useEffect(() => {
+    console.log(isPending, "__________isPending_________")
+    console.log(data, "___________data__________")
+
+  }, [data])
 
   const handleSubmit1 = async () => {
     const enteredOtp = parseInt(otp.join(""), 10);
 
     if (isNaN(enteredOtp) || otp.some((digit) => digit === "")) {
-    
+
       return;
     }
 
@@ -113,7 +103,7 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
 
     if (enteredOtp === storedOtp) {
       try {
-        const response = await verifyOTP({otp: enteredOtp});
+        const response = await verifyOTP({ otp: enteredOtp });
         setIsSubmitting(true);
 
         if (response.data.success) {
@@ -173,9 +163,8 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
             placeholder="0"
             onChange={(e) => handleChange(index, e)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            className={`w-12 h-13 border-2 text-center text-lg text-gray-500 font-brand-bold rounded-lg focus:outline-none transition-all mb-20 focus:border-brand active:text-brand ${
-              value ? "bg-brand text-white border-brand" : "border-gray-300"
-            }`}
+            className={`w-12 h-13 border-2 text-center text-lg text-gray-500 font-brand-bold rounded-lg focus:outline-none transition-all mb-20 focus:border-brand active:text-brand ${value ? "bg-brand text-white border-brand" : "border-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -183,14 +172,13 @@ const OTP: React.FC<OTPProps> = ({ length = 4 }) => {
       <div className="flex rounded-full w-62 overflow-hidden gap-2">
         <Button
           label="Proceed"
-          className={`w-full py-2 font-medium rounded-sm transition ${
-            isDisabled
+          className={`w-full py-2 font-medium rounded-sm transition ${isDisabled
               ? "bg-gray-300 cursor-not-allowed"
               : "bg-brand text-white hover:bg-blue-600"
-          }`}
+            }`}
           onClick={handleSubmit}
           disabled={isDisabled}
-          isLoading={isSubmitting}
+          isLoading={isPending}
         />
         {/* <button
           className={`w-full py-2 font-medium rounded-sm transition ${

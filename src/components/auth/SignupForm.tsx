@@ -11,7 +11,7 @@ import { AuthResponse, SignupData } from '@/types/auth.types';
 import { useMutation } from "@tanstack/react-query";
 import { authService } from '@/services/auth.service';
 import { showError, showSuccess } from '@/utils/toast';
-import {useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const signupSchema = Yup.object().shape({
     store_name: Yup.string()
@@ -61,30 +61,22 @@ export const SignupForm: React.FC = () => {
             ...values,
             user_type: 2
         }
+
         mutation.mutate(payload, {
             onSuccess: (response) => {
-
-                showSuccess(response.data.message)
-                if(response.data.status === 200) {
+                if (response.status === 200 || response.status === 201) {
                     console.log(response.data.message, "in sign up screen")
-                    navigate("auth/otp")
+                    showSuccess(response.data.message)
+
+                    console.log(response.data, "---------response data--------")
+
+                    navigate("/auth//");
                 }
             },
             onError: (error: any) => {
-                console.log(error.response)
-
-                if (error.response?.data?.errors) {
-                    const serverErrors: Record<string, string> = {};
-                    Object.entries(error.response.data.errors).forEach(([field, messages]) => {
-                        if (Array.isArray(messages) && messages.length > 0) {
-                            serverErrors[field] = messages[0];
-                        }
-                    });
-                    setErrors(serverErrors);
-                } else {
-                    console.error("Unexpected error:", error);
-                    showError(error.response.data.message)
-                }
+        
+                console.error("Unexpected error:", error);
+                showError(error.response.data.message)
             },
             onSettled: () => {
                 setSubmitting(false);
@@ -207,17 +199,17 @@ export const SignupForm: React.FC = () => {
                                         By continuing, you agree to our
                                     </span>
                                     <span>
-                                    <a
-                                        href="/terms"
-                                        className="text-brand"
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        Terms of Service
-                                    </a>
+                                        <a
+                                            href="/terms"
+                                            className="text-brand"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            Terms of Service
+                                        </a>
                                     </span>
 
-                                   <span className='mx-1 text-gray-500'>and</span>
+                                    <span className='mx-1 text-gray-500'>and</span>
                                     <span><a
                                         href="/terms"
                                         className="text-brand"

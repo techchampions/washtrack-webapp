@@ -14,6 +14,7 @@ export const useAuth = () => {
     setToken,
     setError,
     clearError,
+    otpVerified,
   } = useAuthStore();
 
   const navigate = useNavigate();
@@ -24,7 +25,6 @@ export const useAuth = () => {
   };
 
   const checkAuthStatus = () => {
-    // Check if token is expired
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -59,12 +59,11 @@ export const useAuth = () => {
     return true;
   };
 
-  // Auto-logout on token expiration
   useEffect(() => {
     if (token && isAuthenticated) {
       const checkInterval = setInterval(() => {
         checkAuthStatus();
-      }, 60000); // Check every minute
+      }, 60000);
 
       return () => clearInterval(checkInterval);
     }

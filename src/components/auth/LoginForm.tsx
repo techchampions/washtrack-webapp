@@ -34,7 +34,7 @@ const initialValues: LoginCredentials & { rememberMe: boolean } = {
 
 export const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const { mutate: login, isPending, error } = useLogin();
+  const { mutate: login, isPending, error, data } = useLogin();
 
   const handleSubmit = (values: LoginCredentials & { rememberMe: boolean }) => {
     login({
@@ -47,6 +47,7 @@ export const LoginForm: React.FC = () => {
   useEffect(() => {
     // Reset form state on mount
     console.log(isPending, "--------isloading--------");
+    console.log(data, "----------data----------");
   }, [isPending]);
 
   return (
@@ -72,7 +73,6 @@ export const LoginForm: React.FC = () => {
           </p>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
             {error.message}

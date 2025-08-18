@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
         </p>
         
         <button 
-          onClick={() => navigate('onboarding/store-profile-setup')}
+          onClick={() => navigate('/onboarding/store-profile-setup')}
           className="w-full bg-cyan-400 text-white font-semibold py-4 rounded-2xl hover:bg-cyan-500 transition-colors"
         >
           Continue Setup

@@ -42,16 +42,16 @@ apiClient.interceptors.response.use(
   },
   async (error: AxiosError) => {
 
-    if (error.response?.status === 401) {
-      localStorage.removeItem('auth-storage');
-      localStorage.removeItem('auth-token');
+    // if (error.response?.status === 401) {
+    //   localStorage.removeItem('auth-storage');
+    //   localStorage.removeItem('auth-token');
 
-      if (!window.location.pathname.includes('/auth/')) {
-        showError('Your session has expired. Please sign in again.');
-      }
+    //   if (!window.location.pathname.includes('/auth/')) {
+    //     showError('Your session has expired. Please sign in again.');
+    //   }
 
-      window.location.href = '/auth/login';
-    }
+    //   window.location.href = '/auth/login';
+    // }
 
 
     const errorMessage = getErrorMessage(error);
