@@ -1,22 +1,31 @@
 import React from 'react';
 import {  Upload, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../common/Button';
+import landingBannerImage from "@/assets/images/landing-banner-image.png";
+
 
 const StoreProfileSetup = () => {
     const navigate = useNavigate();
     
    return (
 
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full">
+    <div
+      className="min-h-screen min-w-screen overflow-hidden flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${landingBannerImage})` }}
+    >
+
+    <div className=" flex items-center justify-center bg-gray-100">
+
+      <div className=" bg-white rounded-3xl shadow-xl px-8 space-y-4 max-w-md max-h-md w-full">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-cyan-400 mb-2">Setup your store</h2>
+          <h2 className="text-2xl font-bold text-brand mb-2">Setup your store</h2>
           <p className="text-gray-600 text-sm">Fill in the information's below to setup your store</p>
         </div>
 
         <div className="mb-8">
-          <div className="w-24 h-24 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-2">
-            <User className="w-8 h-8 text-gray-400" />
+          <div className="w-24 h-24 bg-brand rounded-full flex items-center justify-center mx-auto mb-2">
+            <User className="w-8 h-8 text-white" />
           </div>
           <p className="text-center text-sm text-gray-600">Upload your store logo</p>
         </div>
@@ -59,14 +68,21 @@ const StoreProfileSetup = () => {
           </div>
         </div>
 
-        <button 
-          onClick={() => navigate('addServices')}
-          className="w-full bg-cyan-400 text-white font-semibold py-4 rounded-2xl mt-8 hover:bg-cyan-500 transition-colors"
+            <Button
+          style={{ "borderRadius": "40px" }}
+          type="submit"
+          className="w-full p-0 m-0 mb-1"
+          size="md" 
+         onClick={() => navigate('/onboarding/add-services-setup')}
+
         >
-          Next
-        </button>
+         Next
+        </Button>
       </div>
+
     </div>
+    </div>
+
   );
 
 }

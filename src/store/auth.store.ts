@@ -21,6 +21,7 @@ interface AuthActions {
   setError: (error: string | null) => void;
   clearError: () => void;
   resetAuth: () => void;
+  setAuthObject: (value: any) => void;
 }
 
 
@@ -79,7 +80,13 @@ export const useAuthStore = create<AuthStore>()(
       resetAuth: () => {
         set({ ...initialState });
       },
-    }),
+      setAuthObject: (value: any) => {
+        set((state) => ({
+          ...state,
+          ...value,
+        }));
+      }
+      }),
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),

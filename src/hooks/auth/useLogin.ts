@@ -8,7 +8,7 @@ import { showError, showSuccess } from '@/utils/toast';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser, setToken, setError, setLoading } = useAuthStore();
+  const { setUser, setToken, setError, setLoading, setAuthObject } = useAuthStore();
 
   const mutation = useMutation<AuthResponse, Error, LoginCredentials>({
     mutationFn: authService.login,
@@ -17,13 +17,15 @@ export const useLogin = () => {
       setLoading(true);
     },
     onSuccess: (response) => {
-       console.log("✅ Login success:", response.data);
+
+      if(response.status === 200 || response.status === 201) {
+         console.log("✅ Login success:", response.data);
        showSuccess(response.data.message);
+       setToken(response.data.token);
+       setAuthObject(response.data);
+      }
       
-      // Store user data and token
-      // setUser(response.user);
-      setToken(response.token);
-      setError(null);
+  
     
 
      /* if (!data.user.isVerified) {

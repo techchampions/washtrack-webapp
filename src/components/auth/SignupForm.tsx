@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authService } from '@/services/auth.service';
 import { showError, showSuccess } from '@/utils/toast';
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuthStore } from '@/store/auth.store';
 
 const signupSchema = Yup.object().shape({
     store_name: Yup.string()
@@ -50,6 +51,7 @@ const initialValues: SignupData = {
 export const SignupForm: React.FC = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = React.useState(false);
+    const {setUser, setToken, } = useAuthStore();
     const mutation = useMutation<AuthResponse, Error, SignupData>({
         mutationFn: authService.signup,
     });
@@ -65,18 +67,28 @@ export const SignupForm: React.FC = () => {
         mutation.mutate(payload, {
             onSuccess: (response) => {
                 if (response.status === 200 || response.status === 201) {
-                    console.log(response.data.message, "in sign up screen")
                     showSuccess(response.data.message)
+                    setUser(response.data.user);
+                    setToken(response.data.token)
+                    console.log(response, "---------response data--------")
 
-                    console.log(response.data, "---------response data--------")
-
-                    navigate("/auth//");
+                    navigate("/auth/verify-email");
                 }
             },
             onError: (error: any) => {
-        
                 console.error("Unexpected error:", error);
-                showError(error.response.data.message)
+                 if (error.response?.data?.errors) {
+                    const serverErrors: Record<string, string> = {};
+                    Object.entries(error.response.data.errors).forEach(([field, messages]) => {
+                        if (Array.isArray(messages) && messages.length > 0) {
+                            serverErrors[field] = messages[0];
+                        }
+                    });
+                    setErrors(serverErrors);
+                } else {
+                    console.error("Unexpected error:", error);
+                    showError(error.response.data.message)
+                }
             },
             onSettled: () => {
                 setSubmitting(false);

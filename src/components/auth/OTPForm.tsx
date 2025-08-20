@@ -41,7 +41,7 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
     const updatedValue = newValue.join('');
     onChange(updatedValue);
 
-    // Auto-focus next input
+
     if (inputValue && index < length - 1) {
       setFocusedIndex(index + 1);
     }
@@ -172,7 +172,7 @@ const Header = ({ onBack, title }) => {
 };
 
 
-const OTPForm = ({ onSubmit, resendOtp }: { onSubmit: (code: string) => Promise<void> }) => {
+const OTPForm = ({ onSubmit, resendOtp, isLoading }: { onSubmit: (code: string) => Promise<void>, isLoading: false}) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -190,19 +190,24 @@ const OTPForm = ({ onSubmit, resendOtp }: { onSubmit: (code: string) => Promise<
   const handleProceed = () => {
     if (code.length !== 4) return;
     onSubmit(code)
+    
   };
 
   const handleSendAgain = () => {
     setTimer(59);
     setCode('');
     setError('');
-    resendOtp();
+  
   };
 
+  const onExpire = () => {
+    setTimer(59)
+  }
+
   return (
-    <div className="bg-white lg:max-w-md md:max-w-sm sm:max-w-xs  rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
+    <div className="bg-white w-full lg:max-w-md sm:max-w-xs rounded-none md:border border-white  md:rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
       <div className="text-center mb-6">
-        <CountdownTimer initialTime={timer} onExpire={handleSendAgain} />
+        <CountdownTimer initialTime={timer} onExpire={onExpire} />
         <p className="text-gray-600 text-sm leading-relaxed">
           Type the verification code<br />
           sent you to your email
@@ -217,6 +222,7 @@ const OTPForm = ({ onSubmit, resendOtp }: { onSubmit: (code: string) => Promise<
         value={code}
         onChange={setCode}
       />
+      
       <Keypad onKeyPress={handleKeyPress} />
       <div className='lg:px-12 md:px-8'>
         <ActionButton
@@ -231,7 +237,7 @@ const OTPForm = ({ onSubmit, resendOtp }: { onSubmit: (code: string) => Promise<
       <div className="text-center mt-6">
         <span className="text-gray-500 text-sm">Didn't get code? </span>
         <button
-          onClick={handleSendAgain}
+          onClick={resendOtp}
           className="text-brand text-sm font-medium hover:text-brand transition-colors"
         >
           Send again

@@ -60,6 +60,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
+    console.log(token, isAuthenticated)
     if (token && isAuthenticated) {
       const checkInterval = setInterval(() => {
         checkAuthStatus();
