@@ -67,7 +67,7 @@ const StoreProfileSetup = () => {
           <Button
             style={{ "borderRadius": "40px" }}
             type="submit"
-            className="w-5/6 mb-1 mt-6"
+            className="w-5/6 md:w-8/9 mb-1 mt-6"
             size="md"
             onClick={() => navigate('/onboarding/add-services-setup')}
 
