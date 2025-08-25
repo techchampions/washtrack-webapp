@@ -8,7 +8,7 @@ export const PrivateRoute: React.FC = () => {
   const { otpVerified, storeUpdated } = useAuthStore();
   const location = useLocation();
 
-  console.log(location, " location from useLocation")
+  // console.log(location, " location from useLocation")
 
   // Show loading while checking authentication
   // if (isLoading) {
@@ -34,6 +34,8 @@ export const PrivateRoute: React.FC = () => {
   //   replace
   //   />
   // }
+
+  /// Also check storeUpdated
 
   // Check if user needs email verification
   // if (user && !user.isVerified && !location.pathname.includes('/auth/verify-email')) {

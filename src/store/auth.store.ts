@@ -1,4 +1,4 @@
-import { AuthUser, LoginCredentials, SignupData } from "@/types/auth.types";
+import { AuthUser } from "@/types/auth.types";
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
@@ -12,18 +12,17 @@ interface AuthState {
   error?: string | null;
 }
 interface AuthActions {
-  // login: (credentials: LoginCredentials) => Promise<void>;
-  // signup: (data: SignupData) => Promise<void>;
   logout: () => void;
   setUser: (user: AuthUser) => void;
   setToken: (token: string) => void;
+  setOtpVerified: (verified: boolean) => void;
+  setStoreUpdated: (updated: boolean) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   clearError: () => void;
   resetAuth: () => void;
   setAuthObject: (value: any) => void;
 }
-
 
 type AuthStore = AuthState & AuthActions;
 
@@ -36,7 +35,6 @@ const initialState: AuthState = {
   otpVerified: false,
   storeUpdated: false,
 };
-
 
 export const useAuthStore = create<AuthStore>()(
   persist(
@@ -51,17 +49,21 @@ export const useAuthStore = create<AuthStore>()(
         localStorage.removeItem('auth-storage');
       },
       setOtpVerified: (verified: boolean) => {
+        console.log("Setting OTP verified to:", verified);
         set({ otpVerified: verified }); 
       },
+
       setStoreUpdated: (updated: boolean) => {
         set({ storeUpdated: updated });
       },
 
       setUser: (user: AuthUser) => {
+        console.log("Setting user:", user);
         set({ user, isAuthenticated: true });
       },
 
       setToken: (token: string) => {
+        console.log("Setting token:", token);
         set({ token, isAuthenticated: !!token });
       },
 

@@ -24,24 +24,31 @@ export const useAuth = () => {
     navigate('/auth/login', { replace: true });
   };
 
-  const checkAuthStatus = () => {
+   const checkAuthStatus = () => {
     if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const isExpired = payload.exp * 1000 < Date.now();
-        
-        if (isExpired) {
-          handleLogout();
-          return false;
-        }
-        return true;
-      } catch {
-        handleLogout();
-        return false;
-      }
+      return true;
     }
     return false;
   };
+
+  // const checkAuthStatus = () => {
+  //   if (token) {
+  //     try {
+  //       const payload = JSON.parse(atob(token.split('.')[1]));
+  //       const isExpired = payload.exp * 1000 < Date.now();
+        
+  //       if (isExpired) {
+  //         handleLogout();
+  //         return false;
+  //       }
+  //       return true;
+  //     } catch {
+  //       handleLogout();
+  //       return false;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   const requireAuth = () => {
     if (!isAuthenticated || !checkAuthStatus()) {

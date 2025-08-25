@@ -18,8 +18,8 @@ apiClient.interceptors.request.use(
   async (config) => {
     console.log(config.url, "request interceptor");
 
-     const token = localStorage.getItem('auth-token') || 
-                  JSON.parse(localStorage.getItem('auth-storage') || '{}')?.state?.token;
+    const token = localStorage.getItem('auth-token') ||
+      JSON.parse(localStorage.getItem('auth-storage') || '{}')?.state?.token;
 
 
     if (token && config.headers) {
@@ -33,9 +33,9 @@ apiClient.interceptors.request.use(
   });
 
 apiClient.interceptors.response.use(
-   function (response) {
+  function (response) {
     if (response?.data && (response.data.success === false && (response.status === 200 || response.status === 201))) {
-       showError(response.data.message || 'Your session has expired. Please sign in again.');
+      showError(response.data.message || 'Your session has expired. Please sign in again.');
       Promise.reject(new Error(`Request failed, ${response.data.message}`))
     }
     return response;

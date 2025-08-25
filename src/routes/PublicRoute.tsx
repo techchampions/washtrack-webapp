@@ -8,7 +8,7 @@ export const PublicRoute: React.FC = () => {
   const {otpVerified, storeUpdated} = useAuthStore();
 
   // If user is authenticated, redirect based on their status
-  if (isAuthenticated && user) {
+  // if (isAuthenticated && user) {
     // Check if user needs email verification
     // if (!otpVerified) {
     //   return <Navigate to="/auth/" replace />;
@@ -19,8 +19,8 @@ export const PublicRoute: React.FC = () => {
     // }
 
     // User is fully set up, redirect to dashboard
-    return <Navigate to="/dashboard" replace />;
-  }
+    // return <Navigate to="/dashboard" replace />;
+  // }
 
   // User is not authenticated, show public pages
   return <Outlet />;

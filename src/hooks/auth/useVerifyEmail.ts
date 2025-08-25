@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useVerifyEmail = () => {
     const navigate = useNavigate();
-    const { setUser, setToken, setError, setLoading } = useAuthStore();
+    const { setUser, setToken, setError, setLoading, setOtpVerified } = useAuthStore();
 
     const mutation = useMutation({
         mutationFn: authService.verifyUser,
@@ -19,12 +19,10 @@ export const useVerifyEmail = () => {
             if (response.status === 200 || response.status === 201) {
                 console.log(response.data.message, "in verfiy email")
                 showSuccess(response.data.message)
-                setToken(response.data.token);
-                setUser(response.data.user);
+                setOtpVerified(response.data.verify);
                 setError(null);
                 console.log(response.data, "---------response data--------")
                 navigate('/auth/auth-flow-complete');
-
             }
         },
         onError: (error) => {

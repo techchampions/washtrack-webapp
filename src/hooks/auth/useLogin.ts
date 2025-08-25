@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient} from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { authService } from '@/services/auth.service';
@@ -8,7 +8,8 @@ import { showError, showSuccess } from '@/utils/toast';
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser, setToken, setError, setLoading, setAuthObject } = useAuthStore();
+  const { setToken, setError, setLoading, setAuthObject } = useAuthStore();
+    const queryClient = useQueryClient();
 
   const mutation = useMutation<AuthResponse, Error, LoginCredentials>({
     mutationFn: authService.login,
@@ -23,10 +24,10 @@ export const useLogin = () => {
        showSuccess(response.data.message);
        setToken(response.data.token);
        setAuthObject(response.data);
+       navigate('/dashboard');
+        
+       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       }
-      
-  
-    
 
      /* if (!data.user.isVerified) {
         navigate('/auth/verify-email', { replace: true });
@@ -59,7 +60,8 @@ export const useLogin = () => {
     onSettled: () => {
        console.log("🔁 Login request settled (success or error)");
        setLoading(false);
-    }
+    },
+    
   });
 
   return {

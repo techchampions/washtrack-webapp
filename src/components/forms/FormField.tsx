@@ -1,8 +1,8 @@
 import React from 'react';
 import { useField } from 'formik';
-import { FormFieldProps } from './FormField.types';
+import { FinalFormFieldProps } from './FormField.types';
 
-export const FormField: React.FC<FormFieldProps> = ({
+export const FormField: React.FC<FinalFormFieldProps> = ({
   name,
   label,
   type = 'text',
@@ -21,14 +21,17 @@ export const FormField: React.FC<FormFieldProps> = ({
   const [field, meta, helpers] = useField(name);
   const hasError = meta.touched && meta.error;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (type === 'checkbox') {
-      helpers.setValue(e.target.checked);
-    } else {
-      helpers.setValue(e.target.value);
-    }
-    field.onChange(e);
-  };
+ const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+) => {
+  if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
+    helpers.setValue(e.target.checked);
+  } else {
+    helpers.setValue(e.target.value);
+  }
+
+  field.onChange(e);
+};
 
   const inputId = `field-${name}`;
 
@@ -75,6 +78,38 @@ export const FormField: React.FC<FormFieldProps> = ({
         )}
         {hasError && (
           <p className={`ml-3 text-sm text-red-600 ${errorClassName}`}>
+            {meta.error}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (type === 'textarea') {
+    return (
+      <div className={`${containerClassName}`}>
+        {label && (
+          <label
+            htmlFor={inputId}
+            className={`block text-sm font-medium text-gray-700 ${labelClassName}`}
+          >
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        )}
+        <textarea
+          {...field}
+          {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          id={inputId}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+          className={`${baseInputStyles} resize-none ${inputClassName}`}
+          rows={3}
+
+        />
+        {hasError && (
+          <p className={`text-xs mt-1 text-red-600 ${errorClassName}`}>
             {meta.error}
           </p>
         )}

@@ -9,6 +9,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { HelmetProvider } from 'react-helmet-async';
 import { AppRoutes } from '@/routes/AppRoute';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary/ErrorBoundary';
+import {
+  persistQueryClient,
+  
+} from "@tanstack/react-query-persist-client";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 
 import '@/styles/globals.css';
 
@@ -21,9 +26,18 @@ const queryClient = new QueryClient({
       gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
     },
     mutations: {
-      retry: 1,
+      retry: 0,
     },
   },
+});
+
+const localStoragePersister = createAsyncStoragePersister({
+  storage: window.localStorage,
+});
+
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
 });
 
 const App: React.FC = () => {

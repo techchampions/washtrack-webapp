@@ -5,9 +5,11 @@ import cappedMan from '@/assets/images/capped.png';
 import { Button } from '../common/Button';
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
 import { useAuthStore } from '@/store/auth.store';
+import { useOnboardingStore } from '@/store/onboarding.store';
 
 const AuthFlowComplete = () => {
   const { user } = useAuthStore();
+  const {setStep} = useOnboardingStore();
 
   const navigate = useNavigate();
 
@@ -47,7 +49,10 @@ const AuthFlowComplete = () => {
             type="submit"
             className="w-full p-0 m-0 mb-1"
             size="md"
-            onClick={() => navigate('/onboarding/store-profile-setup')}
+            onClick={() => { 
+              setStep("SETUP_STORE");
+              navigate('/onboarding/store-profile-setup')
+            }}
 
           >
             Continue Setup

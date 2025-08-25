@@ -63,14 +63,13 @@ export const SignupForm: React.FC = () => {
             ...values,
             user_type: 2
         }
-
         mutation.mutate(payload, {
             onSuccess: (response) => {
                 if (response.status === 200 || response.status === 201) {
                     showSuccess(response.data.message)
                     setUser(response.data.user);
                     setToken(response.data.token)
-                    console.log(response, "---------response data--------")
+                    console.log(response,response.data, "---------response data--------")
 
                     navigate("/auth/verify-email");
                 }

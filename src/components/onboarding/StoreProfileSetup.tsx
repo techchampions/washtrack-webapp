@@ -9,6 +9,10 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { Form, Formik } from 'formik';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { FaMapMarkerAlt, FaFileAlt } from "react-icons/fa";
+import { useOnboardingStore } from '@/store/onboarding.store';
+import { useAuthStore } from '@/store/auth.store';
+import { useCreateStore } from '@/hooks/auth/useOnboarding';
+import { FormField } from '../forms/FormField';
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
@@ -20,15 +24,16 @@ const StoreProfileSetup = () => {
     null,
   ]);
   const [storeLocation, setStoreLocation] = useState("");
-
-
-  const navigate = useNavigate();
+  const { store, setStore } = useOnboardingStore();
+  const { user } = useAuthStore();
+  const { isPending, mutateAsync: createEstoreAsync, data } = useCreateStore()
 
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
     type: "logo" | "banner",
     index?: number
   ) => {
+    console.log(event.target.files, "-----files-------");
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       if (type === "logo") {
@@ -42,6 +47,7 @@ const StoreProfileSetup = () => {
   };
 
   const handleSelect = async (address: string) => {
+    console.log(address, "selected address");
     setStoreLocation(address);
 
     const geocoder = new window.google.maps.Geocoder();
@@ -52,21 +58,23 @@ const StoreProfileSetup = () => {
 
         results[0].address_components.forEach((component) => {
           if (component.types.includes("administrative_area_level_1")) {
+            console.log(component.long_name, component.short_name, " in address setting")
             state = component.long_name;
           }
           if (component.types.includes("country")) {
+            console.log(component.long_name, component.short_name, " in address setting")
+
             country = component.long_name;
           }
         });
-
-        // setStore({
-        //   state: state,
-        //   country: country,
-        // });
+        console.log(state, country, " ________in handle select________")
+        setStore({
+          state: state,
+          country: country,
+        });
       }
     });
   };
-
 
   return (
     <LoadScript
@@ -124,14 +132,48 @@ const StoreProfileSetup = () => {
               }}
 
               onSubmit={async (values) => {
-                console.log("Submit it")
-              }}
-            >
+                console.log("Submit it, I am here now")
+                const formData = new FormData();
+                // console.log(formData, "_______form data")
+                // console.log(storeLocation, user?.store_name, values.storeDescription, store?.country, store?.state, "______store name")
+
+                if (user?.store_name !== undefined && user?.store_name !== null) {
+                  formData.append("store_name", user?.store_name);
+                  console.log(formData, "form data");
+
+                }
+                // formData.set("store_name", user?.store_name || "");
+                formData.append("store_location", storeLocation);
+                formData.append("description", values.storeDescription);
+                formData.append("state", store?.state);
+                formData.append("country", store?.country);
+
+                if (logoFile) {
+                  console.log("logo file append", logoFile)
+                  formData.append("store_images[]", logoFile);
+                }
+                console.log(bannerFiles, "______bannerFiles")
+                bannerFiles.forEach((file) => {
+                  console.log("I am here noow banner file append", file)
+                  if (file) {
+                    formData.append("store_images[]", file);
+                  }
+                });
+
+                 for (const [key, value] of formData.entries()) {
+                  console.log("in form data show loop________",key, value);
+                }
+
+                // console.log(formData, "form data");
+
+                 const response =  await createEstoreAsync(formData);
+                 console.log(response, "____________response inside component________")
+                  console.log(data, "inside component");
+
+              }}>
 
               {() => (
                 <Form>
-
-
                   <div className="space-y-3  flex flex-col px-3 w-full md:w-[60vw] lg:w-[30vw] lg:max-w-lg">
                     <PlacesAutocomplete
                       value={storeLocation}
@@ -153,29 +195,37 @@ const StoreProfileSetup = () => {
                             />
                           </div>
 
- {suggestions.length > 0 && (
-                      <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 text-left">
-                        {suggestions.map((suggestion, index) => (
-                          <li
-                            {...getSuggestionItemProps(suggestion)}
-                            key={index}
-                            className="p-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                          >
-                            {suggestion.description}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                          {suggestions.length > 0 && (
+                            <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 text-left">
+                              {suggestions.map((suggestion, index) => (
+                                <li
+                                  {...getSuggestionItemProps(suggestion)}
+                                  key={index}
+                                  className="p-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                >
+                                  {suggestion.description}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       )}
                     </PlacesAutocomplete>
 
                     <div>
                       <label className="block text-left text-sm font-medium text-[#090A0A] mb-2">Store Description</label>
-                      <textarea
+                      {/* <textarea
+                      name='storeDescription'
                         placeholder="Enter Store description"
                         rows={3}
-                        className="w-full px-4 h-15 md:py-3 md:px2 md:py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-brand focus:border-transparent outline-none resize-none"
+                        className="w-full px-4 h-15  md:py-3 md:px2 md:py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-brand focus:border-transparent outline-none resize-none"
+                      /> */}
+
+                      <FormField
+                        name='storeDescription'
+                        placeholder='Enter Store Description'
+                        type='textarea'
+
                       />
                     </div>
 
@@ -186,7 +236,7 @@ const StoreProfileSetup = () => {
                         {[0, 1, 2].map((index) => (
                           <label
                             key={index}
-                            className="min-w-[45%] max-w-[45%] flex-shrink-0 relative cursor-pointer border border-gray-200 rounded-md p-4 h-32 flex items-center justify-center text-black"
+                            className="min-w-[45%] max-w-[45%] md:max-h-[80px] flex-shrink-0 relative cursor-pointer border border-gray-200 rounded-md p-4 h-32 flex items-center justify-center text-black"
                           >
                             <input
                               type="file"
@@ -233,17 +283,14 @@ const StoreProfileSetup = () => {
                     type="submit"
                     className="w-5/6 md:w-8/9 mb-1 mt-6"
                     size="md"
-                    onClick={() => navigate('/onboarding/add-services-setup')}
-
+                    loading={isPending}
+                    disabled={isPending}
                   >
                     Continue
                   </Button>
                 </Form>
 
               )}
-
-
-
             </Formik>
 
           </div>

@@ -53,6 +53,11 @@ class AuthService {
         return response;
     }
 
+    async getProfile() {
+        const response = await apiClient.get("/api/user-profile");
+        return response;
+    };
+
 }
 
 export const authService = new AuthService();
