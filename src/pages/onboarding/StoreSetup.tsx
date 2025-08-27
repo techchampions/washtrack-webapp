@@ -33,7 +33,9 @@ const StoreSetup = () => {
     null,
   ]);
   const [storeLocation, setStoreLocation] = useState("");
-  const { createEStore } = useEstoreStore();
+      <div className="flex min-h-screen w-full items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/background-shirt.png')" }} // Replace with your image path
+    >const { createEStore } = useEstoreStore();
 
   const validationSchema = Yup.object({
     storeDescription: Yup.string().required("Store description is required"),

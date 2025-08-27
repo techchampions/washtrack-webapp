@@ -155,7 +155,7 @@ export const FormField: React.FC<FinalFormFieldProps> = ({
       </div>
       
       {hasError && (
-        <p className={`text-xs leading-tight my-[1.5]  text-red-600 ${errorClassName}`}>
+        <p className={`text-xs leading-tight my-[1.5] text-left  text-red-600 ${errorClassName}`}>
           {meta.error}
         </p>
       )}
