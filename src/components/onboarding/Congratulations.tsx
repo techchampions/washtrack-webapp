@@ -1,19 +1,18 @@
 // CongratsScreen.tsx
 import React from "react";
-
+import landingBannerImage from "@/assets/images/landing-banner-image.png";
+import logo from "@/assets/images/logo.png"
 export default function CongratsScreen() {
   return (
-    <div className="flex flex-col md:flex-row w-full h-screen">
-      
-      <div className="hidden md:block md:w-1/2 h-full bg-cover bg-center" 
-        style={{ backgroundImage: "url('/images/bg-shirt.jpg')" }}>
-        <div className="p-6">
-          <img src="/images/logo.png" alt="Wash Track Logo" className="h-10" />
+   <div
+      className="min-h-screen relative  min-w-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${landingBannerImage})` }}
+    >
+       <div className="p-6 absolute inset-0 -top-8 ">
+          <img src={logo}  alt="Wash Track Logo" className="h-50 w-50" />
         </div>
-      </div>
-
-    
-      <div className="flex w-full md:w-1/2 justify-center items-center bg-gray-50 md:bg-white">
+       
+      <div className="">
         <div className="bg-white shadow-lg rounded-2xl p-8 md:p-12 text-center max-w-md w-full mx-4">
     
           <div className="flex justify-center mb-6">
