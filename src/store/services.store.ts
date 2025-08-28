@@ -22,6 +22,7 @@ export const useServicesStore = create<ServicesStore>()(
       ...initialState,
 
       setServices: (services) => {
+        console.log("___________services store_______", services);
         set({services: services});
       },
 

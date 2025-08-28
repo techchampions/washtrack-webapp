@@ -53,15 +53,10 @@ export function useGetServices(type: number) {
     return useQuery<Service[], Error>({
         queryKey: ["getServices", type],
         queryFn: async () => {
-            
             const res = await servicesService.getServices(type);
             setServices(res.service);
             return res.service; 
-        },
-       
-        onError: (err) => {
-            console.log(err, "____err get services___")
-        }
+        } 
     });
 }
 

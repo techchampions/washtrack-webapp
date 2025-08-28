@@ -17,6 +17,7 @@ import { useItemsStore } from '@/store/items.store';
 import { InputField } from '../FormComponents';
 import { showError, showSuccess } from '@/utils/toast';
 import { useServicesStore } from '@/store/services.store';
+import { useAuthStore } from '@/store/auth.store';
 
 const ItemsList = ({ item, index, setEditIndex, showForm, toggleFormDisplay }) => {
 
@@ -26,8 +27,9 @@ const ItemsList = ({ item, index, setEditIndex, showForm, toggleFormDisplay }) =
         <div className='flex space-x-3  '>
           <div
             onClick={() => {
+              console.log(item, "_____item click in itemlist______")
               setEditIndex(index);
-              toggleFormDisplay(!showForm);
+              toggleFormDisplay();
             }}
             className="bg-brand-200 p-4 rounded-full">
             <FiFileText className="text-quick-action-icon h-4 w-4" />
@@ -41,8 +43,13 @@ const ItemsList = ({ item, index, setEditIndex, showForm, toggleFormDisplay }) =
           </div>
         </div>
         <button
+          onClick={() => {
+            console.log(item, "_____item click in itemlist______")
+            setEditIndex(index);
+            toggleFormDisplay();
+          }}
 
-          onClick={() => console.log('clicked')}>
+        >
           <ChevronRight color='#404040' height={30} width={17.62} className="w-7 h-12 font-bold" />
 
         </button>
@@ -68,70 +75,74 @@ const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, to
         }}
       >
         {({ values }) => (
-          <Form className="space-y-6">
+          <Form className="space-y-6 h-[60vh]">
             <div>
-              <InputField
-                name="item_name"
-                className='mb-6'
-                placeholder="Item Name e.g Trouser"
-              />
+              <div>
+                <InputField
+                  name="item_name"
+                  className='mb-6'
+                  placeholder="Item Name e.g Trouser"
+                />
+              </div>
+              <div className=' flex  min-h-[35vh] '>
+                <h3 className="text-sm text-left text-dark mb-1">Services</h3>
+
+                <FieldArray name="services">
+                  {({ push, remove }) => (
+                    <div className="space-y-3">
+                      {values.services.map((service, index) => (
+                        <div key={index} className="grid grid-cols-12 gap-3 items-end">
+                          <div className="col-span-3">
+                            <InputField
+                              placeholder="Service name"
+                              type='text'
+                              name={`services.${index}.service_name`}
+                              className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
+                            />
+                          </div>
+                          <div className="col-span-3">
+                            <InputField
+                              name={`services.${index}.price`}
+                              placeholder="Price"
+                              className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
+                            />
+                          </div>
+                          <div className="col-span-3">
+                            <InputField
+                              type="number"
+                              name={`services.${index}.estimated_hours`}
+                              placeholder="Estimated hours"
+
+                              className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
+                            />
+                          </div>
+                          <div className="col-span-3 flex justify-center">
+                            <button
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="px-2 pb-3 text-red-500 hover:bg-red-50 rounded-lg"
+                            >
+                              <Trash2 size={24} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
+              <div className=''>
+
+                <button
+                  type="submit"
+                  // onClick={() => console.log("presedd")}
+                  className="w-full  bg-brand hover:bg-brand/30 text-white font-medium py-3 px-4 rounded-full transition-colors"
+                >
+                  {editIndex !== null ? "Update item" : "Add item"}
+                </button>
+
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm text-left text-dark mb-1">Services</h3>
-
-              <FieldArray name="services">
-                {({ push, remove }) => (
-                  <div className="space-y-3">
-                    {values.services.map((service, index) => (
-                      <div key={index} className="grid grid-cols-12 gap-3 items-end">
-                        <div className="col-span-3">
-                          <FormField
-                            placeholder="Service name"
-                            type='text'
-                            value={service.name}
-                            name={service.name}
-                            className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
-                          />
-                        </div>
-                        <div className="col-span-3">
-                          <InputField
-                            name={service.price}
-                            placeholder="Price"
-                            className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
-                          />
-                        </div>
-                        <div className="col-span-3">
-                          <InputField
-                            type="number"
-                            placeholder="Qty"
-                            name={service.quantity}
-                            className="w-full px-3 py-2 bg-white text-sm border border-gray-300 rounded-lg focus:border-none focus:outline-none"
-                          />
-                        </div>
-                        <div className="col-span-3 flex justify-center">
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="px-2 pb-3 text-red-500 hover:bg-red-50 rounded-lg"
-                          >
-                            <Trash2 size={24} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </FieldArray>
-            </div>
-
-            <button
-              type="submit"
-              // onClick={() => console.log("presedd")}
-              className="w-full  bg-brand hover:bg-brand/30 text-white font-medium py-3 px-4 rounded-full transition-colors"
-            >
-              Save Item
-            </button>
-
           </Form>
         )}
       </Formik>
@@ -153,6 +164,7 @@ interface ItemFormValues {
 
 const AddItemsSetup = ({ handleEdit, handleDelete }) => {
   const items = useItemsStore((state) => state.items);
+  const userId = useAuthStore((state) => state.user?.id);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const navigate = useNavigate();
 
@@ -166,12 +178,12 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
   useGetItems();
   useGetServices(1);
 
-  const { services } = useServicesStore();
+  const services = useServicesStore((state) => state.services);
 
   const { setStep } = useOnboardingStore();
 
   useEffect(() => {
-    console.log(typeof items, "___get items data____")
+    console.log(items, "___get items data____")
   }, [])
 
   const { updateItemMutation } = useUpdateItem();
@@ -188,12 +200,13 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
       console.log(currentItemServices, "------ currentItemServices")
       console.log(values.services, "------ values.services")
       const payload = values.services.map((service, idx) => {
-        // const original = currentItemServices?.find(
-        //   (s) => s.service_id === service.service_id
-        // );
+        const original = currentItemServices?.find(
+          (s) => s.service_id === service.service_id
+        );
+
         return {
           id: service.service_id,
-          item_id: service?.item_id,
+          item_id: original?.item_id,
           item_name: values.item_name,
           service_id: service.service_id,
           service_name: service.service_name,
@@ -202,17 +215,21 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
         };
       });
 
+      console.log(payload, "____payload edit item_____")
+
       updateItemMutation.mutate(payload, {
         onSuccess: (response) => {
           console.log("✅ success:", response.data);
           if (response.status === 200 || response.status === 201) {
             showSuccess(response.data.message)
+
             toggleFormDisplay()
           }
         },
         onError: (error) => {
           console.error("❌ error:", error.response);
           showError(error.response.data.message);
+          toggleFormDisplay()
         },
         onSettled: () => {
           console.log("🔁  request settled (success or error)");
@@ -243,24 +260,22 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
           console.log("✅ success:", response.data);
           if (response.status === 200 || response.status === 201) {
             showSuccess(response.data.message)
-            toggleFormDisplay()
+            toggleFormDisplay();
           }
         },
         onError: (error) => {
           console.error("❌ error:", error.response);
           showError(error.response.data.message);
+          toggleFormDisplay();
         },
         onSettled: () => {
           console.log("🔁  request settled (success or error)");
 
           resetForm();
           setEditIndex(null);
-
         }
       })
-
     }
-
   }
 
   const validationSchema = Yup.object().shape({
@@ -269,32 +284,56 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
 
 
   const getServicesItem = (data: any) => {
-    console.log(data, "in get services items")
-    const item = data[editIndex];
-    console.log(`Item: ${typeof item}`);
 
     const servicesToEdit = [];
     const seenIds = new Set();
 
-    if (item?.services && Array.isArray(item?.services)) {
-      item.services.forEach((service: any) => {
-        if (!seenIds.has(service.id)) {
-          seenIds.add(service.id);
-          servicesToEdit.push({
-            id: service.id,
-            service_id: service.item_id,
-            estimated_hours: service.estimated_hours,
-            service_name: service.service_name,
-            price: service.price,
-          });
-        }
-      });
+    if (editIndex !== null) {
+
+      console.log(data, "in get services items")
+      const item = data[editIndex];
+      console.log(`Item: ${typeof item}`);
+
+      if (item?.services && Array.isArray(item?.services)) {
+        item.services.forEach((service: any) => {
+          if (!seenIds.has(service.id)) {
+            seenIds.add(service.id);
+            servicesToEdit.push({
+              id: service.id,
+              service_id: service.item_id,
+              estimated_hours: service.estimated_hours,
+              service_name: service.service_name,
+              price: service.price,
+            });
+          }
+        });
+      }
+      console.log(servicesToEdit, "___________-serviceToEdit_____")
+      return servicesToEdit;
+
+    } else {
+      console.log("use services", services)
+
+      if (services && Array.isArray(services)) {
+        services.forEach((service: any) => {
+          if (!seenIds.has(service.id)) {
+            seenIds.add(service.id);
+            servicesToEdit.push({
+              id: service.id,
+              service_id: service.item_id,
+              estimated_hours: service.estimated_hours,
+              service_name: service.name,
+              price: service.price,
+              user_id: service.user_id,
+            });
+          }
+        });
+      }
+      console.log(servicesToEdit, "___________-serviceToEdit_____")
+      return servicesToEdit;
     }
-    return servicesToEdit;
+
   };
-
-
-
 
   return (
     <div
@@ -337,7 +376,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
           {items && (
             <div className='mt-8'>
               {items?.itemType?.map((item, index) => (
-                <div>
+                <div key={index}>
 
                   <ItemsList
                     setEditIndex={setEditIndex}
@@ -360,7 +399,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
           disabled={true}
           onClick={() => {
             setStep("ONBOARDING_COMPLETE");
-            navigate("/onboarding/congratulations");
+            navigate("/onboarding/welcome");
           }}
           className={`${services?.length === 0 ? " bg-[#00BCFF]/30  cursor-not-allowed" : "bg-brand cursor-pointer"} mt-4 w-full rounded-full py-2 text-white font-medium`}>
           Next
