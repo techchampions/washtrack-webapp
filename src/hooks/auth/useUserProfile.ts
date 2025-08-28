@@ -7,10 +7,16 @@ import { showError, showSuccess } from '@/utils/toast';
 
 
 export function useUserProfile() {
-  const {token, setUser, setToken} = useAuthStore();
+  const {token, setUser, setToken, setAuthObject} = useAuthStore();
   return useQuery({
     queryKey: ["userProfile"],
-    queryFn: () => authService.getProfile(),
+    queryFn: async () => {
+            const res = await  authService.getProfile()
+            console.log(res, "_____get user  profile_____")
+            
+            setAuthObject(res);
+            return res; 
+        },
     enabled: !!token,
   });
 }

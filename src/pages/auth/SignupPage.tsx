@@ -7,20 +7,23 @@ import { useNavigate, Link } from "react-router-dom";
 const SignupPage: React.FC = () => {
     const navigate = useNavigate();
     return (
-        <div className="relative w-screen h-screen overflow-hidden">
-            <img
-                src={landingBannerImage}
-                alt="Background"
-                className="absolute inset-0 w-full h-full object-cover z-0"
-            />
-
-            <div className="relative flex justify-center flex-row py-3  z-10">
-                <div className="flex-1 relative" />
+         <div
+      className="min-h-screen relative  min-w-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${landingBannerImage})` }}
+    >
+            {/* <img */}
+            {/*     src={landingBannerImage} */}
+            {/*     alt="Background" */}
+            {/*     className="absolute inset-0 w-full h-full object-cover z-0" */}
+            {/* /> */}
+            {/**/}
+       
+              
 
                 <div className="flex-1 relative">
                     <SignupForm />
                 </div>
-            </div>
+        
             {/* <div className="absolute inset-0">
                 <Link
                     to="/auth/verify-email"

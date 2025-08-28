@@ -60,7 +60,7 @@ export const useAuthStore = create<AuthStore>()(
       setUser: (user: AuthUser) => {
         console.log("Setting user:", user);
         set({ user, isAuthenticated: true });
-      },
+      }, 
 
       setToken: (token: string) => {
         console.log("Setting token:", token);

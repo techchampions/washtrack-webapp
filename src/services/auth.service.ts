@@ -55,7 +55,7 @@ class AuthService {
 
     async getProfile() {
         const response = await apiClient.get("/api/user-profile");
-        return response;
+        return response.data;
     };
 
 }
