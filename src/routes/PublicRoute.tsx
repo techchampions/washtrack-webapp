@@ -1,27 +1,24 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/hooks/auth/useAuth';
-import { useAuthStore } from '@/store/auth.store';
 
 export const PublicRoute: React.FC = () => {
-  const { isAuthenticated, isLoading, user } = useAuth();
-  const {otpVerified, storeUpdated} = useAuthStore();
+  const {token, user} = useAuth()
 
-  // If user is authenticated, redirect based on their status
-  // if (isAuthenticated && user) {
-    // Check if user needs email verification
-    // if (!otpVerified) {
-    //   return <Navigate to="/auth/" replace />;
-    // }
-    
-    // if (!storeUpdated) {
-    //   return <Navigate to="/onboarding/store-profile-setup" replace />;
-    // }
 
-    // User is fully set up, redirect to dashboard
-    // return <Navigate to="/dashboard" replace />;
-  // }
+  if(token && user) {
 
-  // User is not authenticated, show public pages
+    if(!user.email_verified_at) {
+      return <Navigate to={"/auth/verify-email"} replace />
+    }
+
+    const hasAddress = user.address && user.address.length > 0;
+    if(!hasAddress) {
+      return <Navigate  to={"/onboarding/store-profile-setup"}/>
+    }
+
+    return <Navigate to="/dashboard" replace />;
+  }
+ 
   return <Outlet />;
 };

@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/common/Button';
 import { FormField } from '@/components/forms/FormField';
 import { useLogin } from '@/hooks/auth/useLogin';
+import { useUserProfile } from '@/hooks/auth/useUserProfile';
 import { LoginCredentials } from '@/types/auth.types';
 import { FaEnvelope, FaLock } from 'react-icons/fa6';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import logoImage from "@/assets/images/logo.png";
-
+import { showError, showSuccess } from '@/utils/toast';
+import { useAuthStore } from '@/store/auth.store';
+import { useResendOtp } from '@/hooks/auth/useVerifyEmail';
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -34,21 +37,78 @@ const initialValues: LoginCredentials & { rememberMe: boolean } = {
 
 export const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
-  const { mutate: login, isPending, error, data } = useLogin();
+  const { loginMutation } = useLogin();
+  const { isPending, error } = loginMutation;
+  const { setToken, setAuthObject } = useAuthStore();
+  const resendOtpMutation = useResendOtp();
+  const navigate = useNavigate();
+
+  useUserProfile();
 
   const handleSubmit = (values: LoginCredentials & { rememberMe: boolean }) => {
-    login({
+    const payload = {
       email: values.email,
       password: values.password,
       rememberMe: values.rememberMe,
+    };
+
+    loginMutation.mutate(payload, {
+      onSuccess: (response) => {
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("✅ Login success:", response.data);
+          showSuccess(response.data.message);
+          setToken(response.data.token);
+          setAuthObject(response.data);
+
+          if (!response.data.otpVerified) {
+            resendOtpMutation.mutate({ otp: null })
+            navigate('/auth/verify-email', { replace: true });
+            return response.data;
+          }
+
+          if(!response.data.storeUpdated) {
+            navigate('/onboarding/store-profile-setup')
+            return response.data;
+          }
+
+        }
+
+        /* if (!data.user.isVerified) {
+           navigate('/auth/verify-email', { replace: true });
+         } else {
+         
+           const hasAddress = data.user.addresses && data.user.addresses.length > 0;
+           
+           if (!hasAddress) {
+             navigate('/onboarding/address-setup', { replace: true });
+           } else {
+             navigate('/dashboard', { replace: true });
+           }
+         } */
+
+      },
+
+      onError: (error) => {
+        // Handle specific error cases
+        console.error("❌ Login error:", error.response.data.message);
+        if (error.response.data.message.includes('Unverified Email Address')) {
+          resendOtpMutation.mutate({ otp: null })
+          showError('Please verify your email address before signing in.');
+
+          navigate('/auth/verify-email');
+        } else if (error.response.data.message.includes('invalid credentials')) {
+          showError('Invalid email or password. Please try again.');
+        } else {
+          showError(error.response.data.message || 'Login failed. Please try again.');
+        }
+
+        setError(error.message);
+      },
+
     });
   };
 
-  useEffect(() => {
-    // Reset form state on mount
-    console.log(isPending, "--------isloading--------");
-    console.log(data, "----------data----------");
-  }, [isPending]);
 
   return (
     <div className="flex items-center justify-center bg-transparent">
@@ -84,7 +144,7 @@ export const LoginForm: React.FC = () => {
           validationSchema={loginSchema}
           onSubmit={handleSubmit}
         >
-          {({}) => (
+          {({ }) => (
 
             <Form className="mt-8 space-y-6">
               <div className="space-y-5 p-0 m-0 mb-2">

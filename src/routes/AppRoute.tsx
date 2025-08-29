@@ -17,7 +17,7 @@ const AuthFlowCompletePage = React.lazy(() => import('@/pages/auth/AuthFlowCompl
 const WelcomePage = React.lazy(() => import('@/pages/onboarding/WelcomePage'));
 const StoreProfileSetupPage = React.lazy(() => import('@/pages/onboarding/StoreProfileSetupPage'));
 const AddServicesSetupPage = React.lazy(() => import('@/pages/onboarding/AddServicesSetupPage'));
-const AddItemsSetup = React.lazy(() => import('@/components/onboarding/AddItemsSetup'));
+const AddItemsSetup = React.lazy(() => import('@/pages/onboarding/AddItemsSetupPage'));
 
 // Main app pages
 const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage'));

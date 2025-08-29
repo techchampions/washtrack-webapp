@@ -43,3 +43,18 @@ export const useVerifyEmail = () => {
         verifyEmailAsync: mutation.mutateAsync,
     };
 };
+
+export const useResendOtp = () => {
+    return  useMutation({
+  mutationFn: authService.resendCode,
+  onSuccess: (response) => {
+    console.log("✅ OTP resent success:", response.data);
+    showSuccess('OTP code resent successfully');
+  },
+  onError: (error) => {
+    showError('Failed to resend OTP code');
+    console.error("❌ Resend OTP error:", error.response);
+  },
+  retry: 0
+});
+}

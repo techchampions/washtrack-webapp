@@ -56,6 +56,8 @@ apiClient.interceptors.response.use(
 
     const errorMessage = getErrorMessage(error);
 
+  console.log(errorMessage, "_____error message in apiClient");
+
     if (!window.location.pathname.includes('/auth/')) {
       switch (error.response?.status) {
         case 400:

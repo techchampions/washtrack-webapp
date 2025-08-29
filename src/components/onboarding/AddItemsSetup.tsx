@@ -3,15 +3,12 @@ import { ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-// import { FormField } from '../forms/FormField';
 import { Formik, FieldArray, Form, FormikHelpers } from 'formik';
-import { Button } from '../common/Button';
 import * as Yup from "yup";
 import { useOnboardingStore } from '@/store/onboarding.store';
 import { FiFileText } from "react-icons/fi";
 import { Trash2 } from 'lucide-react';
-import { FormField } from '../forms/FormField';
-import { useCreateItem, useGetItem, useGetItems, useUpdateItem } from '@/hooks/items/useItems';
+import { useCreateItem, useGetItems, useUpdateItem } from '@/hooks/items/useItems';
 import { useGetServices } from '@/hooks/services/useServices';
 import { useItemsStore } from '@/store/items.store';
 import { InputField } from '../FormComponents';
@@ -60,7 +57,7 @@ const ItemsList = ({ item, index, setEditIndex, showForm, toggleFormDisplay }) =
 }
 
 
-const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, toggleFormDisplay, editIndex, setEditIndex, items }) => {
+const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, toggleFormDisplay, editIndex, setEditIndex, items, loading }) => {
 
   return (
     <div className="absolute inset-0 h-[100%] w-[100%] mx-auto bg-white rounded-3xl p-6 shadow-xl z-10">
@@ -72,10 +69,10 @@ const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, to
         initialValues={{
           item_name: editIndex !== null ? items?.itemType[editIndex]?.name : "",
           services: getServicesItem(items?.itemType) || []
-        }}
-      >
+        }}>
+
         {({ values }) => (
-          <Form className="space-y-6 h-[60vh]">
+          <Form className=" relative space-y-6 h-[90%]">
             <div>
               <div>
                 <InputField
@@ -84,8 +81,8 @@ const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, to
                   placeholder="Item Name e.g Trouser"
                 />
               </div>
-              <div className=' flex  min-h-[35vh] '>
-                <h3 className="text-sm text-left text-dark mb-1">Services</h3>
+              <div className='flex min-h-[35vh] '>
+                <h3 className="text-sm text-left text-dark mb-5">Services</h3>
 
                 <FieldArray name="services">
                   {({ push, remove }) => (
@@ -131,21 +128,24 @@ const ItemsServicesForm = ({ handleSubmit, getServicesItem, validationSchema, to
                   )}
                 </FieldArray>
               </div>
-              <div className=''>
+
+              <div className='absolute bottom-0 left-0 rigt-0 w-full'>
 
                 <button
                   type="submit"
-                  // onClick={() => console.log("presedd")}
-                  className="w-full  bg-brand hover:bg-brand/30 text-white font-medium py-3 px-4 rounded-full transition-colors"
+                  disabled={loading}
+                  className="w-full bg-brand hover:bg-brand/30 text-white font-medium py-3 px-4 rounded-full transition-colors"
                 >
                   {editIndex !== null ? "Update item" : "Add item"}
                 </button>
-
               </div>
+
+
             </div>
           </Form>
         )}
       </Formik>
+
     </div>
   );
 };
@@ -174,7 +174,6 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
     setShowForm(!showForm);
   }
 
-
   useGetItems();
   useGetServices(1);
 
@@ -188,6 +187,8 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
 
   const { updateItemMutation } = useUpdateItem();
   const { createItemMutation } = useCreateItem();
+
+
   const handleSubmit = async (
     values: ItemFormValues,
     { resetForm }: FormikHelpers<ItemFormValues>
@@ -197,7 +198,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
 
     if (editIndex !== null) {
       const currentItemServices = items?.itemType[editIndex]?.services;
-      console.log(currentItemServices, "------ currentItemServices")
+      console.log(currentItemServices, "________currentItemServices")
       console.log(values.services, "------ values.services")
       const payload = values.services.map((service, idx) => {
         const original = currentItemServices?.find(
@@ -205,8 +206,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
         );
 
         return {
-          id: service.service_id,
-          item_id: original?.item_id,
+          id: service.id,
           item_name: values.item_name,
           service_id: service.service_id,
           service_name: service.service_name,
@@ -222,7 +222,6 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
           console.log("✅ success:", response.data);
           if (response.status === 200 || response.status === 201) {
             showSuccess(response.data.message)
-
             toggleFormDisplay()
           }
         },
@@ -345,7 +344,6 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
         {showForm && (
           <div className='mt-8'>
             <ItemsServicesForm
-
               validationSchema={validationSchema}
               toggleFormDisplay={toggleFormDisplay}
               editIndex={editIndex}
@@ -353,8 +351,8 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
               getServicesItem={getServicesItem}
               items={items}
               handleSubmit={handleSubmit}
+              loading={createItemMutation.isPending || updateItemMutation.isPending}
             />
-
           </div>
         )}
 
@@ -396,7 +394,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
           Click the “Add items” button to add the type of items you render in your laundry store
         </p>
         <button
-          disabled={true}
+          disabled={createItemMutation.isPending || updateItemMutation.isPending}
           onClick={() => {
             setStep("ONBOARDING_COMPLETE");
             navigate("/onboarding/welcome");

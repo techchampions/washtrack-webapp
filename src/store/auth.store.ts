@@ -83,6 +83,8 @@ export const useAuthStore = create<AuthStore>()(
         set({ ...initialState });
       },
       setAuthObject: (value: any) => {
+        console.log("_________in store auth object_______", value);
+        
         set((state) => ({
           ...state,
           ...value,

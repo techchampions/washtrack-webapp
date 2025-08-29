@@ -25,33 +25,14 @@ export const useAuth = () => {
   };
 
    const checkAuthStatus = () => {
-    if (token) {
+    if (token && (user && user?.email_verified_at)) {
       return true;
     }
     return false;
   };
 
-  // const checkAuthStatus = () => {
-  //   if (token) {
-  //     try {
-  //       const payload = JSON.parse(atob(token.split('.')[1]));
-  //       const isExpired = payload.exp * 1000 < Date.now();
-        
-  //       if (isExpired) {
-  //         handleLogout();
-  //         return false;
-  //       }
-  //       return true;
-  //     } catch {
-  //       handleLogout();
-  //       return false;
-  //     }
-  //   }
-  //   return false;
-  // };
-
   const requireAuth = () => {
-    if (!isAuthenticated || !checkAuthStatus()) {
+    if (!token || !checkAuthStatus()) {
       navigate('/auth/login', { replace: true });
       return false;
     }
@@ -59,23 +40,22 @@ export const useAuth = () => {
   };
 
   const requireGuest = () => {
-    if (isAuthenticated && checkAuthStatus()) {
+    if (isAuthenticated) {
       navigate('/dashboard', { replace: true });
       return false;
     }
     return true;
   };
 
-  useEffect(() => {
-    console.log(token, isAuthenticated)
-    if (token && isAuthenticated) {
-      const checkInterval = setInterval(() => {
-        checkAuthStatus();
-      }, 60000);
+  // useEffect(() => {
+  //   if (token) {
+  //     const checkInterval = setInterval(() => {
+  //       checkAuthStatus();
+  //     }, 60000);
 
-      return () => clearInterval(checkInterval);
-    }
-  }, [token, isAuthenticated]);
+  //     return () => clearInterval(checkInterval);
+  //   }
+  // }, [token, isAuthenticated]);
 
   return {
     user,
@@ -83,6 +63,7 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading,
     error,
+    otpVerified,
     logout: handleLogout,
     setUser,
     setToken,

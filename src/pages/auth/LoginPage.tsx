@@ -5,16 +5,16 @@ import {useUserProfile } from "@/hooks/auth/useUserProfile";
 import { useAuthStore } from "@/store/auth.store";
 
 const LoginPage: React.FC = () => {
-   const { data } = useUserProfile();
-   const {setUser} = useAuthStore();
+  //  const { data } = useUserProfile();
+  //  const {setUser} = useAuthStore();
 
-  useEffect(() => {
-    console.log(data?.data.success, "success")
-    if (data?.data.success) {
-      console.log("Profile loaded:", data?.data.user);
-      setUser(data.data.user);
-    }
-  }, [data?.data?.user]);
+  // useEffect(() => {
+  //   console.log(data?.data.success, "success")
+  //   if (data?.data.success) {
+  //     console.log("Profile loaded:", data?.data.user);
+  //     setUser(data.data.user);
+  //   }
+  // }, [data?.data?.user]);
 
 
   return (

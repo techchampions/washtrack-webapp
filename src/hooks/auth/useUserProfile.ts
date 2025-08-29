@@ -7,12 +7,17 @@ import { showError, showSuccess } from '@/utils/toast';
 
 
 export function useUserProfile() {
-  const {token, setUser, setToken, setAuthObject} = useAuthStore();
+  const {token, setUser, setToken, setAuthObject, setOtpVerified} = useAuthStore();
   return useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
             const res = await  authService.getProfile()
             console.log(res, "_____get user  profile_____")
+            console.log("does it include:  ", res.message.includes('Unverified Email Address'))
+            if(res.message.includes('Unverified Email Address')) {
+              setOtpVerified(false);
+              return res;
+            }
             
             setAuthObject(res);
             return res; 
