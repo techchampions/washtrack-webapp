@@ -15,6 +15,7 @@ export const useAuth = () => {
     setError,
     clearError,
     otpVerified,
+    storeUpdated
   } = useAuthStore();
 
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export const useAuth = () => {
   };
 
    const checkAuthStatus = () => {
-    if (token && (user && user?.email_verified_at)) {
+    if (token && (user && otpVerified)) {
       return true;
     }
     return false;
@@ -39,23 +40,15 @@ export const useAuth = () => {
     return true;
   };
 
-  const requireGuest = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard', { replace: true });
-      return false;
+  useEffect(() => {
+    if (token) {
+      const checkInterval = setInterval(() => {
+        checkAuthStatus();
+      }, 60000);
+
+      return () => clearInterval(checkInterval);
     }
-    return true;
-  };
-
-  // useEffect(() => {
-  //   if (token) {
-  //     const checkInterval = setInterval(() => {
-  //       checkAuthStatus();
-  //     }, 60000);
-
-  //     return () => clearInterval(checkInterval);
-  //   }
-  // }, [token, isAuthenticated]);
+  }, [token, isAuthenticated]);
 
   return {
     user,
@@ -64,6 +57,7 @@ export const useAuth = () => {
     isLoading,
     error,
     otpVerified,
+    storeUpdated,
     logout: handleLogout,
     setUser,
     setToken,
@@ -71,6 +65,5 @@ export const useAuth = () => {
     clearError,
     checkAuthStatus,
     requireAuth,
-    requireGuest,
   };
 };

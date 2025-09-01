@@ -1,6 +1,5 @@
 import { showError } from "@/utils/toast";
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
-import toast from 'react-hot-toast';
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 export const baseURL = import.meta.env.VITE_BASE_URL;
 export const identifier = import.meta.env.VITE_IDENTIFIER;

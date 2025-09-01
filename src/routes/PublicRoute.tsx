@@ -8,16 +8,7 @@ export const PublicRoute: React.FC = () => {
 
   if(token && user) {
 
-    if(!user.email_verified_at) {
-      return <Navigate to={"/auth/verify-email"} replace />
-    }
-
-    const hasAddress = user.address && user.address.length > 0;
-    if(!hasAddress) {
-      return <Navigate  to={"/onboarding/store-profile-setup"}/>
-    }
-
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
  
   return <Outlet />;

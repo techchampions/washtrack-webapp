@@ -39,7 +39,7 @@ export const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { loginMutation } = useLogin();
   const { isPending, error } = loginMutation;
-  const { setToken, setAuthObject } = useAuthStore();
+  const { setToken, setAuthObject, setStoreUpdated, resetAuth, otpVerified, storeUpdated } = useAuthStore();
   const resendOtpMutation = useResendOtp();
   const navigate = useNavigate();
 
@@ -52,6 +52,8 @@ export const LoginForm: React.FC = () => {
       rememberMe: values.rememberMe,
     };
 
+    resetAuth()
+
     loginMutation.mutate(payload, {
       onSuccess: (response) => {
 
@@ -61,49 +63,27 @@ export const LoginForm: React.FC = () => {
           setToken(response.data.token);
           setAuthObject(response.data);
 
-          if (!response.data.otpVerified) {
+          if (!otpVerified) {
             resendOtpMutation.mutate({ otp: null })
             navigate('/auth/verify-email', { replace: true });
             return response.data;
           }
 
-          if(!response.data.storeUpdated) {
-            navigate('/onboarding/store-profile-setup')
+          console.log(response.data, "---------response data after login--------")
+
+          if(!storeUpdated) {
+            setStoreUpdated(response.data.storeUpdated)
+            navigate('/onboarding/store-profile-setup', {replace: true})
             return response.data;
           }
 
         }
-
-        /* if (!data.user.isVerified) {
-           navigate('/auth/verify-email', { replace: true });
-         } else {
-         
-           const hasAddress = data.user.addresses && data.user.addresses.length > 0;
-           
-           if (!hasAddress) {
-             navigate('/onboarding/address-setup', { replace: true });
-           } else {
-             navigate('/dashboard', { replace: true });
-           }
-         } */
-
       },
 
       onError: (error) => {
         // Handle specific error cases
         console.error("❌ Login error:", error.response.data.message);
-        if (error.response.data.message.includes('Unverified Email Address')) {
-          resendOtpMutation.mutate({ otp: null })
-          showError('Please verify your email address before signing in.');
-
-          navigate('/auth/verify-email');
-        } else if (error.response.data.message.includes('invalid credentials')) {
-          showError('Invalid email or password. Please try again.');
-        } else {
-          showError(error.response.data.message || 'Login failed. Please try again.');
-        }
-
-        setError(error.message);
+        showError(error.response.data.message);
       },
 
     });
@@ -112,9 +92,7 @@ export const LoginForm: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center bg-transparent">
-
       <div className="py-10 space-y-8 bg-white px-8 rounded-2xl md:shadow-xl px-15">
-
         <div className=' justify-center items-center h-0  p-0 m-0 flex'>
           <img
             src={logoImage}
