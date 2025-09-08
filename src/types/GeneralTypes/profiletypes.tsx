@@ -33,6 +33,7 @@ export interface UserProfile {
   plan: {
     id: number;
     name: string;
+    slug: string;
   };
   store: {
     id: number;

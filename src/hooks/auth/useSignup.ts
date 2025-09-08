@@ -1,13 +1,13 @@
 import { AxiosResponse } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
-import { LoginCredentials } from "@/types/auth.types";
+import { SignupData } from "@/types/auth.types";
 
-export const useLogin = () => {
+export const useSignup = () => {
   const queryClient = useQueryClient();
 
-  const loginMutation = useMutation<AxiosResponse, Error, LoginCredentials>({
-    mutationFn: authService.login,
+  const signUpMutation = useMutation<AxiosResponse, Error, SignupData>({
+    mutationFn: authService.signup,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       queryClient.invalidateQueries({ queryKey: ["user-profile"] });
@@ -15,6 +15,6 @@ export const useLogin = () => {
   });
 
   return {
-    loginMutation,
+    signUpMutation,
   };
 };

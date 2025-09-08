@@ -1,74 +1,46 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { FiBell, FiSettings } from "react-icons/fi";
-import { useOnboardingStore, useAuthStore } from "@/store/onboardingStore";
 import Button from "../FormComponents/Button";
-import { useProfileStore } from "@/store/ProfileStore";
-import { useOrderStore } from "@/store/orderStore";
+import { useAuth } from "@/hooks/auth/useAuth";
 
-function Header() {
-  const { setStep, setHasCompletedOnboarding } = useOnboardingStore();
-  const logoutUser = useAuthStore((state) => state.logoutUser);
-  const {getUserProfile, user, storeDetails, logoUrl} = useProfileStore();
-    const { fetchVendorOrders, vendorOrders } = useOrderStore();
-      const [selectedFilter, setSelectedFilter] = useState<string>("all");
-  const [ordersData, setOrdersData] = useState<any>({});
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-
-     const loadOrders = async () => {
-    try {
-      const data = await fetchVendorOrders(selectedFilter);
-      setOrdersData(data || {});
-    } catch (error) {
-      console.error("Error fetching vendor orders:", error);
-      setOrdersData({});
-    } finally {
-      setIsLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    await logoutUser(); 
-    setStep("Get Started");
-    setHasCompletedOnboarding(false);
-  };
-
-  useEffect(() => {
-    loadOrders();
-    getUserProfile();
-
-  }, [])
-
-   return (
+const Header: React.FC = () => {
+  const { user } = useAuth();
+  return (
     <div className="flex flex-col w-full md:w-[90%] mx-auto mb-6 space-y-3">
-      <div className="flex justify-between items-center ">
-        <div className="flex flex-row gap-1 items-center">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-row items-center gap-1">
           <img
-            // src="/images/profile-img.png"
-            src={logoUrl || "/images/profile-img.png"}
-            alt=""
-            className="h-10 w-10 rounded-full object-cover"
+            src={"/images/profile-img.png"}
+            alt="Store logo"
+            className="object-cover w-10 h-10 rounded-full"
           />
-          <h1 className="text-lg font-bold text-black">{storeDetails?.store_name}</h1>
-          <span className="bg-brand-100 text-brand px-4 py-0.5 ml-2 rounded-md">
-            {user?.plan?.name}
-          </span>
+          <h1 className="text-lg font-bold text-black">
+            {user?.store_name || "My Store"}
+          </h1>
+          {user?.plan_id && user.plan && (
+            <span className="bg-brand-100 text-brand px-4 py-0.5 ml-2 rounded-md">
+              {user.plan.name}
+            </span>
+          )}
         </div>
         <div className="flex items-center space-x-4">
-          <FiBell className="text-xl text-black" />
-          <FiSettings className="text-xl text-black" onClick={handleLogout} />
+          <FiBell className="text-xl text-black cursor-pointer" />
+          <FiSettings
+            className="text-xl text-black cursor-pointer"
+            // onClick={handleLogout}
+          />
         </div>
       </div>
-      <div className="bg-brand-100 text-brand flex md:hidden py-2 px-4 ml-2 rounded-md w-full justify-between">
-        <p className="text-sm font-bold text-left w-full py-2">
-          {user?.plan.name}
+
+      {/* Mobile-only upgrade banner */}
+      <div className="flex items-center justify-between w-full px-4 py-2 rounded-md bg-brand-100 text-brand md:hidden">
+        <p className="w-full py-2 text-sm font-bold text-left">
+          {user?.plan?.name || "Free Plan"}
         </p>
-        <Button label="Upgrade" className="rounded-md py-0" />
+        <Button label="Upgrade" className="py-0 rounded-md" />
       </div>
     </div>
   );
-
-}
+};
 
 export default Header;

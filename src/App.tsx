@@ -2,20 +2,17 @@ import "./App.css";
 import ToasterProvider from "./provider/ToasterProvider";
 // import AllRoutes from "./routes";
 import "react-datepicker/dist/react-datepicker.css";
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { HelmetProvider } from 'react-helmet-async';
-import { AppRoutes } from '@/routes/AppRoute';
-import { ErrorBoundary } from '@/components/common/ErrorBoundary/ErrorBoundary';
-import {
-  persistQueryClient,
-  
-} from "@tanstack/react-query-persist-client";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { HelmetProvider } from "react-helmet-async";
+import { AppRoutes } from "@/routes/AppRoute";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
+import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 
-import '@/styles/globals.css';
+import "@/styles/globals.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,10 +44,10 @@ const App: React.FC = () => {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AppRoutes />
-            
-            <ToasterProvider/>
+
+            <ToasterProvider />
           </BrowserRouter>
-          
+
           {/* React Query DevTools - Only in development */}
           {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
         </QueryClientProvider>

@@ -2,26 +2,27 @@ import React, { useState } from "react";
 import NavItem from "../Header/NavItem";
 import { FaChartBar, FaHome, FaList, FaUsers } from "react-icons/fa";
 import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
-import { LiaMoneyBillAltSolid, LiaStoreAltSolid } from "react-icons/lia";
-import { TbMoneybag } from "react-icons/tb";
 import { RiAppsLine } from "react-icons/ri";
 import NavbarAddorder from "../Header/NavbarAddorder";
-import Button from "../FormComponents/Button";
-import Modal from "../DashboardComponents/Modal";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "@/components/DashboardComponents";
+import { Button } from "@/components/FormComponents";
+import { LogIn } from "lucide-react";
+import { useAuthStore } from "@/store/auth.store";
+import { authService } from "@/services/auth.service";
 
 function NavigationContainer() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col px-10 h-screen justify-between">
+    <div className="flex flex-col justify-between h-screen px-10">
       <div className="w-full py-8">
         <img src="/images/logo.png" alt="Wash Track" className="w-full" />
-        <nav className="space-y-2 text-white py-8">
+        <nav className="py-8 space-y-2 text-white">
           <NavItem
             label="Overview"
-            icon={<FaHome className="text-white w-4 h-4" />}
+            icon={<FaHome className="w-4 h-4 text-white" />}
             path="/dashboard"
           />
 
@@ -30,13 +31,13 @@ function NavigationContainer() {
             onClick={() => setShowModal(true)}
             className="flex items-center w-full px-3 py-[7px] text-[12px] text-white rounded-md hover:bg-brand-400"
           >
-            <MdOutlineAddBox className="mr-2 text-white w-4 h-4" />
+            <MdOutlineAddBox className="w-4 h-4 mr-2 text-white" />
             Add Order
           </button>
 
           <NavItem
             label="Inventory"
-            icon={<MdOutlineInventory className="text-white w-4 h-4" />}
+            icon={<MdOutlineInventory className="w-4 h-4 text-white" />}
             path="/dashboard/inventory"
           />
           {/* <NavItem
@@ -46,12 +47,12 @@ function NavigationContainer() {
           /> */}
           <NavItem
             label="Orders"
-            icon={<FaList className="text-white w-4 h-4" />}
+            icon={<FaList className="w-4 h-4 text-white" />}
             path="/dashboard/orders"
           />
           <NavItem
             label="Customers"
-            icon={<FaUsers className="text-white w-4 h-4" />}
+            icon={<FaUsers className="w-4 h-4 text-white" />}
             path="/dashboard/customers"
           />
           {/* <NavItem
@@ -66,20 +67,28 @@ function NavigationContainer() {
           /> */}
           <NavItem
             label="Report"
-            icon={<FaChartBar className="text-white w-4 h-4" />}
+            icon={<FaChartBar className="w-4 h-4 text-white" />}
             path="/dashboard/reports"
           />
 
           {/* Nested nav */}
           <NavItem
             label="More"
-            icon={<RiAppsLine className="text-white w-4 h-4" />}
+            icon={<RiAppsLine className="w-4 h-4 text-white" />}
             children={[
               { label: "Setting", path: "/dashboard/settings" },
               { label: "Customer", path: "/dashboard/customers" },
               { label: "Outstanding", path: "/dashboard/outstanding" },
             ]}
           />
+
+          <button
+            onClick={authService.logout2}
+            className="text-red-500 cursor-pointer w-full px-3 text-sm mt-5 font-brand-bold text-leftf flex items-center gap-2"
+          >
+            <LogIn size={16} className="font-brand-bold" />
+            <span>Log Out</span>
+          </button>
         </nav>
       </div>
       <NavbarAddorder />
@@ -88,17 +97,17 @@ function NavigationContainer() {
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <div className="flex flex-col items-center">
           <img src="/images/1171275266.png" alt="" className="w-[150px]" />
-          <h2 className="text-2xl font-brand-bold mb-4 text-black">
+          <h2 className="mb-4 text-2xl text-black font-brand-bold">
             Create Order
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="mb-6 text-gray-600">
             Please select if you are creating a new customer or existing
             customer order
           </p>
           <div className="flex flex-col justify-between w-full gap-2">
             <Button
               label="Existing User"
-              className="bg-brand text-white px-4 py-2"
+              className="px-4 py-2 text-white bg-brand"
               onClick={() => {
                 setShowModal(false);
                 navigate("/dashboard/add-order/existing-customer");
@@ -107,7 +116,7 @@ function NavigationContainer() {
             />
             <Button
               label="New User"
-              className="bg-brand-muted text-white px-4 py-2 w-full"
+              className="w-full px-4 py-2 text-white bg-brand-muted"
               onClick={() => {
                 setShowModal(false);
                 navigate("/dashboard/add-order/new-customer");

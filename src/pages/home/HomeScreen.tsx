@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useUserStore } from "../../store/AppStore";
+import React, { useState } from "react";
 import MainCard from "../../components/DashboardComponents/MainCard";
 import SmallMainCard from "../../components/DashboardComponents/SmallMaiinCard";
 import { BiCheckCircle } from "react-icons/bi";
@@ -8,24 +7,30 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 import QuickActions from "../../components/DashboardComponents/QuickActions";
 import OrderList from "../../components/DashboardComponents/OrderList";
 import CustomDropdown from "../../components/DashboardComponents/CustomDropdown";
+import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
+import { showError } from "@/utils/toast";
+import { useGetProcessingOrders } from "@/hooks/query/useGetUserOrders";
+import Loader from "@/components/GeneralComponents/Loader";
 
-export default function HomeScreen() {
-  // const { orders, loadOrders } = useUserStore();
+const HomeScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState("Today");
+  const { isError } = useGetUserProfile();
+  const { data, isLoading, isError: isErrorOrder } = useGetProcessingOrders();
+  if (isError) {
+    showError("Failed to get user profile");
+  }
+  if (isErrorOrder) {
+    showError("Failed to get user Orders");
+  }
+  if (isLoading) {
+    return <Loader />;
+  }
+  const orders = data || [];
+  const completedOrders = orders?.filter((o) => o.status === "completed");
+  const pendingOrders = orders?.filter((o) => o.status === "pending");
 
-  useEffect(() => {
-    console.log("inside home screen")
-    loadOrders();
-  }, []);
-
-  const completedOrders = orders.filter((o) => o.status === "completed");
-  const pendingOrders = orders.filter((o) => o.status === "pending");
-
-  const sumAmounts = (orderArray: any[]) =>
-    orderArray.reduce(
-      (acc, o) => acc + parseInt(o.amount.replace(/[^\d]/g, "")),
-      0
-    );
+  const sumAmounts = (orderArray: typeof orders) =>
+    orderArray?.reduce((acc, o) => acc + o.totalAmount, 0);
 
   return (
     <div className="w-full md:w-[90%] mx-auto">
@@ -40,7 +45,7 @@ export default function HomeScreen() {
           </div>
           <div>
             <p className="flex items-center text-lg flex-row gap-2">
-              Total Orders <Badge count={orders.length} />
+              Total Orders <Badge count={orders?.length} />
             </p>
             <h2 className="text-[40px] md:text-[60px] font-brand-bold">
               ₦{sumAmounts(orders).toLocaleString()}
@@ -89,4 +94,5 @@ export default function HomeScreen() {
       </div>
     </div>
   );
-}
+};
+export default HomeScreen;

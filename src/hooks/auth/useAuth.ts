@@ -1,6 +1,6 @@
-import { useAuthStore } from '@/store/auth.store';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useAuthStore } from "@/store/auth.store";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const useAuth = () => {
   const {
@@ -15,18 +15,19 @@ export const useAuth = () => {
     setError,
     clearError,
     otpVerified,
-    storeUpdated
+    store,
+    storeUpdated,
   } = useAuthStore();
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/auth/login', { replace: true });
+    navigate("/auth/login", { replace: true });
   };
 
-   const checkAuthStatus = () => {
-    if (token && (user && otpVerified)) {
+  const checkAuthStatus = () => {
+    if (token && user && otpVerified) {
       return true;
     }
     return false;
@@ -34,7 +35,7 @@ export const useAuth = () => {
 
   const requireAuth = () => {
     if (!token || !checkAuthStatus()) {
-      navigate('/auth/login', { replace: true });
+      navigate("/auth/login", { replace: true });
       return false;
     }
     return true;
@@ -58,6 +59,7 @@ export const useAuth = () => {
     error,
     otpVerified,
     storeUpdated,
+    store,
     logout: handleLogout,
     setUser,
     setToken,
