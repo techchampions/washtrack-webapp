@@ -1,9 +1,11 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useAuthStore } from "@/store/auth.store";
 
 export const PrivateRoute: React.FC = () => {
-  const { token, otpVerified, storeUpdated } = useAuth();
+  const { token, otpVerified } = useAuth();
+  const { completedOnboarding } = useAuthStore();
   const location = useLocation();
   console.log(token, " in private route");
 
@@ -13,12 +15,19 @@ export const PrivateRoute: React.FC = () => {
   // else if (token && !storeUpdated) {
   //   return <Navigate to="/onboarding/store-profile-setup" replace />;
   // }
-  else if (
+  if (
     token &&
     !otpVerified &&
     !location.pathname.includes("/auth/verify-email")
   ) {
     return <Navigate to="/auth/verify-email" replace />;
+  }
+  if (
+    token &&
+    !completedOnboarding &&
+    location.pathname.includes("/onboarding/welcome")
+  ) {
+    return <Navigate to="/onboarding/store-profile-setup" replace />;
   }
 
   // if(user && location.pathname.startsWith('/dashboard')) {
@@ -33,7 +42,5 @@ export const PrivateRoute: React.FC = () => {
 
   //   return <Navigate to={'/auth/login'}/>
   // }
-  else {
-    return <Outlet />;
-  }
+  return <Outlet />;
 };

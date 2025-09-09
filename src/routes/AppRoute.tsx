@@ -81,15 +81,12 @@ export const AppRoutes: React.FC = () => {
         <Route path="/onboarding" element={<PrivateRoute />}>
           <Route path="welcome" element={<WelcomePage />} />
           <Route
+            index
             path="store-profile-setup"
             element={<StoreProfileSetupPage />}
           />
           <Route path="add-services-setup" element={<AddServicesSetupPage />} />
           <Route path="add-items-setup" element={<AddItemsSetup />} />
-          <Route
-            index
-            element={<Navigate to="/onboarding/welcome" replace />}
-          />
         </Route>
 
         {/* Private Routes - Main application */}

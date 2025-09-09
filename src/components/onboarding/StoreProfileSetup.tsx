@@ -94,15 +94,24 @@ const StoreProfileSetup = () => {
       >
         <div className="flex items-center justify-center min-h-0 overflow-hidden">
           <div className="bg-white  rounded-2xl max-w-md md:max-w-2xl sm:h-auto md:h-[90vh] lg:h-[100%] md:rounded-3xl p-3 sm:p-3 md:p-5 lg:px-12 shadow-xl overflow-x-hidden scrollbar-hide">
-            <div className="mb-3 text-center">
-              <h2 className="mb-1 text-lg font-bold md:text-2xl text-brand md:mb-2">
+            <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
+              <img
+                src="/src/assets/images/logo.png"
+                alt="Wash Track"
+                className="w-25 h-25"
+              />
+              <div className="ml-5" />
+            </div>
+
+            <div className="mb-3 text-left">
+              <h1 className="mb-1 text-lg font-bold md:text-2xl text-brand md:mb-2">
                 Setup your store
-              </h2>
-              <p className="text-sm text-dark md:text-lg lg:text-sm">
+              </h1>
+              <p className="text-xs text-gray-500">
                 Fill in the information's below to setup your store
               </p>
             </div>
-            <div className="mb-3">
+            <div className="mb-0">
               {/* <div className="flex items-center justify-center w-10 h-10 mx-auto mb-2 rounded-full md:w-15 md:h-15 bg-brand">
                 <User className="w-3 text-white md:w-8 md:h-8" />
               </div> */}

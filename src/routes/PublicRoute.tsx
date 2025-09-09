@@ -8,9 +8,12 @@ export const PublicRoute: React.FC = () => {
   if (token && user && otpVerified && storeUpdated) {
     return <Navigate to="/dashboard" replace />;
   }
-  // if (token && !otpVerified) {
-  //   return <Navigate to="/auth/verify-email" replace />;
-  // }
+  if (!token && location.pathname.includes("/auth/verify-email")) {
+    return <Navigate to="/auth/login" replace />;
+  }
+  if (!token && location.pathname.includes("/auth/auth-flow-complete")) {
+    return <Navigate to="/auth/login" replace />;
+  }
   if (token && otpVerified && !storeUpdated) {
     return <Navigate to="/onboarding/store-profile-setup" replace />;
   }

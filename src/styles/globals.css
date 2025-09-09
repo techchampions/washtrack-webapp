@@ -1,3 +1,4 @@
+@import url("/src/assets/fonts/stylesheet.css");
 @import "tailwindcss";
 
 
@@ -13,10 +14,8 @@
   --color-brand-muted: rgba(0, 188, 255, 0.4);
   --color-brand-border: #a8d3f0;
   --color-dark-purple: #4b164c;
-
   --color-quick-action-icon: rgba(9, 39, 101, 1);
   --font-brand-bold: sk-modernist-bold;
-
   --spacing: 0.28rem;
 }
 
@@ -43,8 +42,8 @@
 }
 
 :root {
-  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif, sk-modernist; */
-  font-family: sk-modernist, sans-serif;
+  /* font-family: sk-modernist, sans-serif; */
+  font-family: "Hellix", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -68,13 +67,18 @@ a {
 } */
 
 html, body, #root {
-  font-family: sk-modernist, sans-serif;
+  font-family: "Hellix", sans-serif;
+  /* font-family: sk-modernist, sans-serif; */
   margin: 0;
-  padding:0;
+  padding: 0;
   display: flex;
   min-width: 100%;
   min-height: 100%;
   background-color: "#FFFFFF";
+}
+
+h1 {
+  font-family: "Hellix"
 }
 
 input:-webkit-autofill {
@@ -82,6 +86,10 @@ input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 50px white inset !important;
   -webkit-text-fill-color: black !important;
   /* Change to your desired text color */
+}
+
+button {
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: light) {

@@ -59,7 +59,10 @@ export const LoginForm: React.FC = () => {
 
     loginMutation.mutate(payload, {
       onSuccess: (response) => {
-        if (response.status === 200 || response.status === 201) {
+        if (
+          response.status === 200 ||
+          (response.status === 201 && response.data.success)
+        ) {
           console.log("✅ Login success:", response.data);
           showSuccess(response.data.message);
           setToken(response.data.token);
@@ -100,20 +103,20 @@ export const LoginForm: React.FC = () => {
           <div className="ml-5" />
         </div>
 
-        <div className="flex flex-col items-center justify-center my-4 mt-6">
-          <h3 className="text-2xl text-left font-brand-bold text-brand">
+        <div className="flex flex-col items-start justify-center my-4 mt-6">
+          <h3 className="text-2xl text-left md:text-3xl font-brand-bold text-brand">
             Welcome
           </h3>
-          <p className="mt-[1.5] text-gray-400 text-left">
+          <p className="mt-[1.5] text-gray-400 text-left text-sm">
             Sign in with your Email Address
           </p>
         </div>
 
-        {error && (
+        {/* {error && (
           <div className="px-4 py-3 text-sm text-red-700 border border-red-200 rounded-lg bg-red-50">
             {error.message}
           </div>
-        )}
+        )} */}
 
         <Formik
           initialValues={initialValues}

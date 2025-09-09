@@ -131,7 +131,6 @@
 // );
 
 import { Store, User } from "@/hooks/query/useGetUserProfile";
-import { AuthUser } from "@/types/auth.types";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -163,6 +162,7 @@ interface AuthState {
   store: Store | null;
   token: string | null;
   isAuthenticated: boolean;
+  completedOnboarding: boolean;
   storeUpdated: boolean;
   otpVerified: boolean;
   isLoading: boolean;
@@ -177,6 +177,7 @@ interface AuthActions {
   setToken: (token: string) => void;
   setOtpVerified: (verified: boolean) => void;
   setIsAuthenticated: (authenticated: boolean) => void;
+  setCompletedOnboarding: (completed: boolean) => void;
   setStoreUpdated: (updated: boolean) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -195,6 +196,7 @@ const initialState: AuthState = {
   store: null,
   token: null,
   isAuthenticated: false,
+  completedOnboarding: false,
   isLoading: false,
   error: null,
   otpVerified: false,
@@ -223,6 +225,9 @@ export const useAuthStore = create<AuthStore>()(
       },
       setIsAuthenticated: (authenticated: boolean) => {
         set({ isAuthenticated: authenticated });
+      },
+      setCompletedOnboarding: (completed: boolean) => {
+        set({ completedOnboarding: completed });
       },
 
       setStoreUpdated: (updated: boolean) => {
@@ -289,6 +294,7 @@ export const useAuthStore = create<AuthStore>()(
         plan: state.plan,
         store: state.store,
         isAuthenticated: state.isAuthenticated,
+        completedOnboarding: state.completedOnboarding,
         storeUpdated: state.storeUpdated,
         otpVerified: state.otpVerified,
       }),
