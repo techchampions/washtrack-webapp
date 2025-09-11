@@ -16,13 +16,14 @@ type Order = {
   createdAt: string;
 };
 
-export const getProcessingOrders = async (): Promise<Order[]> => {
-  const response = await apiClient.get("/orders/processing");
+export const getOrders = async (status: string): Promise<Order[]> => {
+  const response = await apiClient.get(`/api/orders/${status}`);
   return response.data;
 };
-export const useGetProcessingOrders = () => {
+export const useGetOrders = (status: string) => {
   return useQuery<Order[]>({
-    queryKey: ["orders-processing"],
-    queryFn: getProcessingOrders,
+    queryKey: ["orders", status],
+    queryFn: () => getOrders(status),
+    enabled: !!status,
   });
 };

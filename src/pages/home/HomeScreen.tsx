@@ -9,13 +9,13 @@ import OrderList from "../../components/DashboardComponents/OrderList";
 import CustomDropdown from "../../components/DashboardComponents/CustomDropdown";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 import { showError } from "@/utils/toast";
-import { useGetProcessingOrders } from "@/hooks/query/useGetUserOrders";
 import Loader from "@/components/GeneralComponents/Loader";
+import { useGetDashboard } from "@/hooks/query/useGetDashboard";
 
 const HomeScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState("Today");
   const { isError } = useGetUserProfile();
-  const { data, isLoading, isError: isErrorOrder } = useGetProcessingOrders();
+  const { data, isLoading, isError: isErrorOrder } = useGetDashboard();
   if (isError) {
     showError("Failed to get user profile");
   }
@@ -25,18 +25,18 @@ const HomeScreen: React.FC = () => {
   if (isLoading) {
     return <Loader />;
   }
-  const orders = data || [];
-  const completedOrders = orders?.filter((o) => o.status === "completed");
-  const pendingOrders = orders?.filter((o) => o.status === "pending");
+  // const orders = data.;
+  // const completedOrders = orders?.filter((o) => o.status === "completed");
+  // const pendingOrders = orders?.filter((o) => o.status === "pending");
 
-  const sumAmounts = (orderArray: typeof orders) =>
-    orderArray?.reduce((acc, o) => acc + o.totalAmount, 0);
+  // const sumAmounts = (orderArray: typeof orders) =>
+  //   orderArray?.reduce((acc, o) => acc + o.totalAmount, 0);
 
   return (
     <div className="w-full md:w-[90%] mx-auto">
       <div className="flex flex-col md:flex-row gap-4 h-fit md:h-[200px]">
         <MainCard>
-          <div className="text-black mb-4">
+          <div className="mb-4 text-black">
             <CustomDropdown
               options={["Today", "Yesterday"]}
               selected={selectedDay}
@@ -44,40 +44,40 @@ const HomeScreen: React.FC = () => {
             />
           </div>
           <div>
-            <p className="flex items-center text-lg flex-row gap-2">
-              Total Orders <Badge count={orders?.length} />
+            <p className="flex flex-row items-center gap-2 text-lg">
+              Total Orders <Badge count={data?.total_order_count} />
             </p>
             <h2 className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦{sumAmounts(orders).toLocaleString()}
+              ₦{data?.total_amount.toLocaleString()}
             </h2>
           </div>
         </MainCard>
 
         <div className="hidden md:flex flex-row md:flex-col w-full md:w-[45%] h-full gap-1 justify-between">
           <SmallMainCard>
-            <div className="bg-white p-1 flex justify-start items-center rounded-full">
+            <div className="flex items-center justify-start p-1 bg-white rounded-full">
               <BiCheckCircle className="h-[30px] w-[30px] text-green-500" />
             </div>
             <div className="w-[70%] flex flex-col text-left">
-              <p className="flex items-center text-lg flex-row gap-2">
-                Completed <Badge count={completedOrders.length} />
+              <p className="flex flex-row items-center gap-2 text-lg">
+                Completed <Badge count={data?.completed_order_count} />
               </p>
-              <h2 className="text-md lg:text-2xl font-bold">
-                ₦{sumAmounts(completedOrders).toLocaleString()}
+              <h2 className="font-bold text-md lg:text-2xl">
+                ₦{data?.completed_amount.toLocaleString()}
               </h2>
             </div>
           </SmallMainCard>
 
           <SmallMainCard>
-            <div className="bg-white p-1 flex justify-start items-center rounded-full">
+            <div className="flex items-center justify-start p-1 bg-white rounded-full">
               <FaClockRotateLeft className="h-[30px] w-[30px] text-red-500" />
             </div>
             <div className="w-[70%] flex flex-col text-left">
-              <p className="flex items-center text-lg flex-row gap-2">
-                Pending <Badge count={pendingOrders.length} />
+              <p className="flex flex-row items-center gap-2 text-lg">
+                Pending <Badge count={data?.pending_order_count} />
               </p>
-              <h2 className="text-md lg:text-2xl font-bold">
-                ₦{sumAmounts(pendingOrders).toLocaleString()}
+              <h2 className="font-bold text-md lg:text-2xl">
+                ₦{data?.pending_amount.toLocaleString()}
               </h2>
             </div>
           </SmallMainCard>
@@ -87,10 +87,10 @@ const HomeScreen: React.FC = () => {
       <QuickActions />
 
       <div className="mt-6">
-        <h3 className="text-lg md:text-2xl text-black text-left font-brand-bold md-2 md:mb-4">
+        <h3 className="text-lg text-left text-black md:text-2xl font-brand-bold md-2 md:mb-4">
           Recent Orders
         </h3>
-        <OrderList orders={orders} />
+        <OrderList orders={data?.recent_orders} />
       </div>
     </div>
   );

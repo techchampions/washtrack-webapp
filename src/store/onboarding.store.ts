@@ -11,11 +11,17 @@ type Store = {
   address?: string;
   logoUrl?: string;
   createdAt?: string;
+  logitude: string | number;
+  latitude: string | number;
 };
 
-
 interface OnboardingState {
-  step: "SETUP_STORE" | "ADD_SERVICES" | "ADD_ITEMS" | "ONBOARDING_COMPLETE" | null;
+  step:
+    | "SETUP_STORE"
+    | "ADD_SERVICES"
+    | "ADD_ITEMS"
+    | "ONBOARDING_COMPLETE"
+    | null;
   store: Store | null;
   setStore: (store: Partial<Store>) => void;
   setStep: (newStep: OnboardingState["step"]) => void;
@@ -43,7 +49,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       hasCompletedOnboarding: false,
       setHasCompletedOnboarding: (newHasCompletedOnboarding) =>
         set({ hasCompletedOnboarding: newHasCompletedOnboarding }),
-       store: null,
+      store: null,
       setStore: (storeUpdates) =>
         set((state) => ({
           store: {

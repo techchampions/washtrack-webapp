@@ -7,6 +7,7 @@ import { AppLayout } from "@/components/layout/AppLayout/AppLayout";
 import Loader from "@/components/GeneralComponents/Loader";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { HomeScreen } from "@/pages/home";
+import ReportScreen from "@/pages/stats/ReportScreen";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -93,6 +94,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route element={<AppLayout />}>
             <Route index element={<HomeScreen />} />
+            <Route path="/dashboard/reports" element={<ReportScreen />} />
 
             {/* Order Routes */}
             <Route path="orders">

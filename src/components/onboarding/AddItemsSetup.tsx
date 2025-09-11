@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
@@ -41,9 +41,9 @@ const ItemsList = ({
           >
             <FiFileText className="w-4 h-4 text-quick-action-icon" />
           </div>
-          <div>
+          <div className="min-w-0 text-left">
             <h3 className="font-medium text-md text-[#000000]">{item.name}</h3>
-            <p className="text-sm text-[#000000]">
+            <p className="text-sm text-[#000000] line-clamp-1">
               {item["services"].map((s) => s.service_name).join(", ")}
             </p>
           </div>
@@ -78,14 +78,20 @@ const ItemsServicesForm = ({
   loading,
 }) => {
   return (
-    <div className="absolute inset-0 h-[100%] w-[100%] mx-auto bg-white rounded-3xl p-6 shadow-xl z-10">
-      <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
-        <img
-          src="/src/assets/images/logo.png"
-          alt="Wash Track"
-          className="w-25 h-25"
+    <div className="absolute inset-0 h-[100%] w-[100%] mx-auto bg-white rounded-3xl p-6 shadow-xl z-10 flex flex-col">
+      <div className="flex justify-between">
+        <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
+          <img
+            src="/src/assets/images/logo.png"
+            alt="Wash Track"
+            className="w-25 h-25"
+          />
+          <div className="ml-5" />
+        </div>
+        <X
+          className="text-gray-500 hover:text-black cursor-pointer"
+          onClick={toggleFormDisplay}
         />
-        <div className="ml-5" />
       </div>
 
       <h1 className="mb-8 text-2xl font-bold text-left text-brand">
@@ -101,7 +107,7 @@ const ItemsServicesForm = ({
         }}
       >
         {({ values }) => (
-          <Form className=" relative space-y-6 h-[90%]">
+          <Form className="relative flex-1 space-y-6">
             <div>
               <div>
                 <InputField
@@ -110,12 +116,14 @@ const ItemsServicesForm = ({
                   placeholder="Item Name e.g Trouser"
                 />
               </div>
-              <div className="flex min-h-[35vh] ">
-                <h3 className="mb-5 text-sm text-left text-dark">Services</h3>
+              <div className="min-h-[35vh]">
+                <h3 className="mb-5 text-sm font-bold text-left text-black">
+                  Services
+                </h3>
 
                 <FieldArray name="services">
                   {({ push, remove }) => (
-                    <div className="space-y-3">
+                    <div className="space-y-3 max-h-[430px] overflow-y-scroll scrollbar-hide">
                       {values.services.map((service, index) => (
                         <div
                           key={index}
@@ -403,7 +411,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
 
         <div className=" min-h-[35vh]">
           {items && (
-            <div className="mt-8">
+            <div className="mt-8 max-h-[250px] overflow-y-scroll scrollbar-hide">
               {items?.itemType?.map((item, index) => (
                 <div key={index}>
                   <ItemsList

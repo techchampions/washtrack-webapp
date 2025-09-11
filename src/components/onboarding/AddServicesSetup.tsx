@@ -100,7 +100,7 @@ const AddServicesSetup = ({
           Add a service
         </button>
 
-        <div className=" min-h-[35vh]">
+        <div className=" min-h-[35vh] ">
           {services?.length > 0 && (
             <>
               <div className="grid grid-cols-4 mt-8  bg-[#F8F8F8] py-2 rounded-xl  gap-4 text-sm font-bold tex-lg mb-4 px-2">
@@ -109,18 +109,19 @@ const AddServicesSetup = ({
                 <div className="text-lg text-[#232323] ">Est. Hours</div>
                 <div className="text-lg text-[#232323] ">Actions</div>
               </div>
-
-              {services.map((service, index) => (
-                <ServicesList
-                  handleDelete={handleDelete}
-                  handleEdit={handleEdit}
-                  index={index}
-                  name={service.name}
-                  price={service.price}
-                  estimated_hours={service.estimated_hours}
-                  id={service.id}
-                />
-              ))}
+              <div className="max-h-[200px] overflow-y-scroll scrollbar-hide">
+                {services.map((service, index) => (
+                  <ServicesList
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    index={index}
+                    name={service.name}
+                    price={service.price}
+                    estimated_hours={service.estimated_hours}
+                    id={service.id}
+                  />
+                ))}
+              </div>
             </>
           )}
         </div>
@@ -146,7 +147,12 @@ const AddServicesSetup = ({
           Next
         </button>
 
-        {showForm && <div className="absolute inset-0 bg-black/40"></div>}
+        {showForm && (
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={toggleFormDisplay}
+          ></div>
+        )}
 
         {showForm && (
           <div
