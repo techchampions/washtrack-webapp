@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { showError, showSuccess } from "@/utils/toast";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useVerifyEmail = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { setUser, setIsAuthenticated, setError, setLoading, setOtpVerified } =
     useAuthStore();
 
@@ -17,7 +18,14 @@ export const useVerifyEmail = () => {
     },
     onSuccess: (response) => {
       console.log("✅ Verify Email success:", response.data);
-      if (response.status === 200 || response.status === 201) {
+      if (
+        response.data.success &&
+        (response.status === 200 || response.status === 201)
+      ) {
+        queryClient.invalidateQueries({
+          queryKey: ["user-profile"],
+        });
+
         console.log(response.data.message, "in verfiy email");
         showSuccess(response.data.message);
         setOtpVerified(response.data.verify);

@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { FaEdit } from "react-icons/fa";
 import { useOnboardingStore } from "@/store/onboarding.store";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 const ServicesList = ({
   handleEdit,
@@ -19,8 +20,8 @@ const ServicesList = ({
 }) => {
   return (
     <div className="relative mt-3">
-      <div className="grid grid-cols-4 bg-[#EBF7FC] border-none rounder-lg gap-4 items-center py-2 px-2 border-b border-gray-100">
-        <div className="text-[#232323]">{name}</div>
+      <div className="grid grid-cols-4 text-sm min-w-0 bg-[#EBF7FC] border-none rounder-lg gap-4 items-center py-2 px-2 border-b border-gray-100">
+        <div className="text-[#232323] line-clamp-1">{name}</div>
         <div className="text-[#232323]"> ₦{price?.toLocaleString()} </div>
         <div className="text-[#232323]"> {estimated_hours} hours </div>
         <div className="flex items-center justify-end space-x-3 border-none w-18">
@@ -161,9 +162,17 @@ const AddServicesSetup = ({
             }  absolute inset-0  rounded-tl-4xl rounded-tr-4xl  top-50 max-w-md md:max-w-lg  w-[100%] h-[70%]`}
           >
             <div className="flex-col flex-1">
-              <h3 className="text-[#3F3F3F] px-5 py-4 font-bold text-3xl  text-left  leading-tight">
-                Add new services{" "}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-[#3F3F3F] px-5 py-4 font-bold text-3xl  text-left  leading-tight">
+                  Add new services{" "}
+                </h3>
+                <div className="px-4">
+                  <X
+                    onClick={toggleFormDisplay}
+                    className="cursor-pointer text-gray-500 hover:text-black"
+                  />
+                </div>
+              </div>
 
               <div>
                 <Formik
@@ -178,7 +187,7 @@ const AddServicesSetup = ({
                 >
                   {() => (
                     <Form className="space-y-6  h-[100vh]">
-                      <div className="px-4 mb-2 space-y-5 w-100">
+                      <div className="px-4 mb-2 space-y-5 w-full">
                         <FormField
                           name="name"
                           type="text"

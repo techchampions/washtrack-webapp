@@ -9,50 +9,64 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { HelmetProvider } from "react-helmet-async";
 import { AppRoutes } from "@/routes/AppRoute";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
-import { persistQueryClient } from "@tanstack/react-query-persist-client";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+// import { persistQueryClient } from "@tanstack/react-query-persist-client";
+// import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 
 import "@/styles/globals.css";
+import { Libraries, LoadScript } from "@react-google-maps/api";
+import Loader from "@/components/GeneralComponents/Loader";
+const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-    },
-    mutations: {
-      retry: 0,
-    },
-  },
-});
+const LIBRARIES: Libraries = ["places"];
 
-const localStoragePersister = createAsyncStoragePersister({
-  storage: window.localStorage,
-});
+const queryClient = new QueryClient();
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       retry: 1,
+//       refetchOnWindowFocus: true,
+//       staleTime: 5 * 60 * 1000, // 5 minutes
+//       gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+//     },
+//     mutations: {
+//       retry: 0,
+//     },
+//   },
+// });
 
-persistQueryClient({
-  queryClient,
-  persister: localStoragePersister,
-});
+// const localStoragePersister = createAsyncStoragePersister({
+//   storage: window.localStorage,
+// });
+
+// persistQueryClient({
+//   queryClient,
+//   persister: localStoragePersister,
+// });
 
 const App: React.FC = () => {
   return (
-    <ErrorBoundary>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <AppRoutes />
+    <LoadScript
+      loadingElement={<Loader />}
+      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+      libraries={LIBRARIES}
+    >
+      <ErrorBoundary>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <AppRoutes />
 
-            <ToasterProvider />
-          </BrowserRouter>
+              <ToasterProvider />
+            </BrowserRouter>
 
-          {/* React Query DevTools - Only in development */}
-          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
-        </QueryClientProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
+            {/* React Query DevTools - Only in development */}
+            {import.meta.env.DEV && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
+          </QueryClientProvider>
+        </HelmetProvider>
+      </ErrorBoundary>
+    </LoadScript>
   );
 };
 

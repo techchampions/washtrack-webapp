@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
+import { useAuthStore } from "@/store/auth.store";
 
-const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
+const CountdownTimer = ({ initialTime = 59, onExpire }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
 
   useEffect(() => {
@@ -12,7 +14,7 @@ const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
     }
 
     const timer = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(timer);
@@ -21,7 +23,9 @@ const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   return (
@@ -31,16 +35,14 @@ const CountdownTimer = ({ initialTime = 59, onExpire, }) => {
   );
 };
 
-
 const CodeInput = ({ value, onChange, length = 4 }) => {
   const [focusedIndex, setFocusedIndex] = useState(0);
 
   const handleInputChange = (index, inputValue) => {
-    const newValue = value.split('');
+    const newValue = value.split("");
     newValue[index] = inputValue;
-    const updatedValue = newValue.join('');
+    const updatedValue = newValue.join("");
     onChange(updatedValue);
-
 
     if (inputValue && index < length - 1) {
       setFocusedIndex(index + 1);
@@ -48,7 +50,7 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
   };
 
   const handleKeyDown = (index, e) => {
-       if (e.key === 'Backspace' && !value[index] && index > 0) {
+    if (e.key === "Backspace" && !value[index] && index > 0) {
       setFocusedIndex(index - 1);
     }
   };
@@ -60,18 +62,19 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
           key={index}
           type="text"
           maxLength={1}
-          value={value[index] || ''}
+          value={value[index] || ""}
           onChange={(e) => handleInputChange(index, e.target.value)}
           onKeyDown={(e) => handleKeyDown(index, e)}
           onFocus={() => setFocusedIndex(index)}
           className={`
             w-10 h-10 text-lg font-bold text-center rounded-2xl border-1
             focus:outline-none transition-all duration-200
-            ${value[index]
-              ? 'bg-brand text-white border-brand'
-              : focusedIndex === index
-                ? 'border-brand bg-white'
-                : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+            ${
+              value[index]
+                ? "bg-brand text-white border-brand"
+                : focusedIndex === index
+                ? "border-brand bg-white"
+                : "border-gray-200 bg-gray-50 hover:border-gray-300"
             }
           `}
           autoFocus={index === 0}
@@ -81,28 +84,27 @@ const CodeInput = ({ value, onChange, length = 4 }) => {
   );
 };
 
-
 const Keypad = ({ onKeyPress }) => {
   const keys = [
-    ['1', '2', '3'],
-    ['4', '5', '6'],
-    ['7', '8', '9'],
-    ['', '0', 'backspace']
+    ["1", "2", "3"],
+    ["4", "5", "6"],
+    ["7", "8", "9"],
+    ["", "0", "backspace"],
   ];
 
   const handleKeyPress = (key) => {
-    if (key === '') return;
+    if (key === "") return;
     onKeyPress(key);
   };
 
   return (
     <div className="grid grid-cols-3 gap-y-0 w-3/4  gap-x-0 place-items-center mx-auto">
       {keys.flat().map((key, index) => {
-        if (key === '') {
+        if (key === "") {
           return <div key={index} className="w-16 h-16 bg-white"></div>;
         }
 
-        if (key === 'backspace') {
+        if (key === "backspace") {
           return (
             <button
               key={index}
@@ -128,13 +130,20 @@ const Keypad = ({ onKeyPress }) => {
   );
 };
 
-
-const ActionButton = ({ onClick, disabled, loading, children, variant = 'primary' }) => {
-  const baseClasses = "w-full py-1 rounded-full font-semibold text-lg transition-all duration-200 disabled:opacity-50";
+const ActionButton = ({
+  onClick,
+  disabled,
+  loading,
+  children,
+  variant = "primary",
+}) => {
+  const baseClasses =
+    "w-full py-1 rounded-full font-semibold text-lg transition-all duration-200 disabled:opacity-50";
 
   const variants = {
     primary: "bg-brand hover:bg-brand text-white disabled:hover:bg-brand",
-    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:hover:bg-gray-200"
+    secondary:
+      "bg-gray-200 hover:bg-gray-300 text-gray-700 disabled:hover:bg-gray-200",
   };
 
   return (
@@ -155,7 +164,6 @@ const ActionButton = ({ onClick, disabled, loading, children, variant = 'primary
   );
 };
 
-
 const Header = ({ onBack, title }) => {
   return (
     <div className="flex items-center justify-between mb-8 px-6 pt-6">
@@ -171,60 +179,66 @@ const Header = ({ onBack, title }) => {
   );
 };
 
-
-const OTPForm = ({ onSubmit, resendOtp, isLoading }: { onSubmit: (code: string) => Promise<void>, isLoading: false}) => {
+const OTPForm = ({
+  onSubmit,
+  resendOtp,
+  isLoading,
+}: {
+  onSubmit: (code: string) => Promise<void>;
+  isLoading: false;
+}) => {
   const [timer, setTimer] = useState(59);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
+  const [error, setError] = useState("");
+  const { user } = useAuthStore();
 
   const handleKeyPress = (key) => {
-    if (key === 'backspace') {
-      setCode(prev => prev.slice(0, -1));
+    if (key === "backspace") {
+      setCode((prev) => prev.slice(0, -1));
     } else if (code.length < 4) {
-      setCode(prev => prev + key);
+      setCode((prev) => prev + key);
     }
   };
 
   const handleProceed = () => {
     if (code.length !== 4) return;
-    onSubmit(code)
-    
+    onSubmit(code);
   };
 
   const handleSendAgain = () => {
     setTimer(59);
-    setCode('');
-    setError('');
-  
+    setCode("");
+    setError("");
   };
 
   const onExpire = () => {
-    setTimer(59)
-  }
+    setTimer(59);
+  };
 
   return (
     <div className="bg-white w-full lg:max-w-md sm:max-w-xs rounded-none md:border border-white  md:rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
       <div className="text-center mb-6">
         <CountdownTimer initialTime={timer} onExpire={onExpire} />
         <p className="text-gray-600 text-sm leading-relaxed">
-          Type the verification code<br />
-          sent you to your email
+          Type the verification code
+          <br />
+          sent you to your email{" "}
+          <span className="text-blue-500 underline underline-offset-4">
+            {user?.email}
+          </span>
         </p>
       </div>
       <div className="mb-8 text-center">
         <p className="text-gray-500 text-xs">
-          This code will expire in <span className="font-semibold">1 minutes</span>
+          This code will expire in{" "}
+          <span className="font-semibold">1 minutes</span>
         </p>
       </div>
-      <CodeInput
-        value={code}
-        onChange={setCode}
-      />
-      
+      <CodeInput value={code} onChange={setCode} />
+
       <Keypad onKeyPress={handleKeyPress} />
-      <div className='lg:px-12 md:px-8'>
+      <div className="lg:px-12 md:px-8">
         <ActionButton
           onClick={handleProceed}
           disabled={code.length !== 4}
@@ -244,7 +258,6 @@ const OTPForm = ({ onSubmit, resendOtp, isLoading }: { onSubmit: (code: string) 
         </button>
       </div>
     </div>
-
   );
 };
 

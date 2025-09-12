@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
@@ -79,8 +79,12 @@ const ItemsServicesForm = ({
 }) => {
   return (
     <div className="absolute inset-0 h-[100%] w-[100%] mx-auto bg-white rounded-3xl p-6 shadow-xl z-10 flex flex-col">
-      <div className="flex justify-between">
-        <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
+      <div className="flex">
+        <ChevronLeft
+          className="text-gray-500 hover:text-black cursor-pointer"
+          onClick={toggleFormDisplay}
+        />
+        <div className="flex flex-1 items-center justify-center h-0 p-0 mt-2 mb-7 ">
           <img
             src="/src/assets/images/logo.png"
             alt="Wash Track"
@@ -88,10 +92,6 @@ const ItemsServicesForm = ({
           />
           <div className="ml-5" />
         </div>
-        <X
-          className="text-gray-500 hover:text-black cursor-pointer"
-          onClick={toggleFormDisplay}
-        />
       </div>
 
       <h1 className="mb-8 text-2xl font-bold text-left text-brand">
@@ -120,14 +120,24 @@ const ItemsServicesForm = ({
                 <h3 className="mb-5 text-sm font-bold text-left text-black">
                   Services
                 </h3>
-
                 <FieldArray name="services">
                   {({ push, remove }) => (
                     <div className="space-y-3 max-h-[430px] overflow-y-scroll scrollbar-hide">
+                      <div className="grid items-end grid-cols-10 gap-3 text-black w-full">
+                        <div className="col-span-3 text-left text-xs">
+                          Services
+                        </div>
+                        <div className="col-span-3 text-left text-xs">
+                          Price
+                        </div>
+                        <div className="col-span-3 text-left text-xs">
+                          Est. hrs
+                        </div>
+                      </div>
                       {values.services.map((service, index) => (
                         <div
                           key={index}
-                          className="grid items-end grid-cols-12 gap-3"
+                          className="grid items-end grid-cols-10 gap-3"
                         >
                           <div className="col-span-3">
                             <InputField
@@ -152,7 +162,7 @@ const ItemsServicesForm = ({
                               className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-none focus:outline-none"
                             />
                           </div>
-                          <div className="flex justify-center col-span-3">
+                          <div className="flex justify-center col-span-1">
                             <button
                               type="button"
                               onClick={() => remove(index)}
@@ -216,10 +226,6 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
   const services = useServicesStore((state) => state.services);
 
   const { setStep } = useOnboardingStore();
-
-  useEffect(() => {
-    console.log(items, "___get items data____");
-  }, []);
 
   const { updateItemMutation } = useUpdateItem();
   const { createItemMutation } = useCreateItem();

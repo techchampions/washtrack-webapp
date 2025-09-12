@@ -60,8 +60,8 @@ export const LoginForm: React.FC = () => {
     loginMutation.mutate(payload, {
       onSuccess: (response) => {
         if (
-          response.status === 200 ||
-          (response.status === 201 && response.data.success)
+          response.data.success &&
+          (response.status === 200 || response.status === 201)
         ) {
           console.log("✅ Login success:", response.data);
           showSuccess(response.data.message);

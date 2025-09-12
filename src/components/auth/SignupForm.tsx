@@ -65,8 +65,8 @@ export const SignupForm: React.FC = () => {
     signUpMutation.mutate(payload, {
       onSuccess: (response) => {
         if (
-          response.status === 200 ||
-          (response.status === 201 && response.data.success)
+          response.data.success &&
+          (response.status === 200 || response.status === 201)
         ) {
           showSuccess(response.data.message);
           // setUser(response.data.user);
