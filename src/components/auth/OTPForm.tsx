@@ -182,10 +182,11 @@ const Header = ({ onBack, title }) => {
 const OTPForm = ({
   onSubmit,
   resendOtp,
-  isLoading,
+  isLoading = false,
 }: {
   onSubmit: (code: string) => Promise<void>;
-  isLoading: false;
+  resendOtp: () => Promise<void>;
+  isLoading: boolean;
 }) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState("");
@@ -223,16 +224,13 @@ const OTPForm = ({
         <p className="text-gray-600 text-sm leading-relaxed">
           Type the verification code
           <br />
-          sent you to your email{" "}
-          <span className="text-blue-500 underline underline-offset-4">
-            {user?.email}
-          </span>
+          sent to <span className="text-blue-500">{user?.email}</span>
         </p>
       </div>
       <div className="mb-8 text-center">
         <p className="text-gray-500 text-xs">
           This code will expire in{" "}
-          <span className="font-semibold">1 minutes</span>
+          <span className="font-semibold">60 secs</span>
         </p>
       </div>
       <CodeInput value={code} onChange={setCode} />

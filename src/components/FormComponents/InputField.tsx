@@ -69,6 +69,7 @@ interface InputFieldProps {
   type?: "text" | "email" | "password" | "number" | "checkbox" | "textarea";
   placeholder?: string;
   name: string;
+  editable?: boolean;
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   className?: string;
@@ -79,6 +80,7 @@ const InputField: React.FC<InputFieldProps> = ({
   type = "text",
   placeholder,
   name,
+  editable = true,
   icon,
   rightIcon,
   className = "",
@@ -106,6 +108,7 @@ const InputField: React.FC<InputFieldProps> = ({
         <Field
           as={isTextarea ? "textarea" : "input"}
           {...field}
+          disabled={!editable}
           type={isTextarea ? undefined : type}
           placeholder={placeholder}
           rows={isTextarea ? rows : undefined}

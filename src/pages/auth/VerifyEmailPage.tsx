@@ -1,10 +1,11 @@
 import OTPForm from "@/components/auth/OTPForm";
-import React, { useEffect } from "react";
+import React from "react";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
 import { useVerifyEmail } from "@/hooks/auth/useVerifyEmail";
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
 import { showError, showSuccess } from "@/utils/toast";
+import { AxiosError } from "axios";
 
 const VerifyEmailPage = () => {
   const { isPending = false, mutate: verifyEmail } = useVerifyEmail();
@@ -32,7 +33,7 @@ const VerifyEmailPage = () => {
           console.log(response.data, "---------response data--------");
         }
       },
-      onError: (error: any) => {
+      onError: (error) => {
         console.error("Unexpected error:", error);
         showError(error.response.data.message);
       },

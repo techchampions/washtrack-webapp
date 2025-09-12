@@ -39,8 +39,21 @@ const StoreProfileSetup = () => {
   if (isLoadingProfile) {
     return <Loader />;
   }
-  const profileStoreImages =
-    JSON.parse(profileData?.user.store?.store_images ?? "") ?? [];
+  let profileStoreImages: string[] = [];
+
+  try {
+    const storeImagesString = profileData?.user.store?.store_images;
+    if (
+      storeImagesString &&
+      typeof storeImagesString === "string" &&
+      storeImagesString.trim() !== ""
+    ) {
+      profileStoreImages = JSON.parse(storeImagesString);
+    }
+  } catch (error) {
+    console.error("Error parsing store images:", error);
+    profileStoreImages = [];
+  }
   const initialValues = {
     storeLocation: profileData?.user.address,
     storeDescription: profileData?.user.description,

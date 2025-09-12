@@ -29,7 +29,14 @@ const ItemsList = ({
 }) => {
   return (
     <div className="mb-2 space-y-1">
-      <div className="flex items-center justify-between p-2 bg-[#EBF7FC] rounded-xl overflow-x-auto">
+      <div
+        className="flex items-center justify-between p-2 bg-[#EBF7FC] rounded-xl overflow-x-auto cursor-pointer"
+        onClick={() => {
+          console.log(item, "_____item click in itemlist______");
+          setEditIndex(index);
+          toggleFormDisplay();
+        }}
+      >
         <div className="flex space-x-3 ">
           <div
             onClick={() => {
@@ -123,28 +130,29 @@ const ItemsServicesForm = ({
                 <FieldArray name="services">
                   {({ push, remove }) => (
                     <div className="space-y-3 max-h-[430px] overflow-y-scroll scrollbar-hide">
-                      <div className="grid items-end grid-cols-10 gap-3 text-black w-full">
-                        <div className="col-span-3 text-left text-xs">
+                      <div className="grid items-end grid-cols-11 gap-3 text-black w-full">
+                        <div className="col-span-4 text-left text-xs">
                           Services
                         </div>
                         <div className="col-span-3 text-left text-xs">
                           Price
                         </div>
                         <div className="col-span-3 text-left text-xs">
-                          Est. hrs
+                          Est. hours
                         </div>
                       </div>
                       {values.services.map((service, index) => (
                         <div
                           key={index}
-                          className="grid items-end grid-cols-10 gap-3"
+                          className="grid items-end grid-cols-11 gap-3 border border-gray-300 py-1 rounded-lg"
                         >
-                          <div className="col-span-3">
+                          <div className="col-span-4">
                             <InputField
                               placeholder="Service name"
                               type="text"
+                              editable={false}
                               name={`services.${index}.service_name`}
-                              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:border-none focus:outline-none"
+                              className="w-full py-2 text-sm bg-white rounded-lg border-none text-black"
                             />
                           </div>
                           <div className="col-span-3">
