@@ -2,7 +2,7 @@ import React from "react";
 
 const RightSideBar = () => {
   return (
-    <div className="w-full h-full md:w-1/3 hidden md:flex flex-col gap-4">
+    <div className="w-full h-full lg:w-1/3 hidden md:flex flex-col gap-4">
       <div className="px-16 py-12 bg-brand text-white rounded-lg text-center flex items-center justify-between">
         <div className="leading-5 text-white text-[22px] text-left p-2 rounded-lg font-brand-bold">
           GET STARTED

@@ -8,6 +8,11 @@ import Loader from "@/components/GeneralComponents/Loader";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { HomeScreen } from "@/pages/home";
 import ReportScreen from "@/pages/stats/ReportScreen";
+import { AddOrderNewUser } from "@/pages/orders/AddOrderNewUser";
+import { AddOrderExistingUser } from "@/pages/orders/AddOrderExistingUser";
+import OrderOverview from "@/pages/orders/OrderOverview";
+import OrdersScreen from "@/pages/orders/OrdersScreen";
+import InventoryScreen from "@/pages/inventory/InventoryScreen";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -36,21 +41,11 @@ const AddItemsSetup = React.lazy(
 );
 
 // Main app pages
-const DashboardPage = React.lazy(
-  () => import("@/pages/dashboard/DashboardPage")
-);
-// const CreateOrderPage = React.lazy(() => import('@/pages/orders/CreateOrderPage'));
-// const OrderHistoryPage = React.lazy(() => import('@/pages/orders/OrderHistoryPage'));
-// const OrderDetailsPage = React.lazy(() => import('@/pages/orders/OrderDetailsPage'));
-// const ProfilePage = React.lazy(() => import('@/pages/profile/ProfilePage'));
-// const SettingsPage = React.lazy(() => import('@/pages/profile/SettingsPage'));
-
 // Error pages
 const NotFoundPage = React.lazy(() => import("@/pages/NotFoundPage"));
 
 export const AppRoutes: React.FC = () => {
-  const { token, isAuthenticated, otpVerified, storeUpdated, store } =
-    useAuth();
+  const { token, isAuthenticated, otpVerified, storeUpdated } = useAuth();
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
@@ -95,17 +90,20 @@ export const AppRoutes: React.FC = () => {
           <Route element={<AppLayout />}>
             <Route index element={<HomeScreen />} />
             <Route path="/dashboard/reports" element={<ReportScreen />} />
-
-            {/* Order Routes */}
-            <Route path="orders">
-              {/* <Route path="new" element={<CreateOrderPage />} /> */}
-              {/* <Route path="history" element={<OrderHistoryPage />} /> */}
-              {/* <Route path=":orderId" element={<OrderDetailsPage />} /> */}
-              <Route
-                index
-                element={<Navigate to="/orders/history" replace />}
-              />
-            </Route>
+            <Route path="/dashboard/orders" element={<OrdersScreen />} />
+            <Route
+              path="/dashboard/orders/create/new-customer"
+              element={<AddOrderNewUser />}
+            />
+            <Route
+              path="/dashboard/orders/create/existing-customer/:user_id"
+              element={<AddOrderExistingUser />}
+            />
+            <Route
+              path="/dashboard/orders/:order_id"
+              element={<OrderOverview />}
+            />
+            <Route path="/dashboard/inventory" element={<InventoryScreen />} />
 
             {/* Profile Routes */}
             <Route path="profile">

@@ -26,9 +26,9 @@ import {
 import { Customer, UserProfile } from "@/types/GeneralTypes/profiletypes";
 import { OTP } from "@/types/OnboardingTypes/otpTypes";
 import {
-  ChangePassword,
-  ForgotPassword,
-  Login,
+  ChangePasswordData,
+  ForgotPasswordData,
+  LoginCredentials,
   Register,
 } from "@/types/auth.types";
 import { DeleteItemsPayload } from "@/store/orderStore";
@@ -58,16 +58,16 @@ const resendCode = async (data: OTP) => {
   const response = await apiClient.post("/api/resend-otp", data);
   return response.data; // Assumes server responds with user and other relevant info
 };
-const login = async (data: Login) => {
+const login = async (data: LoginCredentials) => {
   const response = await apiClient.post("/api/login", data);
 
   return response; // Assumes server responds with user and other relevant info
 };
-const forgotPassword = async (data: ForgotPassword) => {
+const forgotPassword = async (data: ForgotPasswordData) => {
   const response = await apiClient.post("/api/forget-password", data);
   return response.data;
 };
-const changePassword = async (data: ChangePassword) => {
+const changePassword = async (data: ChangePasswordData) => {
   const response = await apiClient.post("/api/update/password", data);
   // console.log(response.data.success);
   return response.data;
@@ -88,7 +88,7 @@ const getCustomers = async () => {
   const response = await apiClient.get("/api/customers/view");
   return response.data;
 };
-const getCustomerProfile = async (id: string) => {
+const getCustomerProfile = async (id: string | number) => {
   const response = await apiClient.get(`/api/customer/profile/${id}`);
   return response.data;
 };
@@ -162,8 +162,12 @@ const deleteItems = async (data: DeleteItemsPayload) => {
   const response = await apiClient.post(`/api/delete/item`, data);
   return response.data;
 };
-const createOrder = async (data: Orders) => {
-  const response = await apiClient.post(`/api/order/create`, data);
+const createOrder = async (payload: FormData) => {
+  const response = await apiClient.post(`/api/order/create`, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 const createExistingOrder = async (data: ExistingOrders) => {
@@ -445,7 +449,7 @@ const payOutstandingBalance = async (id: string, paid_amount: number) => {
 
 const getOutstandingHistory = async (id: string) => {
   const response = await apiClient.get(
-    `/api/vendor/outstanding-order-history/${id}`,
+    `/api/vendor/outstanding-order-history/${id}`
   );
   return response.data;
 };
@@ -458,11 +462,11 @@ const deleteAccount = async () => {
 const contactInfo = async () => {
   const response = await apiClient.get(`/api/system-info?type=contact`);
   return response.data;
-}
+};
 const fetchFaqs = async () => {
   const response = await apiClient.get(`/api/faq`);
   return response.data;
-}
+};
 
 // Exporting all API functions
 export const api = {

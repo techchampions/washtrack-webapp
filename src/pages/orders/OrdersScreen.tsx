@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import OrderList from "@/components/DashboardComponents/OrderList";
-import { useUserStore } from "@/store/AppStore";
+import { useGetOrders } from "@/hooks/query/usegetOrders";
+import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 
 const OrdersScreen = () => {
   const [activeTab, setActiveTab] = useState("Current");
-  const { orders, loadOrders } = useUserStore();
-
+  const { data, isLoading } = useGetOrders("all");
+  if (isLoading) {
+    return <SmallLoader />;
+  }
+  const orders = data?.orders ?? [];
   return (
     <div className="w-full md:w-[90%] mx-auto">
       {/* Tabs */}

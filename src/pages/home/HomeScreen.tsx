@@ -90,7 +90,7 @@ const HomeScreen: React.FC = () => {
         <h3 className="text-lg text-left text-black md:text-2xl font-brand-bold md-2 md:mb-4">
           Recent Orders
         </h3>
-        <OrderList orders={data?.recent_orders} />
+        <OrderList orders={data?.recent_orders ?? []} />
       </div>
     </div>
   );

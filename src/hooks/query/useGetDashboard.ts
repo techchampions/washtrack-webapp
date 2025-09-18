@@ -7,7 +7,7 @@ interface Customer {
   email: string;
 }
 
-interface Order {
+export interface Order {
   id: number;
   store_id: number;
   user_id: number;

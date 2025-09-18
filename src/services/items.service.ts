@@ -11,7 +11,7 @@ export interface IItemService {
 }
 
 export interface UpdateItem {
-  id: number
+  id: number;
   item_id: number;
   user_id: number;
   store_id: number;
@@ -23,26 +23,24 @@ export interface UpdateItem {
 }
 
 class ItemsService {
+  async postItem(data: IItemService) {
+    const response = await apiClient.post(`/api/item-services/create`, data);
+    return response;
+  }
 
-async postItem(data: IItemService) {
-  const response = await apiClient.post(`/api/item-services/create`, data);
-  return response;
-};
+  async getItems() {
+    const response = await apiClient.get(`/api/estore/get-item-service`);
+    return response.data;
+  }
+  async getItem(id: string) {
+    const response = await apiClient.get(`/api/item-services/${id}`);
+    return response.data;
+  }
 
-async getItems() {
-  const response = await apiClient.get(`/api/estore/get-item-service`);
-  return response.data;
-};
- async getItem (id: string) {
-  const response = await apiClient.get(`/api/item-services/${id}`);
-  return response.data;
-};
-
-async updateItem (data: UpdateItem[]) {
-  const response = await apiClient.put(`/api/item-services/update`, data);
-  return response;
-};
-
+  async updateItem(data: UpdateItem[]) {
+    const response = await apiClient.put(`/api/item-services/update`, data);
+    return response;
+  }
 }
 
 export const itemsService = new ItemsService();

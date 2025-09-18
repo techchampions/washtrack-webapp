@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../common/Button";
 import * as Yup from "yup";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-import { BiSolidCameraPlus } from "react-icons/bi";
-import { MdOutlineFileUpload } from "react-icons/md";
 import { Form, Formik } from "formik";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { useOnboardingStore } from "@/store/onboarding.store";
@@ -13,17 +11,19 @@ import { FormField } from "../forms/FormField";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 import Loader from "@/components/GeneralComponents/Loader";
 import { useSoosarCreateStore } from "@/hooks/auth/useOnboarding";
+import ImageUploadField from "@/components/FormComponents/ImageInput";
+import RoundImageUpload from "@/components/FormComponents/RoundImageInput";
 
 // const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
 // const LIBRARIES: Libraries = ["places"];
 const StoreProfileSetup = () => {
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [bannerFiles, setBannerFiles] = useState<(File | null)[]>([
-    null,
-    null,
-    null,
-  ]);
+  // const [logoFile, setLogoFile] = useState<File | null>(null);
+  // const [bannerFiles, setBannerFiles] = useState<(File | null)[]>([
+  //   null,
+  //   null,
+  //   null,
+  // ]);
   const { store, setStore } = useOnboardingStore();
   const { user } = useAuthStore();
   const { data: profileData, isLoading: isLoadingProfile } =
@@ -55,31 +55,18 @@ const StoreProfileSetup = () => {
     profileStoreImages = [];
   }
   const initialValues = {
+    profile_picture: profileData?.user.profile_picture || "",
     storeLocation: profileData?.user.address,
     storeDescription: profileData?.user.description,
+    store_banner1: profileStoreImages[0],
+    store_banner2: profileStoreImages[1],
+    store_banner3: profileStoreImages[2],
   };
   const validationSchema = Yup.object().shape({
     storeLocation: Yup.string().required("Store location is required"),
     storeDescription: Yup.string().required("Description is required"),
   });
-
-  const handleImageUpload = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    type: "logo" | "banner",
-    index?: number
-  ) => {
-    console.log(event.target.files, "-----files-------");
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (type === "logo") {
-        setLogoFile(file);
-      } else if (type === "banner" && index !== undefined) {
-        const newBannerFiles = [...bannerFiles];
-        newBannerFiles[index] = file;
-        setBannerFiles(newBannerFiles);
-      }
-    }
-  };
+  console.log("store_banner", profileStoreImages);
 
   const handleSelect = async (address: string, setFieldValue: any) => {
     console.log(address, "selected address");
@@ -123,39 +110,8 @@ const StoreProfileSetup = () => {
       }
     });
   };
-  // Function to get image source for each banner slot
-  const getBannerImageSource = (index: number) => {
-    // If user uploaded a new file, show that
-    if (bannerFiles[index]) {
-      return URL.createObjectURL(bannerFiles[index]!);
-    }
-    // If no new file but there's an existing image at this index, show it
-    if (profileStoreImages[index]) {
-      return profileStoreImages[index];
-    }
-    // Otherwise return null to show upload placeholder
-    return null;
-  };
-
-  // Function to get logo image source
-  const getLogoImageSource = () => {
-    if (logoFile) {
-      return URL.createObjectURL(logoFile);
-    }
-    // Check if there's a logo in profile store images (you might need to adjust this logic)
-    // Often the first image is the logo, or you might need to identify it differently
-    if (profileStoreImages.length > 0) {
-      return profileStoreImages[0]; // Assuming first image is logo
-    }
-    return "../images/profile-img.png";
-  };
 
   return (
-    // <LoadScript
-    //   loadingElement={<Loader />}
-    //   googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-    //   libraries={LIBRARIES}
-    // >
     <div
       className="flex items-center justify-center min-h-screen overflow-hidden bg-center bg-cover min-w-screen md:min-h-0"
       style={{ backgroundImage: `url(${landingBannerImage})` }}
@@ -179,7 +135,7 @@ const StoreProfileSetup = () => {
               Fill in the information's below to setup your store
             </p>
           </div>
-          <div className="mb-0">
+          {/* <div className="mb-0">
             <label className="relative flex items-center justify-center mx-auto mb-2 cursor-pointer">
               <input
                 type="file"
@@ -207,7 +163,7 @@ const StoreProfileSetup = () => {
             <p className="text-sm text-center text-dark">
               Upload your store logo
             </p>
-          </div>
+          </div> */}
           {/* <div className="mb-0">
               <label className="relative flex items-center justify-center mx-auto mb-2 cursor-pointer">
                 <input
@@ -263,28 +219,59 @@ const StoreProfileSetup = () => {
                 formData.append("longitude", String(store.logitude));
                 formData.append("latitude", String(store.latitude));
               }
-
-              if (logoFile) {
-                console.log("logo file append", logoFile);
-                formData.append("store_images[]", logoFile);
+              if (
+                values.profile_picture &&
+                typeof values.profile_picture !== "string"
+              ) {
+                formData.append("profile_picture", values.profile_picture);
               }
-              console.log(bannerFiles, "______bannerFiles");
-              bannerFiles.forEach((file) => {
-                console.log("I am here noow banner file append", file);
-                if (file) {
-                  formData.append("store_images[]", file);
-                }
-              });
-
-              for (const [key, value] of formData.entries()) {
-                console.log("in form data show loop________", key, value);
+              if (
+                values.store_banner1 &&
+                typeof values.store_banner1 !== "string"
+              ) {
+                formData.append("store_images[]", values.store_banner1);
               }
+              if (
+                values.store_banner2 &&
+                typeof values.store_banner2 !== "string"
+              ) {
+                formData.append("store_images[]", values.store_banner2);
+              }
+              if (
+                values.store_banner3 &&
+                typeof values.store_banner3 !== "string"
+              ) {
+                formData.append("store_images[]", values.store_banner3);
+              }
+              // if (logoFile) {
+              //   console.log("logo file append", logoFile);
+              //   formData.append("store_images[]", logoFile);
+              // }
+              // console.log(bannerFiles, "______bannerFiles");
+              // bannerFiles.forEach((file) => {
+              //   console.log("I am here noow banner file append", file);
+              //   if (file) {
+              //     formData.append("store_images[]", file);
+              //   }
+              // });
+
+              // for (const [key, value] of formData.entries()) {
+              //   console.log("in form data show loop________", key, value);
+              // }
 
               soosarCreateStore(formData);
             }}
           >
             {({ isValid, setFieldValue }) => (
               <Form>
+                <div className="py-2">
+                  <RoundImageUpload
+                    name="profile_picture"
+                    className="flex justify-center"
+                    width={100}
+                    height={100}
+                  />
+                </div>
                 <div className="space-y-3  flex flex-col px-3 w-full md:w-[60vw] lg:w-[30vw] lg:max-w-lg">
                   <PlacesAutocomplete
                     value={storeLocation}
@@ -303,7 +290,7 @@ const StoreProfileSetup = () => {
                     }) => (
                       <div className="relative">
                         <div>
-                          <label className="block text-left text-sm  font-medium text-[#090A0A] mb-2">
+                          <label className="block text-left text-sm  font-medium text-[#090A0A] mb-1">
                             Store Location
                           </label>
                           <input
@@ -334,7 +321,7 @@ const StoreProfileSetup = () => {
                   </PlacesAutocomplete>
 
                   <div>
-                    <label className="block text-left text-sm font-medium text-[#090A0A] mb-2">
+                    <label className="block text-left text-sm font-medium text-[#090A0A] mb-1">
                       Store Description
                     </label>
                     {/* <textarea
@@ -359,42 +346,7 @@ const StoreProfileSetup = () => {
                     <p className="mb-3 text-xs text-left text-gray-500 md:hidden">
                       Add your store banner
                     </p>
-                    <div className="flex pb-2 space-x-2 overflow-x-auto scrollbar-hide">
-                      {/* {[0, 1, 2].map((index) => (
-                          <label
-                            key={index}
-                            className="min-w-[45%] max-w-[45%] md:max-h-[80px] flex-shrink-0 relative cursor-pointer border border-gray-200 rounded-md p-4 h-32 flex items-center justify-center text-black"
-                          >
-                            <input
-                              type="file"
-                              className="hidden"
-                              accept="image/*"
-                              onChange={(e) =>
-                                handleImageUpload(e, "banner", index)
-                              }
-                            />
-                            {bannerFiles[index] ? (
-                              <img
-                                src={URL.createObjectURL(bannerFiles[index]!)}
-                                alt="Banner"
-                                className="object-cover w-full h-full text-black"
-                              />
-                            ) : (
-                              <div className="flex flex-col items-center justify-center">
-                                <MdOutlineFileUpload
-                                  size={35}
-                                  className="text-gray-500"
-                                />
-                                <p className="text-xs text-black">
-                                  Upload Store Image
-                                </p>
-                                <p className="text-[6px] text-black mt-[2px]">
-                                  (Recommended Dimensions: 930*1163)
-                                </p>
-                              </div>
-                            )}
-                          </label>
-                        ))} */}
+                    {/* <div className="flex pb-2 space-x-2 overflow-x-auto scrollbar-hide">
                       {[0, 1, 2].map((index) => {
                         const imageSrc = getBannerImageSource(index);
                         return (
@@ -433,6 +385,23 @@ const StoreProfileSetup = () => {
                           </label>
                         );
                       })}
+                    </div> */}
+                    <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
+                      <ImageUploadField
+                        name="store_banner1"
+                        height={100}
+                        width={240}
+                      />
+                      <ImageUploadField
+                        name="store_banner2"
+                        height={100}
+                        width={240}
+                      />
+                      <ImageUploadField
+                        name="store_banner3"
+                        height={100}
+                        width={240}
+                      />
                     </div>
                   </div>
                 </div>
@@ -453,7 +422,6 @@ const StoreProfileSetup = () => {
         </div>
       </div>
     </div>
-    // </LoadScript>
   );
 };
 

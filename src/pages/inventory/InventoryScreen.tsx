@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import MainCard from "@/components/DashboardComponents/MainCard";
-import { useUserStore } from "@/store/AppStore";
+import { useGetOrders } from "@/hooks/query/usegetOrders";
+import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 
 const InventoryScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Current");
-  const { orders } = useUserStore();
+  const { data, isLoading } = useGetOrders("all");
 
   // Sample Data
   const items = [
@@ -22,30 +23,38 @@ const InventoryScreen: React.FC = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 gap-4 mb-4 h-[150px] md:h-[280px] md:h-fill w-full">
         <MainCard>
-          <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
-            <div className="flex flex-col space-y-0 text-left">
-              <div className="text-[40px] md:text-[80px] font-brand-bold">
-                {orders?.total || 0}
+          {isLoading ? (
+            <SmallLoader height="150px" width="150px" />
+          ) : (
+            <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
+              <div className="flex flex-col space-y-0 text-left">
+                <div className="text-[40px] md:text-[80px] font-brand-bold">
+                  {data?.orders.length || 0}
+                </div>
+                <div className="text-md text-white/80">Total Orders</div>
               </div>
-              <div className="text-md text-white/80">Total Orders</div>
+              <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
+                View all
+              </p>
             </div>
-            <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
-              View all
-            </p>
-          </div>
+          )}
         </MainCard>
         <MainCard>
-          <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
-            <div className="flex flex-col space-y-0 text-left">
-              <div className="text-[40px] md:text-[80px] font-brand-bold">
-                50
+          {isLoading ? (
+            <SmallLoader height="150px" width="150px" />
+          ) : (
+            <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
+              <div className="flex flex-col space-y-0 text-left">
+                <div className="text-[40px] md:text-[80px] font-brand-bold">
+                  50
+                </div>
+                <div className="text-md text-white/80">Customers</div>
               </div>
-              <div className="text-md text-white/80">Customers</div>
+              <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
+                View all
+              </p>
             </div>
-            <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
-              View all
-            </p>
-          </div>
+          )}
         </MainCard>
       </div>
 

@@ -15,6 +15,7 @@ import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
 import "@/styles/globals.css";
 import { Libraries, LoadScript } from "@react-google-maps/api";
 import Loader from "@/components/GeneralComponents/Loader";
+import Modal from "@/components/DashboardComponents/Modal2";
 const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
 const LIBRARIES: Libraries = ["places"];
@@ -55,7 +56,7 @@ const App: React.FC = () => {
           <QueryClientProvider client={queryClient}>
             <BrowserRouter>
               <AppRoutes />
-
+              <Modal />
               <ToasterProvider />
             </BrowserRouter>
 

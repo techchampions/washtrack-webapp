@@ -10,7 +10,11 @@ const Header: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex flex-row items-center gap-1">
           <img
-            src={"/images/profile-img.png"}
+            src={
+              user?.profile_picture
+                ? user.profile_picture
+                : "/images/profile-img.png"
+            }
             alt="Store logo"
             className="object-cover w-10 h-10 rounded-full"
           />
