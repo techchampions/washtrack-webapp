@@ -126,6 +126,13 @@ interface CustomerSummary {
 interface StoreOwner {
   profile_picture: string;
 }
+
+export interface OrderCreatedResponse {
+  message: string;
+  status: string;
+  order: Order;
+}
+
 export const useGetSingleOrder = (id: string) => {
   return useQuery<OrderDetailResponse>({
     queryKey: ["order", id],

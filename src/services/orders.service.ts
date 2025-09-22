@@ -1,8 +1,24 @@
 import apiClient from "@/api/apiClient";
-
+interface Payload {
+  service_name: string;
+  no_of_items: number;
+  item_type: string;
+  photos?: string[];
+}
 class OrderService {
-  async addItem(data: any) {
+  async addItem(data: Payload) {
     const response = await apiClient.post(`/api/create/item`, data);
+    return response;
+  }
+  async updateItem(data: Payload) {
+    const response = await apiClient.post(`/api/upate/item`, data);
+    return response;
+  }
+  async deleteItem(id: number | string) {
+    const payload = {
+      id: id.toString(),
+    };
+    const response = await apiClient.post(`/api/delete/item`, payload);
     return response;
   }
 }

@@ -2,19 +2,29 @@ import React from "react";
 import Item from "@/components/DashboardComponents/Item";
 import { useParams } from "react-router-dom";
 import { useGetSingleOrder } from "@/hooks/query/usegetOrders";
-import Loader from "@/components/GeneralComponents/Loader";
 import { formatDate, formatPrice } from "@/utils/formatter";
+import SmallLoader from "@/components/GeneralComponents/SmallLoader";
+import { useUpdateOrderStatus } from "@/hooks/mutations/useUpdateOrderStatus";
+import { Button } from "@/components/FormComponents";
+import { useModal } from "@/store/useModal.store";
+import PayOutstandingBalance from "@/components/DashboardComponents/UpdateOrderComponents/PayOutstandingBalance";
 
 const OrderOverview = () => {
   const { order_id } = useParams<{ order_id: string }>();
   const { data, isLoading } = useGetSingleOrder(order_id || "");
-  if (isLoading) {
-    return <Loader />;
+  const { mutate: update, isPending } = useUpdateOrderStatus();
+  const modal = useModal();
+  if (isLoading || isPending) {
+    return <SmallLoader />;
   }
   const order = data?.order;
   const customer = data?.customer;
   const orderItems = data?.order_item ?? [];
   const noOfItems = data?.total_item_count;
+  const updateStatus = (status: number) => {
+    const payload = { id: order_id || "", status: status };
+    update(payload);
+  };
   return (
     <div className="w-full md:w-[90%] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -71,7 +81,7 @@ const OrderOverview = () => {
 
         <div className="flex flel-col bg-brand-100 rounded-lg py-4 px-8">
           <ol className="relative text-gray-500 border-s border-gray-500 text-left ">
-            <li className="mb-10 ms-6">
+            <li className="mb-10 ms-6 cursor-pointer">
               <span
                 className={`absolute flex items-center text-white justify-center w-8 h-8  ${
                   order?.created_at ? "bg-brand" : "bg-gray-100"
@@ -84,10 +94,13 @@ const OrderOverview = () => {
               </h3>
               <p className="text-sm">{formatDate(order?.created_at || "")}</p>
             </li>
-            <li className="mb-10 ms-6">
+            <li
+              className="mb-10 ms-6 cursor-pointer"
+              onClick={() => updateStatus(1)}
+            >
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
-                  order?.processing_date ? "bg-brand" : "bg-gray-100"
+                  order?.processing_date ? "bg-brand text-white" : "bg-gray-100"
                 } rounded-full -start-4 ring-4 ring-white`}
               >
                 02{" "}
@@ -99,10 +112,15 @@ const OrderOverview = () => {
                 {formatDate(order?.processing_date || "")}
               </p>
             </li>
-            <li className="mb-10 ms-6">
+            <li
+              className="mb-10 ms-6 cursor-pointer"
+              onClick={() => updateStatus(2)}
+            >
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
-                  order?.ready_pickup_date ? "bg-brand" : "bg-gray-100"
+                  order?.ready_pickup_date
+                    ? "bg-brand text-white"
+                    : "bg-gray-100"
                 } rounded-full -start-4 ring-4 ring-white`}
               >
                 03{" "}
@@ -114,10 +132,10 @@ const OrderOverview = () => {
                 {formatDate(order?.ready_pickup_date || "")}
               </p>
             </li>
-            <li className="ms-6">
+            <li className="ms-6 cursor-pointer" onClick={() => updateStatus(3)}>
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
-                  order?.completed_date ? "bg-brand" : "bg-gray-100"
+                  order?.completed_date ? "bg-brand text-white" : "bg-gray-100"
                 } rounded-full -start-4 ring-4 ring-white`}
               >
                 04{" "}
@@ -132,7 +150,7 @@ const OrderOverview = () => {
           </ol>
         </div>
 
-        <div className=" rounded-lg md:col-span-2 p-4 space-y-2">
+        <div className=" rounded-lg md:col-span-2 p-4 space-y-1">
           <h3 className="text-left text-black font-bold">Items</h3>
           {orderItems.map((item, index) => (
             <Item
@@ -144,6 +162,17 @@ const OrderOverview = () => {
           ))}
         </div>
       </div>
+      {order?.balance || 0 > 0 ? (
+        <Button
+          label="Update Outstanding Balance"
+          className="my-5"
+          onClick={() =>
+            modal.openModal(<PayOutstandingBalance id={String(order?.id)} />)
+          }
+        />
+      ) : (
+        <Button label="View Payment history" className="my-5" />
+      )}
     </div>
   );
 };

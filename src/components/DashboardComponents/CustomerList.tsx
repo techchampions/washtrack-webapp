@@ -1,50 +1,18 @@
 import React from "react";
-import OrderItem from "./OrdetItem";
 import CustomerItem from "./CustomerItem";
-
-const customers = [
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-  {
-    name: "Victoria Idris",
-    phoneNumber: "09012345678",
-    email: "vicky@email.com",
-  },
-];
+import { useGetCustomers } from "@/hooks/query/useGetCustomers";
+import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 
 const CustomerList = () => {
+  const { data, isLoading } = useGetCustomers();
+  if (isLoading) {
+    return <SmallLoader />;
+  }
+  const customers = data?.Customers ?? [];
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       {customers.map((user) => (
-        <CustomerItem key={user.name} {...user} />
+        <CustomerItem key={user.name} customer={user} />
       ))}
     </div>
   );

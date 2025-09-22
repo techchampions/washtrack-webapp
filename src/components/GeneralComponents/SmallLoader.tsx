@@ -12,7 +12,7 @@ const SmallLoader: React.FC<SmallLoaderProps> = ({
 }) => {
   return (
     <div
-      className={`flex bg-white justify-center items-center rounded-lg p-2 h-[${height}] w-[${width}]`}
+      className={`flex justify-center items-center rounded-lg p-2 h-[${height}] w-[${width}]`}
     >
       <svg
         aria-hidden="true"

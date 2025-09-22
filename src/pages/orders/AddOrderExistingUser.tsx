@@ -1,37 +1,25 @@
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React from "react";
 import { Button, InputField } from "@/components/FormComponents";
 import { FiPlusCircle } from "react-icons/fi";
 import { RightSideBar } from "@/components/DashboardComponents";
 import DatePickerInput from "@/components/FormComponents/DateInput";
 import { useModal } from "@/store/useModal.store";
-import { ChevronRight, Info, Trash2 } from "lucide-react";
+import { ChevronRight, Info } from "lucide-react";
 import { formatPrice } from "@/utils/formatter";
 import RadioSelect, {
   RadioOption,
 } from "@/components/FormComponents/RadioInput";
 import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
-import AddItemForOrder, {
-  ItemFormData,
-} from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
+import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
 import { FaChevronRight } from "react-icons/fa";
 import { useGetCustomerProfile } from "@/hooks/query/useGetCustomers";
 import { useParams } from "react-router-dom";
 import SmallLoader from "@/components/GeneralComponents/SmallLoader";
+import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
+import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
 
-interface OrderItem {
-  name: string;
-  service: string;
-  quantity: number;
-  price: string | number;
-  photo: File | string;
-  photo2: File | string;
-  photo3: File | string;
-  item_id: number;
-  service_name: string;
-  item_type: string;
-}
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
   { label: "Transfer", value: "transfer" },
@@ -39,11 +27,11 @@ const PAYMENT_OPTIONS: RadioOption[] = [
 
 export const AddOrderExistingUser: React.FC = () => {
   const { user_id } = useParams<{ user_id: string }>();
-  const [items, setItems] = useState<OrderItem[]>([]);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const modal = useModal();
   const { mutate: createOrder, isPending } = useCreateOrder();
   const { data, isLoading } = useGetCustomerProfile(user_id || "");
+  const { data: orderItemData } = useGetOrderItem();
+  const orderItems = orderItemData?.Items ?? [];
 
   const initialValues = {
     // customerName: "",
@@ -66,68 +54,13 @@ export const AddOrderExistingUser: React.FC = () => {
     costOfService: Yup.number().required("Required"),
   });
   const customer = data?.customer;
-  const handleAddItem = (itemData: ItemFormData) => {
-    if (editingIndex !== null) {
-      // Update existing item
-      const updatedItems = [...items];
-      updatedItems[editingIndex] = {
-        name: itemData.item_type,
-        service: itemData.service_name,
-        quantity: itemData.quantity,
-        price: itemData.price * itemData.quantity, // You might want to calculate this based on service
-        photo: itemData.image,
-        photo2: itemData.image2,
-        photo3: itemData.image3,
-        item_id: itemData.item_id,
-        service_name: itemData.service_name,
-        item_type: itemData.item_type,
-      };
-      setItems(updatedItems);
-      setEditingIndex(null);
-    } else {
-      // Add new item
-      const newItem: OrderItem = {
-        name: itemData.item_type,
-        service: itemData.service_name,
-        quantity: itemData.quantity,
-        price: itemData.price * itemData.quantity, // You might want to calculate this based on service
-        photo: itemData.image,
-        photo2: itemData.image2,
-        photo3: itemData.image3,
-        item_id: itemData.item_id,
-        service_name: itemData.service_name,
-        item_type: itemData.item_type,
-      };
-      setItems([...items, newItem]);
-    }
-  };
 
-  const handleEditItem = (index: number) => {
-    const item = items[index];
-    setEditingIndex(index);
-
-    modal.openModal(
-      <AddItemForOrder
-        onAddItem={handleAddItem}
-        editingIndex={index}
-        initialItemData={{
-          item_name: item.item_id.toString(),
-          service: item.service, // You'll need to map this based on your data
-          quantity: item.quantity,
-          image: item.photo,
-          item_type: item.item_type,
-          service_name: item.service_name,
-        }}
-      />
-    );
-  };
-
-  const handleDeleteItem = (index: number) => {
-    setItems(items.filter((_, i) => i !== index));
+  const handleEditItem = (item: (typeof orderItems)[0]) => {
+    modal.openModal(<EditItemForOrder item={item} />);
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    if (!values || items.length === 0) return;
+    if (!values || orderItems.length === 0) return;
 
     try {
       const formData = new FormData();
@@ -145,22 +78,22 @@ export const AddOrderExistingUser: React.FC = () => {
         String(values.costOfService - values.amountPaid)
       );
       formData.append("paid_amount", String(values.amountPaid));
-      items.forEach((item, index) => {
-        formData.append(`items[${index}][service_name]`, item.service);
-        formData.append(`items[${index}][item_type]`, item.name);
+      orderItems.forEach((item, index) => {
+        formData.append(`items[${index}][service_name]`, item.service_name);
+        formData.append(`items[${index}][item_type]`, item.item_type);
         formData.append(
           `items[${index}][no_of_items]`,
-          item.quantity.toString()
+          item.no_of_items.toString()
         );
-        if (item.photo) {
-          formData.append(`items[${index}][photos]`, item.photo as File);
-        }
-        if (item.photo2) {
-          formData.append(`items[${index}][photos]`, item.photo2 as File);
-        }
-        if (item.photo3) {
-          formData.append(`items[${index}][photos]`, item.photo3 as File);
-        }
+        // if (item.photo) {
+        //   formData.append(`items[${index}][photos]`, item.photo as File);
+        // }
+        // if (item.photo2) {
+        //   formData.append(`items[${index}][photos]`, item.photo2 as File);
+        // }
+        // if (item.photo3) {
+        //   formData.append(`items[${index}][photos]`, item.photo3 as File);
+        // }
       });
 
       createOrder(formData);
@@ -212,49 +145,36 @@ export const AddOrderExistingUser: React.FC = () => {
                   <FiPlusCircle
                     className="w-8 h-8 text-black cursor-pointer"
                     onClick={() => {
-                      setEditingIndex(null);
-                      modal.openModal(
-                        <AddItemForOrder onAddItem={handleAddItem} />
-                      );
+                      modal.openModal(<AddItemForOrder />);
                     }}
                   />
                 </div>
 
-                {items.map((item, index) => (
+                {orderItems.map((item, index) => (
                   <div
-                    className="flex items-center justify-between px-4 py-2 mt-1 rounded-lg bg-brand-100"
+                    className="flex items-center cursor-pointer justify-between px-4 py-2 mt-1 rounded-lg bg-brand-100"
                     key={index}
+                    onClick={() => handleEditItem(item)}
                   >
                     <div className="flex items-center gap-4">
                       <img
                         src="/images/order-icon.png"
                         className="w-10 h-10 object-cover rounded"
-                        alt={item.name}
+                        alt={item.item_type}
                       />
                       <div className="text-left">
                         <p className="font-semibold text-quick-action-icon">
-                          {item.service}
+                          {item.service_name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {item.name} - {item.quantity} pieces
+                          {item.item_type} - {item.no_of_items} pieces
                         </p>
                       </div>
                     </div>
                     <div className="">
-                      <div
-                        className="flex gap-1 cursor-pointer text-quick-action-icon hover:text-blue-700 text-sm items-center justify-end"
-                        onClick={() => handleEditItem(index)}
-                      >
+                      <div className="flex gap-1 cursor-pointer text-quick-action-icon hover:text-blue-700 text-sm items-center justify-end">
                         <ChevronRight />
                       </div>
-
-                      {/* <div
-                        className="flex gap-1 cursor-pointer text-red-400 hover:text-red-500 text-sm items-center"
-                        onClick={() => handleDeleteItem(index)}
-                      >
-                        <span>remove</span>
-                        <Trash2 size={15} />
-                      </div> */}
                     </div>
                   </div>
                 ))}
@@ -314,7 +234,7 @@ export const AddOrderExistingUser: React.FC = () => {
                 <Button
                   label="Create Order"
                   type="submit"
-                  disabled={!isValid || items.length === 0 || isPending}
+                  disabled={!isValid || orderItems.length === 0 || isPending}
                   isLoading={isPending}
                 />
               </Form>

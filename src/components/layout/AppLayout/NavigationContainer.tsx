@@ -1,23 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import NavItem from "../Header/NavItem";
 import { FaChartBar, FaHome, FaList, FaUsers } from "react-icons/fa";
 import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
 import { RiAppsLine } from "react-icons/ri";
 import NavbarAddorder from "../Header/NavbarAddorder";
-import { useNavigate } from "react-router-dom";
-import { Modal } from "@/components/DashboardComponents";
-import { Button } from "@/components/FormComponents";
 import { LogIn } from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { useModal } from "@/store/useModal.store";
-import SelectCustomers from "@/components/DashboardComponents/CreateOrderComponents/SelectCustomers";
+import CreateOrderModal from "@/components/DashboardComponents/CreateOrderComponents/CreateOrderModal";
 
 function NavigationContainer() {
-  const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
   const modal = useModal();
   return (
-    <div className="flex flex-col justify-between h-screen px-10">
+    <div className="flex flex-col justify-between h-screen px-4 overflow-y-scroll scrollbar-hide">
       <div className="w-full py-8">
         <img src="/images/logo.png" alt="Wash Track" className="w-full" />
         <nav className="py-8 space-y-2 text-white">
@@ -29,7 +24,8 @@ function NavigationContainer() {
 
           {/* Replace Add Order NavItem with a button to open modal */}
           <button
-            onClick={() => setShowModal(true)}
+            // onClick={() => setShowModal(true)}
+            onClick={() => modal.openModal(<CreateOrderModal />)}
             className="flex items-center w-full px-3 py-[7px] text-[12px] text-white rounded-md hover:bg-brand-400"
           >
             <MdOutlineAddBox className="w-4 h-4 mr-2 text-white" />
@@ -93,39 +89,6 @@ function NavigationContainer() {
         </nav>
       </div>
       <NavbarAddorder />
-
-      {/* Add Order Modal */}
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <div className="flex flex-col items-center">
-          <img src="/images/1171275266.png" alt="" className="w-[150px]" />
-          <h2 className="mb-4 text-2xl text-black font-bold">Create Order</h2>
-          <p className="mb-6 text-gray-600">
-            Please select if you are creating a new customer or existing
-            customer order
-          </p>
-          <div className="flex flex-col justify-between w-full gap-2">
-            <Button
-              label="Existing Customer"
-              className="px-4 py-2 text-white bg-brand"
-              onClick={() => {
-                setShowModal(false);
-                modal.openModal(<SelectCustomers />);
-                // navigate("/dashboard/orders/create/existing-customer");
-              }}
-            />
-            <Button
-              label="New Customer"
-              className="w-full px-4 py-2 text-white bg-brand-muted"
-              onClick={() => {
-                setShowModal(false);
-                navigate("/dashboard/orders/create/new-customer");
-
-                // window.location.href = "/dashboard/add-order/new-customer";
-              }}
-            />
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

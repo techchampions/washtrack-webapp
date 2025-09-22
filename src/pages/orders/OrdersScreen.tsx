@@ -4,8 +4,10 @@ import { useGetOrders } from "@/hooks/query/usegetOrders";
 import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 
 const OrdersScreen = () => {
-  const [activeTab, setActiveTab] = useState("Current");
-  const { data, isLoading } = useGetOrders("all");
+  const tabs = ["all", "pending", "processing", "pickup", "completed"];
+  type Tab = (typeof tabs)[number];
+  const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
+  const { data, isLoading } = useGetOrders(activeTab);
   if (isLoading) {
     return <SmallLoader />;
   }
@@ -13,11 +15,13 @@ const OrdersScreen = () => {
   return (
     <div className="w-full md:w-[90%] mx-auto">
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-2 md:gap-5 mt-10 mb-4 md:mb-8">
-        {["Current", "Pickup", "Completed", "All"].map((tab) => (
+      <div className="grid grid-cols-5 gap-2 mt-10 mb-4 md:mb-8">
+        {tabs.map((tab, index) => (
           <button
-            key={tab}
-            className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-brand-bold ${
+            key={index}
+            className={`px-1 capitalize truncate py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-medium ${
+              tab === "all" && ""
+            } ${
               activeTab === tab
                 ? "bg-brand text-white"
                 : "border border-gray-200 text-gray-400"

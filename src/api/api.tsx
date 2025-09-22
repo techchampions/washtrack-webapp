@@ -18,7 +18,6 @@ import {
   ExistingOrders,
   ItemQuery,
   OnlineServices,
-  Orders,
   SearchCustomerItemResponse,
   SearchCustomersResponse,
   Services,
@@ -417,10 +416,13 @@ const getNotifications = async () => {
   const response = await apiClient.get(`/api/notifications`);
   return response.data;
 };
-
-const changeOrderStatus = async (id: string, status: number) => {
-  const response = await apiClient.post(`/api/update/orderstatus/${id}`, {
-    status,
+interface UpdateOrderStatusPayload {
+  id: string;
+  status: number;
+}
+const changeOrderStatus = async (data: UpdateOrderStatusPayload) => {
+  const response = await apiClient.post(`/api/update/orderstatus/${data.id}`, {
+    status: data.status,
   });
   return response.data;
 };
@@ -437,11 +439,15 @@ const completeOrder = async (
   return response.data;
 };
 
-const payOutstandingBalance = async (id: string, paid_amount: number) => {
+interface PayOutstandingBalancePayload {
+  id: string;
+  paid_amount: number;
+}
+const payOutstandingBalance = async (data: PayOutstandingBalancePayload) => {
   const response = await apiClient.post(
-    `/api/vendor/outstanding-order-update/${id}`,
+    `/api/vendor/outstanding-order-update/${data.id}`,
     {
-      paid_amount,
+      paid_amount: data.paid_amount,
     }
   );
   return response.data;

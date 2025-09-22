@@ -13,6 +13,7 @@ import { AddOrderExistingUser } from "@/pages/orders/AddOrderExistingUser";
 import OrderOverview from "@/pages/orders/OrderOverview";
 import OrdersScreen from "@/pages/orders/OrdersScreen";
 import InventoryScreen from "@/pages/inventory/InventoryScreen";
+import CustomerScreen from "@/pages/customers/CustomerScreen";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -104,6 +105,7 @@ export const AppRoutes: React.FC = () => {
               element={<OrderOverview />}
             />
             <Route path="/dashboard/inventory" element={<InventoryScreen />} />
+            <Route path="/dashboard/customers" element={<CustomerScreen />} />
 
             {/* Profile Routes */}
             <Route path="profile">
