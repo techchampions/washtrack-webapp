@@ -10,6 +10,7 @@ import {
 import { FaSmile } from "react-icons/fa";
 import MainCard from "@/components/DashboardComponents/MainCard";
 import Button from "@/components/FormComponents/Button";
+import { useGetReport } from "@/hooks/query/useGetReport";
 
 // Full dataset (12 months)
 const fullData = [
@@ -50,7 +51,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const ReportScreen: React.FC = () => {
   const [chartHeight, setChartHeight] = useState(300);
-  const [chartData, setChartData] = useState(fullData);
+  const { data, isLoading } = useGetReport();
+  const report = data?.order_report ?? [];
+  const [chartData, setChartData] = useState(report);
   const [activeTab, setActiveTab] = useState("Order");
 
   // Function to handle responsive adjustments
@@ -58,17 +61,17 @@ const ReportScreen: React.FC = () => {
     const updateChartSize = () => {
       if (window.innerWidth < 768) {
         setChartHeight(250); // Mobile: shorter chart
-        setChartData(fullData.slice(-8)); // Show last 6 months
+        setChartData(report.slice(-8)); // Show last 6 months
       } else {
         setChartHeight(350); // Desktop: taller chart
-        setChartData(fullData); // Show all months
+        setChartData(report); // Show all months
       }
     };
 
     updateChartSize();
     window.addEventListener("resize", updateChartSize);
     return () => window.removeEventListener("resize", updateChartSize);
-  }, []);
+  }, [report]);
 
   return (
     <div className="w-full md:w-[90%] bg-white mx-auto">

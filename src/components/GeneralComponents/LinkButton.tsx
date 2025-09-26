@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface ButtonProps {
   label: string;
@@ -22,8 +23,8 @@ const LinkButton: React.FC<ButtonProps> = ({
   rightIcon,
 }) => {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       target={`${target ? "_blank" : "_self"}`}
       className={`w-full bg-brand py-2 rounded-full transition duration-300 text-white ${className}
         `}
@@ -56,7 +57,7 @@ const LinkButton: React.FC<ButtonProps> = ({
           {rightIcon && <span className="ml-2">{rightIcon}</span>}
         </div>
       )}
-    </a>
+    </Link>
   );
 };
 

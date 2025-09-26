@@ -11,6 +11,9 @@ export const usePayOutstandingBalance = () => {
       queryClient.invalidateQueries({
         queryKey: ["order"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["outstanding"],
+      });
       showSuccess("Oustanding Balance Updated Successfully");
     },
   });

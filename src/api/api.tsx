@@ -12,7 +12,6 @@ import {
   SearchOutstandingResponse,
 } from "@/types/GeneralTypes/ExpenseTypes";
 import {
-  CustomerOrderResponse,
   DeleteServices,
   EditServices,
   ExistingOrders,
@@ -298,14 +297,11 @@ const getInventoryView = async (data: string, status: string) => {
   console.log(response.data);
   return response.data;
 };
-const getCustomerOrderView = async (
-  id: string,
-  itemType: string
-): Promise<CustomerOrderResponse> => {
+const getCustomerOrderView = async (id: string, itemType: string) => {
   const response = await apiClient.get(
     `/api/vendor/customer/${id}/orders/${itemType}`
   );
-  return response.data as CustomerOrderResponse;
+  return response.data;
 };
 const searchCustomers = async (
   query: string
@@ -386,11 +382,10 @@ const getReport = async (): Promise<Report> => {
   return response.data;
 };
 
-const getMonthlyReport = async (
-  query: string
-): Promise<MonthlyReportResponse> => {
+const getMonthlyReport = async (): // query: string
+Promise<MonthlyReportResponse> => {
   const response = await apiClient.get<MonthlyReportResponse>(
-    `/api/monthly-report/${query}`
+    `/api/monthly-report`
   );
   return response.data;
 };

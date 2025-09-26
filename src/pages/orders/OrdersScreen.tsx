@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import OrderList from "@/components/DashboardComponents/OrderList";
 import { useGetOrders } from "@/hooks/query/usegetOrders";
-import SmallLoader from "@/components/GeneralComponents/SmallLoader";
+import { Header } from "@/components/DashboardComponents";
+import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 
 const OrdersScreen = () => {
   const tabs = ["all", "pending", "processing", "pickup", "completed"];
   type Tab = (typeof tabs)[number];
   const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
   const { data, isLoading } = useGetOrders(activeTab);
-  if (isLoading) {
-    return <SmallLoader />;
-  }
   const orders = data?.orders ?? [];
   return (
-    <div className="w-full md:w-[90%] mx-auto">
+    <div className="w-full">
+      <Header title="Orders" />
       {/* Tabs */}
       <div className="grid grid-cols-5 gap-2 mt-10 mb-4 md:mb-8">
         {tabs.map((tab, index) => (
@@ -32,8 +31,7 @@ const OrdersScreen = () => {
           </button>
         ))}
       </div>
-
-      <OrderList orders={orders} />
+      {isLoading ? <OrderItemLoading /> : <OrderList orders={orders} />}
     </div>
   );
 };

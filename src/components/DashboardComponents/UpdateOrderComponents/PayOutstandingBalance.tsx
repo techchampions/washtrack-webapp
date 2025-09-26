@@ -3,8 +3,10 @@ import * as Yup from "yup";
 import React from "react";
 import { usePayOutstandingBalance } from "@/hooks/mutations/usePayOutstandingBalance";
 import { Button, InputField } from "@/components/FormComponents";
+import { useModal } from "@/store/useModal.store";
 
 const PayOutstandingBalance = ({ id }: { id: string }) => {
+  const modal = useModal();
   const { mutate: update, isPending } = usePayOutstandingBalance();
   const initialValues = {
     amount: null,
@@ -17,7 +19,11 @@ const PayOutstandingBalance = ({ id }: { id: string }) => {
       id: id,
       paid_amount: Number(values.amount),
     };
-    update(payload);
+    update(payload, {
+      onSuccess() {
+        modal.closeModal();
+      },
+    });
   };
   return (
     <div>

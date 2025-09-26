@@ -9,8 +9,9 @@ import OrderList from "../../components/DashboardComponents/OrderList";
 import CustomDropdown from "../../components/DashboardComponents/CustomDropdown";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 import { showError } from "@/utils/toast";
-import Loader from "@/components/GeneralComponents/Loader";
 import { useGetDashboard } from "@/hooks/query/useGetDashboard";
+import { Header } from "@/components/DashboardComponents";
+import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 
 const HomeScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState("Today");
@@ -22,18 +23,10 @@ const HomeScreen: React.FC = () => {
   if (isErrorOrder) {
     showError("Failed to get user Orders");
   }
-  if (isLoading) {
-    return <Loader />;
-  }
-  // const orders = data.;
-  // const completedOrders = orders?.filter((o) => o.status === "completed");
-  // const pendingOrders = orders?.filter((o) => o.status === "pending");
-
-  // const sumAmounts = (orderArray: typeof orders) =>
-  //   orderArray?.reduce((acc, o) => acc + o.totalAmount, 0);
 
   return (
-    <div className="w-full md:w-[90%] mx-auto">
+    <div className="w-full">
+      <Header />
       <div className="flex flex-col md:flex-row gap-4 h-fit md:h-[200px]">
         <MainCard>
           <div className="mb-4 text-black">
@@ -90,7 +83,11 @@ const HomeScreen: React.FC = () => {
         <h3 className="text-lg text-left text-black md:text-2xl font-brand-bold md-2 md:mb-4">
           Recent Orders
         </h3>
-        <OrderList orders={data?.recent_orders ?? []} />
+        {isLoading ? (
+          <OrderItemLoading />
+        ) : (
+          <OrderList orders={data?.recent_orders ?? []} />
+        )}
       </div>
     </div>
   );

@@ -1,25 +1,22 @@
 import React, { useState } from "react";
 import MainCard from "@/components/DashboardComponents/MainCard";
-import { useGetOrders } from "@/hooks/query/usegetOrders";
 import SmallLoader from "@/components/GeneralComponents/SmallLoader";
+import { useGetInventory } from "@/hooks/query/useGetInventory";
+import { Header } from "@/components/DashboardComponents";
+import { Link } from "react-router-dom";
 
 const InventoryScreen: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Current");
-  const { data, isLoading } = useGetOrders("all");
+  const tabs = ["all", "pending", "processing", "pickup", "completed"];
+  type Tab = (typeof tabs)[number];
 
+  const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
+  const { data, isLoading } = useGetInventory(activeTab);
   // Sample Data
-  const items = [
-    { id: 1, item: "Jeans", quantity: 9 },
-    { id: 2, item: "Shirt", quantity: 5 },
-    { id: 3, item: "Trouser", quantity: 5 },
-    { id: 4, item: "Towel", quantity: 5 },
-    { id: 5, item: "Duvet", quantity: 5 },
-    { id: 6, item: "Jeans", quantity: 5 },
-    { id: 7, item: "Jeans", quantity: 5 },
-  ];
+  const items = data?.inventory ?? [];
 
   return (
-    <div className=" bg-white rounded-lg w-full md:w-[90%] mx-auto">
+    <div className="w-full">
+      <Header />
       {/* Stats Cards */}
       <div className="grid grid-cols-2 gap-4 mb-4 h-[150px] md:h-[280px] md:h-fill w-full">
         <MainCard>
@@ -28,10 +25,10 @@ const InventoryScreen: React.FC = () => {
           ) : (
             <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
               <div className="flex flex-col space-y-0 text-left">
-                <div className="text-[40px] md:text-[80px] font-brand-bold">
-                  {data?.orders.length || 0}
+                <div className="text-[40px] md:text-[80px] font-bold">
+                  {data?.total_Item_count || 0}
                 </div>
-                <div className="text-md text-white/80">Total Orders</div>
+                <div className="text-md text-white/80">Total Items</div>
               </div>
               <p className="text-sm underline text-white text-left md:text-right underline-offset-4 cursor-pointer">
                 View all
@@ -45,8 +42,8 @@ const InventoryScreen: React.FC = () => {
           ) : (
             <div className="text-white py-3 md:py-6 flex flex-col justify-between my-auto">
               <div className="flex flex-col space-y-0 text-left">
-                <div className="text-[40px] md:text-[80px] font-brand-bold">
-                  50
+                <div className="text-[40px] md:text-[80px] font-bold">
+                  {data?.total_customers}
                 </div>
                 <div className="text-md text-white/80">Customers</div>
               </div>
@@ -59,11 +56,11 @@ const InventoryScreen: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-2 md:gap-5 mt-10 mb-4 md:mb-8">
-        {["Current", "Pickup", "Completed", "All"].map((tab) => (
+      <div className="grid grid-cols-5 gap-2 mt-10 mb-4 md:mb-8">
+        {tabs.map((tab) => (
           <button
             key={tab}
-            className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-brand-bold ${
+            className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm capitalize ${
               activeTab === tab
                 ? "bg-brand text-white"
                 : "border border-gray-200 text-gray-400"
@@ -88,14 +85,19 @@ const InventoryScreen: React.FC = () => {
         <tbody>
           {items.map((item, index) => (
             <tr
-              key={item.id}
-              className="even:bg-transparent odd:bg-brand-500 text-black font-bold"
+              key={index}
+              className="even:bg-transparent odd:bg-brand-500 rounded-lg text-black font-bold"
             >
               <td className=" px-4 py-2">{index + 1}</td>
-              <td className=" px-4 py-2">{item.item}</td>
-              <td className=" px-4 py-2">{item.quantity}</td>
+              <td className=" px-4 py-2">{item.item_type}</td>
+              <td className=" px-4 py-2">{item.total_items}</td>
               <td className=" px-4 py-2">
-                <p className="text-brand underline underline-offset-4">View</p>
+                <Link
+                  className="text-brand border-b border-b-brand"
+                  to={`/dashboard/inventory/${item.item_type}/customers`}
+                >
+                  View
+                </Link>
               </td>
             </tr>
           ))}

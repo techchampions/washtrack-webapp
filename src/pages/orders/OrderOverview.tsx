@@ -3,19 +3,23 @@ import Item from "@/components/DashboardComponents/Item";
 import { useParams } from "react-router-dom";
 import { useGetSingleOrder } from "@/hooks/query/usegetOrders";
 import { formatDate, formatPrice } from "@/utils/formatter";
-import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 import { useUpdateOrderStatus } from "@/hooks/mutations/useUpdateOrderStatus";
 import { Button } from "@/components/FormComponents";
-import { useModal } from "@/store/useModal.store";
-import PayOutstandingBalance from "@/components/DashboardComponents/UpdateOrderComponents/PayOutstandingBalance";
+import { Header } from "@/components/DashboardComponents";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
+import OrderDetailsLoading from "@/components/DashboardComponents/LoadingComponents/OrderOverviewLoading";
 
 const OrderOverview = () => {
   const { order_id } = useParams<{ order_id: string }>();
   const { data, isLoading } = useGetSingleOrder(order_id || "");
   const { mutate: update, isPending } = useUpdateOrderStatus();
-  const modal = useModal();
   if (isLoading || isPending) {
-    return <SmallLoader />;
+    return (
+      <div className="">
+        <Header />
+        <OrderDetailsLoading />
+      </div>
+    );
   }
   const order = data?.order;
   const customer = data?.customer;
@@ -26,13 +30,28 @@ const OrderOverview = () => {
     update(payload);
   };
   return (
-    <div className="w-full md:w-[90%] mx-auto">
+    <div className="w-full">
+      <Header>
+        <Button label="View Reciept" className="!min-w-fit px-4" />
+        {(order?.balance || 0) > 0 ? (
+          <LinkButton
+            href={`/dashboard/orders/outstanding/${order?.id}`}
+            label="Update Outstanding Balance"
+            className="!min-w-fit px-4"
+          />
+        ) : (
+          <Button label="View Payment history" className="!min-w-fit px-4" />
+        )}
+      </Header>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
           <div className="flex justify-start gap-2 text-black pb-2 ">
             <img src="/images/washing_machine.svg" alt="" />
             <div className="flex flex-col text-left justify-start">
-              <h2 className="text-2xl font-bold">Order #{order?.order_code}</h2>
+              <h2 className="text-2xl font-bold">
+                Order #{order?.order_number}
+              </h2>
               <p className="text-sm">
                 Order Date: {formatDate(order?.created_at || "")}
               </p>
@@ -162,17 +181,6 @@ const OrderOverview = () => {
           ))}
         </div>
       </div>
-      {order?.balance || 0 > 0 ? (
-        <Button
-          label="Update Outstanding Balance"
-          className="my-5"
-          onClick={() =>
-            modal.openModal(<PayOutstandingBalance id={String(order?.id)} />)
-          }
-        />
-      ) : (
-        <Button label="View Payment history" className="my-5" />
-      )}
     </div>
   );
 };
