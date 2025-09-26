@@ -118,7 +118,7 @@ export const AppRoutes: React.FC = () => {
             />
             <Route path="/dashboard/customers" element={<CustomerScreen />} />
             <Route
-              path="/dashboard/customers/:customer_id/:item_type/orders"
+              path="/dashboard/customers/:customer_name/:customer_id/:item_type/orders"
               element={<CustomerOrderByType />}
             />
 

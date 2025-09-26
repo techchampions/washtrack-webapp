@@ -34,7 +34,7 @@ const InventoryCustomers = () => {
           <div className="">{item.name}</div>
           <div className="">{item.total_no_of_items}</div>
           <Link
-            to={`/dashboard/customers/${item.id}/${item_type}/orders`}
+            to={`/dashboard/customers/${item.name}/${item.id}/${item_type}/orders`}
             className="text-brand"
           >
             view
