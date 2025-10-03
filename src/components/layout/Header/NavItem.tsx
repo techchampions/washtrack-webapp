@@ -49,7 +49,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
 
       {/* Nested Items */}
       {isOpen && children && (
-        <div className="ml-6 mt-2 space-y-2">
+        <div className="ml-6 mt-2 space-y-2 border-l-1 border-white/40 px-1.5">
           {children.map((child, index) => (
             <NavLink
               key={index}

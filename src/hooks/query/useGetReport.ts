@@ -1,9 +1,10 @@
 import { api } from "@/api/api";
+import { MonthlyReportResponse } from "@/types/GeneralTypes/report";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetReport = () => {
-  return useQuery({
+export const useGetMonthlyReport = () => {
+  return useQuery<MonthlyReportResponse>({
     queryKey: ["report"],
-    queryFn: () => api.getMonthlyReport,
+    queryFn: () => api.getMonthlyReport(),
   });
 };

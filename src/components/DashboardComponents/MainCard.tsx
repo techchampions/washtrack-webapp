@@ -1,6 +1,13 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-const MainCard = ({ children, className = "", ...props }) => {
+const MainCard = ({
+  children,
+  className = "",
+  ...props
+}: {
+  children?: ReactNode;
+  className?: string;
+}) => {
   return (
     <div
       className={`bg-brand relative text-white text-left py-3 md:py-6 p-5 md:px-10 rounded-[20px] w-full h-full flex flex-col justify-between overflow-hidden ${className}`}
@@ -14,9 +21,9 @@ const MainCard = ({ children, className = "", ...props }) => {
       <img
         src="/images/ellipse-b.svg"
         alt="inventory"
-        className="absolute left-0 bottom-0 h-8 md:h-8 w-8 md:w-20 "
+        className="absolute bottom-0 left-0 w-8 h-8 md:h-8 md:w-20 "
       />
-      <div className="relative -top-1 z-10">{children}</div>
+      <div className="relative z-10 -top-1">{children}</div>
     </div>
   );
 };

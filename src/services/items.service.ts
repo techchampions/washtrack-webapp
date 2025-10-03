@@ -2,14 +2,14 @@ import apiClient from "@/api/apiClient";
 
 export interface IItemService {
   item_name: string;
-  services: {
-    service_name: string;
-    price: number;
-    estimated_hours: number;
-    service_id: number;
-  }[];
+  services: Service[];
 }
-
+export interface Service {
+  service_name: string;
+  price: number;
+  estimated_hours: number;
+  service_id: number;
+}
 export interface UpdateItem {
   id: number;
   item_id: number;

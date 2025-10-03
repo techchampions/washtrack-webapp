@@ -17,6 +17,16 @@ import CustomerScreen from "@/pages/customers/CustomerScreen";
 import OutstandingHistory from "@/pages/orders/OutstandingHistory";
 import InventoryCustomers from "@/pages/inventory/InventoryCustomers";
 import CustomerOrderByType from "@/pages/customers/CustomerOrderByType";
+import ExpenseIndex from "@/pages/expense/ExpenseIndex";
+import AllExpenseList from "@/pages/expense/AllExpenseList";
+import RevenueIndex from "@/pages/revenue/RevenueIndex";
+import AllRevenueList from "@/pages/revenue/RevenueList";
+import OutstandingIndex from "@/pages/outstanding/OustandingIndex";
+import AllOutstandingList from "@/pages/outstanding/OutstandingList";
+import SettingsPage from "@/pages/settings/SettingsPage";
+import SettingStoreSetup from "@/pages/settings/StoreSetup";
+import ServicesSetup from "@/pages/settings/ServicesSetup";
+import ItemsSetup from "@/pages/settings/ItemsSetup";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -120,6 +130,37 @@ export const AppRoutes: React.FC = () => {
             <Route
               path="/dashboard/customers/:customer_name/:customer_id/:item_type/orders"
               element={<CustomerOrderByType />}
+            />
+            <Route path="/dashboard/expenses" element={<ExpenseIndex />} />
+            <Route
+              path="/dashboard/expenses/list"
+              element={<AllExpenseList />}
+            />
+            <Route path="/dashboard/revenues" element={<RevenueIndex />} />
+            <Route
+              path="/dashboard/revenues/list"
+              element={<AllRevenueList />}
+            />
+            <Route
+              path="/dashboard/outstandings"
+              element={<OutstandingIndex />}
+            />
+            <Route
+              path="/dashboard/outstandings/list"
+              element={<AllOutstandingList />}
+            />
+            <Route path="/dashboard/settings" element={<SettingsPage />} />
+            <Route
+              path="/dashboard/settings/store-setup"
+              element={<SettingStoreSetup />}
+            />
+            <Route
+              path="/dashboard/settings/services"
+              element={<ServicesSetup />}
+            />
+            <Route
+              path="/dashboard/settings/items-setup"
+              element={<ItemsSetup />}
             />
 
             {/* Profile Routes */}

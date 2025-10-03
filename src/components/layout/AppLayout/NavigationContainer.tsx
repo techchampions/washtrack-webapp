@@ -8,9 +8,19 @@ import { LogIn } from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { useModal } from "@/store/useModal.store";
 import CreateOrderModal from "@/components/DashboardComponents/CreateOrderComponents/CreateOrderModal";
+import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
+import ExhaustedOrder from "@/components/DashboardComponents/CreateOrderComponents/ExhaustedOrder";
 
 function NavigationContainer() {
   const modal = useModal();
+  const { data } = useGetSubscription();
+  const handleCreateOrder = () => {
+    if (data?.expired || (data?.ordersLeft || 0) < 1) {
+      modal.openModal(<ExhaustedOrder />);
+    } else {
+      modal.openModal(<CreateOrderModal />);
+    }
+  };
   return (
     <div className="flex flex-col justify-between h-screen px-4 overflow-y-scroll scrollbar-hide">
       <div className="w-full py-8">
@@ -24,8 +34,7 @@ function NavigationContainer() {
 
           {/* Replace Add Order NavItem with a button to open modal */}
           <button
-            // onClick={() => setShowModal(true)}
-            onClick={() => modal.openModal(<CreateOrderModal />)}
+            onClick={handleCreateOrder}
             className="flex items-center w-full px-3 py-[7px] text-[12px] text-white rounded-md hover:bg-brand-400"
           >
             <MdOutlineAddBox className="w-4 h-4 mr-2 text-white" />
@@ -74,8 +83,9 @@ function NavigationContainer() {
             icon={<RiAppsLine className="w-4 h-4 text-white" />}
             children={[
               { label: "Setting", path: "/dashboard/settings" },
-              { label: "Customer", path: "/dashboard/customers" },
-              { label: "Outstanding", path: "/dashboard/outstanding" },
+              { label: "Revenue", path: "/dashboard/revenues" },
+              { label: "Outstanding", path: "/dashboard/outstandings" },
+              { label: "Expense", path: "/dashboard/expenses" },
             ]}
           />
 

@@ -6,11 +6,22 @@ import MobileNavItem from "../Header/MobileNavItem";
 import React from "react";
 import { useModal } from "@/store/useModal.store";
 import CreateOrderModal from "@/components/DashboardComponents/CreateOrderComponents/CreateOrderModal";
+import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
+import ExhaustedOrder from "@/components/DashboardComponents/CreateOrderComponents/ExhaustedOrder";
 
 const BottomNav: React.FC = () => {
   const modal = useModal();
+  const { data } = useGetSubscription();
+  const handleCreateOrder = () => {
+    if (data?.expired || (data?.ordersLeft || 0) < 1) {
+      modal.openModal(<ExhaustedOrder />);
+    } else {
+      modal.openModal(<CreateOrderModal />);
+    }
+  };
+
   return (
-    <nav className="fixed flex bottom-0  left-0 right-0 bg-white shadow-lg shadow-black py-4 px-2 md:hidden justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 flex justify-around px-2 py-4 bg-white shadow-lg shadow-black md:hidden">
       <MobileNavItem
         label="Home"
         icon={<FaHome size={24} />}
@@ -22,8 +33,8 @@ const BottomNav: React.FC = () => {
         path="/dashboard/inventory"
       />
       <button
-        className="bg-brand text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg -mt-6"
-        onClick={() => modal.openModal(<CreateOrderModal />)}
+        className="flex items-center justify-center w-12 h-12 -mt-6 text-white rounded-full shadow-lg bg-brand"
+        onClick={handleCreateOrder}
       >
         <FaPlus size={24} />
       </button>

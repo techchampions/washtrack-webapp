@@ -1,76 +1,76 @@
 // Payload sent to the API
 export interface CreateExpensePayload {
-    expense_name: string;
-    amount: string; // Keep as string since the API expects it this way
-    expense_date: string;
-    description: string;
-  }
-  
-  // API response type
-  export interface CreateExpenseResponse {
-    message: string;
-    Expense: {
-      user_id: number;
-      expense_name: string;
-      amount: string;
-      store_id: number;
-      expense_date: string;
-      description: string;
-      updated_at: string;
-      created_at: string;
-      id: number;
-    };
-  }
-  
-  interface StoreOwner {
-    id: number;
-    user_id: number;
-    store_name: string;
-    description: string;
-    store_images: string[]; // Parsed as an array of URLs
-    store_rate: number;
-    created_at: string;
-    updated_at: string;
-    store_location: string;
-    is_visible: number;
-    longitude: number;
-    latitude: number;
-    geolocation: number;
-    state: string;
-    country: string;
-  }
-  
-  export interface Expense {
-    id: number;
-    store_id: number;
-    user_id: number;
-    expense_name: string;
-    amount: number;
-    expense_date: string;
-    description: string;
-    created_at: string;
-    updated_at: string;
-  }
-  
- export interface HomeExpenses {
-    success: boolean;
-    totalExpenses: number;
-    storeOwner: StoreOwner;
-    Expense: Expense[];
-  }
-  export interface  SearchExpensesResponse {
-    success: boolean;
-    message: string;
-    result?: Expense[];
-  };  
-  export interface HomeExpensesOverview {
-    success: boolean;
-    totalExpenses: number;
-    storeOwner: StoreOwner;
-    Expense: Expense;
-  }
+  expense_name: string;
+  amount: string; // Keep as string since the API expects it this way
+  expense_date: string;
+  description: string;
+}
 
-  // outstanding types 
+// API response type
+export interface CreateExpenseResponse {
+  message: string;
+  Expense: {
+    user_id: number;
+    expense_name: string;
+    amount: string;
+    store_id: number;
+    expense_date: string;
+    description: string;
+    updated_at: string;
+    created_at: string;
+    id: number;
+  };
+}
+
+export interface StoreOwner {
+  id: number;
+  user_id: number;
+  store_name: string;
+  description: string;
+  store_images: string[]; // Parsed as an array of URLs
+  store_rate: number;
+  created_at: string;
+  updated_at: string;
+  store_location: string;
+  is_visible: number;
+  longitude: number;
+  latitude: number;
+  geolocation: number;
+  state: string;
+  country: string;
+}
+
+export interface Expense {
+  id: number;
+  store_id: number;
+  user_id: number;
+  expense_name: string;
+  amount: number;
+  expense_date: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface HomeExpenses {
+  success: boolean;
+  totalExpenses: number;
+  storeOwner: StoreOwner;
+  Expense: Expense[];
+}
+export interface SearchExpensesResponse {
+  success: boolean;
+  message: string;
+  result?: Expense[];
+}
+export interface HomeExpensesOverview {
+  success: boolean;
+  totalExpenses: number;
+  storeOwner: StoreOwner;
+  Expense: Expense;
+}
+
+// outstanding types
 
 export interface Customer {
   id: number;
@@ -110,18 +110,15 @@ export interface OutStandingResponse {
   totalOutStanding: number;
   Outstanding: OutstandingItem[];
 }
-  export interface SearchOutstandingResponse {
-    success: boolean;
-    message: string;
-    result: OutstandingItem[];
-  }
-  
+export interface SearchOutstandingResponse {
+  success: boolean;
+  message: string;
+  result: OutstandingItem[];
+}
 
-  
-  export interface Customer {
-    id: number;
-    name: string;
-    phone_number: string;
-    email: string;
-  }
-  
+export interface Customer {
+  id: number;
+  name: string;
+  phone_number: string;
+  email: string;
+}
