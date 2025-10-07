@@ -52,15 +52,31 @@ export interface SubscriptionResponse {
   expired: boolean;
 }
 
+// Alternative if you want to parse the benefits as actual arrays
+interface PlanWithParsedBenefits extends Omit<Plan, "benefits"> {
+  benefits: string[];
+  parsed_features?: string[]; // Optional parsed features if needed
+}
+
+interface SubscriptionResponseWithParsedBenefits {
+  success: boolean;
+  current: PlanWithParsedBenefits;
+  start_date: string;
+  end_date: string;
+  store_id: number;
+  plans: PlanWithParsedBenefits[];
+  email: string;
+}
+
 export const useGetSubscription = () => {
   return useQuery<SubscriptionResponse>({
     queryKey: ["user-plan"],
     queryFn: () => api.getSubscriptionsHistory(),
   });
 };
-// export const useGetOustandingList = () => {
-//   return useQuery<OutStandingResponse>({
-//     queryKey: ["outstanding"],
-//     queryFn: () => api.getAllOutstanding(),
-//   });
-// };
+export const useGetAllSubscriptions = () => {
+  return useQuery<SubscriptionResponseWithParsedBenefits>({
+    queryKey: ["plans"],
+    queryFn: () => api.getSubscriptions(),
+  });
+};

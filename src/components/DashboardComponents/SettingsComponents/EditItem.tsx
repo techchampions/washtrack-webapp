@@ -1,7 +1,8 @@
 import { Button, InputField } from "@/components/FormComponents";
 import { useUpdateItem } from "@/hooks/mutations/useMutateItems";
 import { ItemType } from "@/hooks/query/useGetItemService";
-import { IItemService, Service } from "@/services/items.service";
+import { Service, UpdateItem } from "@/services/items.service";
+import { useAuthStore } from "@/store/auth.store";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Trash } from "lucide-react";
 import React from "react";
@@ -15,7 +16,7 @@ interface Props {
 }
 const EditItem: React.FC<Props> = ({ item }) => {
   const { mutate: updateItem, isPending } = useUpdateItem();
-
+  const { user } = useAuthStore();
   const services = item.services ?? [];
 
   // Initialize service prices for each service
@@ -36,11 +37,23 @@ const EditItem: React.FC<Props> = ({ item }) => {
     const servicesWithPrices = values.services.filter(
       (servicePrice) => servicePrice.price && servicePrice.estimated_hours
     );
+    const payload: UpdateItem[] = [];
+    for (let index = 0; index < servicesWithPrices.length; index++) {
+      const service = servicesWithPrices[index];
 
-    const payload: IItemService = {
-      item_name: values.item_name,
-      services: servicesWithPrices,
-    };
+      const shortPayload: UpdateItem = {
+        item_name: values.item_name,
+        service_id: service.service_id,
+        service_name: service.service_name,
+        price: service.price,
+        estimated_hours: service.estimated_hours,
+        id: item.id,
+        item_id: item.id,
+        store_id: item.store_id,
+        user_id: user?.id || 0,
+      };
+      payload.push(shortPayload);
+    }
 
     updateItem(payload);
   };

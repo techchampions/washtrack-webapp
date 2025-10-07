@@ -1,4 +1,5 @@
 import { Button, InputField } from "@/components/FormComponents";
+import SmallLoader from "@/components/GeneralComponents/SmallLoader";
 import { useAddItem } from "@/hooks/mutations/useMutateItems";
 import { useGetServices } from "@/hooks/query/useGetServices";
 import { IItemService, Service } from "@/services/items.service";
@@ -13,7 +14,10 @@ interface FormValues {
 
 const AddItem = () => {
   const { mutate: addItem, isPending } = useAddItem();
-  const { data: servicesData } = useGetServices();
+  const { data: servicesData, isLoading } = useGetServices();
+  if (isLoading) {
+    return <SmallLoader />;
+  }
 
   const services = servicesData?.service ?? [];
 

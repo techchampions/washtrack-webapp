@@ -27,6 +27,8 @@ import SettingsPage from "@/pages/settings/SettingsPage";
 import SettingStoreSetup from "@/pages/settings/StoreSetup";
 import ServicesSetup from "@/pages/settings/ServicesSetup";
 import ItemsSetup from "@/pages/settings/ItemsSetup";
+import SubscriptionPage from "@/pages/settings/SubscriptionPage";
+import SubscriptionPlanPage from "@/pages/settings/SubscriptionPlanPage";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -161,6 +163,14 @@ export const AppRoutes: React.FC = () => {
             <Route
               path="/dashboard/settings/items-setup"
               element={<ItemsSetup />}
+            />
+            <Route
+              path="/dashboard/settings/subscription"
+              element={<SubscriptionPage />}
+            />
+            <Route
+              path="/dashboard/settings/subscription/all"
+              element={<SubscriptionPlanPage />}
             />
 
             {/* Profile Routes */}

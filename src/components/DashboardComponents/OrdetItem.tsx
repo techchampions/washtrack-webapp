@@ -15,7 +15,7 @@ const OrderItem: React.FC<OrderProps> = ({ order, onClick }) => {
       onClick={onClick}
     >
       {/* Icon */}
-      <img src="../images/order-icon.png" alt="inventory" className="h-12" />
+      <img src="/images/order-icon.png" alt="inventory" className="h-12" />
 
       {/* Order Details */}
       <div className="flex flex-col flex-1 text-left">

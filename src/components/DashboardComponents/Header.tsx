@@ -42,7 +42,7 @@ const Header: React.FC<Props> = ({ children, title }) => {
         )}
       </div>
       {/* Mobile-only upgrade banner */}
-      <div className="flex items-center justify-between w-full px-4 py-2 rounded-md bg-brand-100 text-brand md:hidden">
+      <div className="flex items-center justify-between w-full px-4 py-2 rounded-md bg-brand-100 text-brand">
         <div className="flex-1 w-full text-left">
           <p className="w-full text-sm font-bold text-left">
             {data?.currentPlan.name || user?.plan?.name || "Free Plan"}

@@ -6,6 +6,7 @@ import {
 import { Button } from "@/components/FormComponents";
 import { useAuthStore } from "@/store/auth.store";
 import {
+  CalendarSync,
   Lock,
   LogOut,
   Mail,
@@ -16,7 +17,6 @@ import {
   Settings,
   Store,
   Trash,
-  User,
 } from "lucide-react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,11 +27,6 @@ const SETTINGSLIST = [
     href: "/dashboard/settings/store-setup",
   },
   {
-    icon: <User size={20} className="" />,
-    label: "User Profile",
-    href: "/dashboard/settings/user-profile",
-  },
-  {
     icon: <Settings size={20} className="" />,
     label: "Services",
     href: "/dashboard/settings/services",
@@ -40,6 +35,11 @@ const SETTINGSLIST = [
     icon: <Package size={20} className="" />,
     label: "Items",
     href: "/dashboard/settings/items-setup",
+  },
+  {
+    icon: <CalendarSync size={20} className="" />,
+    label: "Subscription",
+    href: "/dashboard/settings/subscription",
   },
 ];
 const ACTIONSLIST = [
