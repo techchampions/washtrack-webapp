@@ -12,6 +12,8 @@ import { showError } from "@/utils/toast";
 import { useGetDashboard } from "@/hooks/query/useGetDashboard";
 import { Header } from "@/components/DashboardComponents";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { ArrowRight } from "lucide-react";
 
 const HomeScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState("Today");
@@ -88,6 +90,14 @@ const HomeScreen: React.FC = () => {
         ) : (
           <OrderList orders={data?.recent_orders ?? []} />
         )}
+        <div className="py-8">
+          <LinkButton
+            href="/dashboard/orders"
+            label="View more"
+            rightIcon={<ArrowRight />}
+            className="!text-black"
+          />
+        </div>
       </div>
     </div>
   );

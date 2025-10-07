@@ -18,5 +18,6 @@ export interface OrderReportItem {
 export interface MonthlyReportResponse {
   success: boolean;
   order_report: OrderReportItem[];
+  expense_report: OrderReportItem[];
   percentage_change: number[];
 }

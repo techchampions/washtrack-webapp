@@ -1,198 +1,34 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-//   // CartesianGrid,
-// } from "recharts";
-// import { FaSmile } from "react-icons/fa";
-// import MainCard from "@/components/DashboardComponents/MainCard";
-// import Button from "@/components/FormComponents/Button";
-// import { useGetReport } from "@/hooks/query/useGetReport";
-
-// // Full dataset (12 months)
-// const fullData = [
-//   { name: "Jan", orders: 10 },
-//   { name: "Feb", orders: 25 },
-//   { name: "Mar", orders: 15 },
-//   { name: "Apr", orders: 20 },
-//   { name: "May", orders: 18 },
-//   { name: "Jun", orders: 22 },
-//   { name: "Jul", orders: 12 },
-//   { name: "Aug", orders: 24 },
-//   { name: "Sep", orders: 30 },
-//   { name: "Oct", orders: 16 },
-//   { name: "Nov", orders: 19 },
-//   { name: "Dec", orders: 21 },
-//   { name: "Jan", orders: 10 },
-//   { name: "Feb", orders: 25 },
-//   { name: "Mar", orders: 15 },
-//   { name: "Apr", orders: 20 },
-//   { name: "May", orders: 18 },
-//   { name: "Jun", orders: 22 },
-// ];
-
-// const CustomTooltip = ({ active, payload, label }: any) => {
-//   if (active && payload && payload.length) {
-//     return (
-//       <div className="bg-white shadow-md p-2 rounded-md text-sm text-gray-700">
-//         <div className="flex items-center gap-1">
-//           <FaSmile className="text-brand" />
-//           <span className="font-semibold">{payload[0].value} Orders</span>
-//         </div>
-//         <p className="text-xs">{label}, 2024</p>
-//       </div>
-//     );
-//   }
-//   return null;
-// };
-
-// const ReportScreen: React.FC = () => {
-//   const [chartHeight, setChartHeight] = useState(300);
-//   const { data, isLoading } = useGetReport();
-//   const report = data?.order_report ?? [];
-//   const [chartData, setChartData] = useState(report);
-//   const [activeTab, setActiveTab] = useState("Order");
-
-//   // Function to handle responsive adjustments
-//   useEffect(() => {
-//     const updateChartSize = () => {
-//       if (window.innerWidth < 768) {
-//         setChartHeight(250); // Mobile: shorter chart
-//         setChartData(report.slice(-8)); // Show last 6 months
-//       } else {
-//         setChartHeight(350); // Desktop: taller chart
-//         setChartData(report); // Show all months
-//       }
-//     };
-
-//     updateChartSize();
-//     window.addEventListener("resize", updateChartSize);
-//     return () => window.removeEventListener("resize", updateChartSize);
-//   }, [report]);
-
-//   return (
-//     <div className="w-full md:w-[90%] bg-white mx-auto">
-//       {/* Cards */}
-//       <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
-//         <MainCard>
-//           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-//             <div className="text-[40px] md:text-[60px] font-brand-bold">
-//               200
-//             </div>
-//             <div className="text-md text-white/80">Total Orders</div>
-//             <p className="text-sm underline text-white cursor-pointer">
-//               View all
-//             </p>
-//           </div>
-//         </MainCard>
-//         <MainCard>
-//           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-//             <div className="text-[40px] md:text-[60px] font-brand-bold">
-//               ₦50
-//             </div>
-//             <div className="text-md text-white/80">Outstanding</div>
-//             <p className="text-sm underline text-white cursor-pointer">
-//               View all
-//             </p>
-//           </div>
-//         </MainCard>
-//         <MainCard>
-//           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-//             <div className="text-[40px] md:text-[60px] font-brand-bold">
-//               ₦500
-//             </div>
-//             <div className="text-md text-white/80">Revenue</div>
-//             <p className="text-sm underline text-white cursor-pointer">
-//               View all
-//             </p>
-//           </div>
-//         </MainCard>
-//         <MainCard>
-//           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-//             <div className="text-[40px] md:text-[60px] font-brand-bold">
-//               ₦1200
-//             </div>
-//             <div className="text-md text-white/80">Total Expense</div>
-//             <p className="text-sm underline text-white cursor-pointer">
-//               View all
-//             </p>
-//           </div>
-//         </MainCard>
-//       </div>
-
-//       {/* Tabs */}
-//       <div className="text-black text-left text-2xl font-brand-bold py-5">
-//         Performance
-//       </div>
-//       <div className="grid grid-cols-4 gap-2 md:gap-5 mb-4 md:mb-8">
-//         {["Order", "Expense", "Revenue", "Outstanding"].map((tab) => (
-//           <button
-//             key={tab}
-//             className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-brand-bold ${
-//               activeTab === tab
-//                 ? "bg-brand text-white"
-//                 : "border border-gray-200 text-gray-400"
-//             }`}
-//             onClick={() => setActiveTab(tab)}
-//           >
-//             {tab}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Chart */}
-//       <ResponsiveContainer width="100%" height={chartHeight}>
-//         <BarChart data={chartData}>
-//           <XAxis dataKey="name" tick={{ fill: "gray" }} />
-//           <Tooltip
-//             content={<CustomTooltip />}
-//             cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
-//           />
-//           <Bar
-//             dataKey="orders"
-//             fill="#00bcff"
-//             radius={[7, 7, 0, 0]}
-//             background={{ fill: "#eee" }}
-//           />
-//         </BarChart>
-//       </ResponsiveContainer>
-
-//       {/* Performance Text */}
-//       <p className="text-gray-600 mt-2 text-center text-lg md:text-2xl">
-//         <span className="font-brand-bold text-2xl md:text-3xl">30%</span> Your
-//         sales performance is <span className="text-brand">30% better</span>{" "}
-//         compared to last month.
-//       </p>
-
-//       {/* Button */}
-//       <div className="w-full md:w-[50%] mx-auto mt-8">
-//         <Button label="View Details" className="text-[25px]" />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ReportScreen;
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { FaSmile } from "react-icons/fa";
 import MainCard from "@/components/DashboardComponents/MainCard";
 import Button from "@/components/FormComponents/Button";
 import { useGetMonthlyReport } from "@/hooks/query/useGetReport";
 import { OrderReportItem } from "@/types/GeneralTypes/report";
+import { formatPrice } from "@/utils/formatter";
 
 // Define the type for the API response data
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  activeTab,
+}: {
+  active?: boolean;
+  payload?: OrderReportItem[];
+  label?: string;
+  activeTab: string;
+}) => {
   if (active && payload && payload.length) {
+    let placeholder = `${payload[0].value} orders`;
+    if (activeTab === "expenses") {
+      placeholder = `${formatPrice(payload[0].value)} spent`;
+    }
     return (
       <div className="bg-white shadow-md p-2 rounded-md text-sm text-gray-700">
         <div className="flex items-center gap-1">
           <FaSmile className="text-brand" />
-          <span className="font-semibold">{payload[0].value} Orders</span>
+          <span className="font-semibold">{placeholder}</span>
         </div>
         <p className="text-xs">{label}</p>
       </div>
@@ -202,32 +38,50 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const ReportScreen: React.FC = () => {
+  const tabs = ["orders", "expenses", "Revenues", "outstandings"];
+  type Tab = (typeof tabs)[number];
+
   const [chartHeight, setChartHeight] = useState(300);
-  const { data, isLoading } = useGetMonthlyReport();
+  const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
+  const { data, isLoading } = useGetMonthlyReport(activeTab);
   const reportData = data;
 
   // Transform the API data for the chart
-  const transformChartData = (orderReport: OrderReportItem[]) => {
-    return orderReport.map((item) => ({
+  const transformChartData = (report: OrderReportItem[]) => {
+    return report.map((item) => ({
       name: item.month.split(" ")[0], // Get just the month name (e.g., "April" from "April 2025")
       orders: item.value,
       fullMonth: item.month, // Keep full month for reference if needed
     }));
   };
+  // let report: OrderReportItem[] = [];
+  // if (activeTab === "orders") {
+  //   report = reportData?.order_report ?? [];
+  // } else if (activeTab === "expenses") {
+  //   report = reportData?.expense_report ?? [];
+  // }
 
-  const orderReport = reportData?.order_report ?? [];
+  // Wrap report calculation in useMemo to prevent unnecessary recalculations
+  const report = useMemo((): OrderReportItem[] => {
+    if (activeTab === "orders") {
+      return reportData?.order_report ?? [];
+    } else if (activeTab === "expenses") {
+      return reportData?.expense_report ?? [];
+    }
+    return [];
+  }, [activeTab, reportData?.order_report, reportData?.expense_report]);
+
   const percentageChange = reportData?.percentage_change?.[0] ?? 0;
 
-  const [chartData, setChartData] = useState(transformChartData(orderReport));
-  const [activeTab, setActiveTab] = useState("Order");
+  const [chartData, setChartData] = useState(transformChartData(report));
 
   // Update chart data when API response changes
   useEffect(() => {
-    if (orderReport.length > 0) {
-      const transformedData = transformChartData(orderReport);
+    if (report.length > 0) {
+      const transformedData = transformChartData(report);
       setChartData(transformedData);
     }
-  }, [orderReport]);
+  }, [report]);
 
   // Function to handle responsive adjustments
   useEffect(() => {
@@ -241,28 +95,28 @@ const ReportScreen: React.FC = () => {
       } else {
         setChartHeight(350); // Desktop: taller chart
         // Show all data on desktop
-        setChartData(transformChartData(orderReport));
+        setChartData(transformChartData(report));
       }
     };
 
     updateChartSize();
     window.addEventListener("resize", updateChartSize);
     return () => window.removeEventListener("resize", updateChartSize);
-  }, [orderReport, chartData.length]);
+  }, [report, chartData.length]);
 
   // Calculate totals from the API data
-  const calculateTotals = () => {
-    if (orderReport.length === 0) return { totalOrders: 0, totalValue: 0 };
+  // const calculateTotals = () => {
+  //   if (report.length === 0) return { totalOrders: 0, totalValue: 0 };
 
-    const totalOrders = orderReport.reduce((sum, item) => sum + item.value, 0);
-    // You might want to calculate revenue based on your business logic
-    const averageOrderValue = 100; // Replace with actual average order value
-    const totalValue = totalOrders * averageOrderValue;
+  //   const totalOrders = report.reduce((sum, item) => sum + item.value, 0);
+  //   // You might want to calculate revenue based on your business logic
+  //   const averageOrderValue = 100; // Replace with actual average order value
+  //   const totalValue = totalOrders * averageOrderValue;
 
-    return { totalOrders, totalValue };
-  };
+  //   return { totalOrders, totalValue };
+  // };
 
-  const { totalOrders, totalValue } = calculateTotals();
+  // const { totalOrders, totalValue } = calculateTotals();
 
   // Loading state
   if (isLoading) {
@@ -290,9 +144,7 @@ const ReportScreen: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
         <MainCard>
           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-            <div className="text-[40px] md:text-[60px] font-brand-bold">
-              {totalOrders}
-            </div>
+            <div className="text-3xl font-bold">{5}</div>
             <div className="text-md text-white/80">Total Orders</div>
             <p className="text-sm underline text-white cursor-pointer">
               View all
@@ -301,9 +153,7 @@ const ReportScreen: React.FC = () => {
         </MainCard>
         <MainCard>
           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-            <div className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦{/* Add outstanding calculation here */}
-            </div>
+            <div className="text-3xl font-bold">{formatPrice(25000)}</div>
             <div className="text-md text-white/80">Outstanding</div>
             <p className="text-sm underline text-white cursor-pointer">
               View all
@@ -312,9 +162,7 @@ const ReportScreen: React.FC = () => {
         </MainCard>
         <MainCard>
           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-            <div className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦{totalValue.toLocaleString()}
-            </div>
+            <div className="text-3xl font-bold">{formatPrice(56500)}</div>
             <div className="text-md text-white/80">Revenue</div>
             <p className="text-sm underline text-white cursor-pointer">
               View all
@@ -323,9 +171,7 @@ const ReportScreen: React.FC = () => {
         </MainCard>
         <MainCard>
           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
-            <div className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦{/* Add expense calculation here */}
-            </div>
+            <div className="text-3xl font-bold">{formatPrice(2222)}</div>
             <div className="text-md text-white/80">Total Expense</div>
             <p className="text-sm underline text-white cursor-pointer">
               View all
@@ -338,11 +184,13 @@ const ReportScreen: React.FC = () => {
       <div className="text-black text-left text-2xl font-brand-bold py-5">
         Performance
       </div>
-      <div className="grid grid-cols-4 gap-2 md:gap-5 mb-4 md:mb-8">
-        {["Order", "Expense", "Revenue", "Outstanding"].map((tab) => (
+      <div className="grid grid-cols-4 gap-2 mt-10 mb-4 md:mb-8">
+        {tabs.map((tab, index) => (
           <button
-            key={tab}
-            className={`px-1 py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-brand-bold ${
+            key={index}
+            className={`px-1 capitalize truncate py-1 md:py-2 md:px-4 text-xs md:text-md rounded-sm font-medium ${
+              tab === "all" && ""
+            } ${
               activeTab === tab
                 ? "bg-brand text-white"
                 : "border border-gray-200 text-gray-400"
@@ -360,7 +208,7 @@ const ReportScreen: React.FC = () => {
           <BarChart data={chartData}>
             <XAxis dataKey="name" tick={{ fill: "gray" }} />
             <Tooltip
-              content={<CustomTooltip />}
+              content={<CustomTooltip activeTab={activeTab} />}
               cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
             />
             <Bar

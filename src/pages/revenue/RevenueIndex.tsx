@@ -46,14 +46,16 @@ const RevenueIndex = () => {
           <div className="space-y-2">
             <h3 className="text-2xl font-bold text-left">Revenue</h3>
             <RevenueList revenues={revenues} />
-            <div className="mt-5">
-              <LinkButton
-                href="/dashboard/revenues/list"
-                label="View More"
-                rightIcon={<ArrowRight />}
-                className="!font-bold !text-quick-action-icon"
-              />
-            </div>
+            {revenues.length > 2 && (
+              <div className="mt-5">
+                <LinkButton
+                  href="/dashboard/revenues/list"
+                  label="View More"
+                  rightIcon={<ArrowRight />}
+                  className="!font-bold !text-quick-action-icon"
+                />
+              </div>
+            )}
           </div>
         </div>
         <RightSideBar />

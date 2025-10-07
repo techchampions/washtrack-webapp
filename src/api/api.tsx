@@ -382,10 +382,12 @@ const getReport = async (): Promise<Report> => {
   return response.data;
 };
 
-const getMonthlyReport = async (): // query: string
+const getMonthlyReport = async (
+  type: string
+): // query: string
 Promise<MonthlyReportResponse> => {
   const response = await apiClient.get<MonthlyReportResponse>(
-    `/api/monthly-report`
+    `/api/monthly-report/${type}`
   );
   return response.data;
 };

@@ -1,8 +1,8 @@
 export interface LoginCredentials {
-   email: string;
+  email: string;
   password: string;
   rememberMe: boolean;
-};
+}
 export interface SignupData {
   store_name: string;
   email: string;
@@ -11,20 +11,19 @@ export interface SignupData {
   referral_code?: string;
 }
 
-export interface ForgotPasswordData{
+export interface ForgotPasswordData {
   email: string;
-};
+}
 export interface ChangePasswordData {
-  otp: number;
+  otp?: number;
   password: string;
   password_confirmation: string;
-};
-export interface AuthResponse {};
-export interface ResetPasswordData {};
-
+}
+export interface AuthResponse {}
+export interface ResetPasswordData {}
 
 export interface AuthUser {
- id: number;
+  id: number;
   email: string;
   phone_num: string;
   plan_id: number;
@@ -34,13 +33,13 @@ export interface AuthUser {
   user_type: number;
   created_at: string;
   updated_at: string;
-};
+}
 
 export interface OnboardingData {
   profileComplete: boolean;
   addressSetup: boolean;
   preferencesSet: boolean;
-  currentStep: 'profile' | 'address' | 'preferences' | 'complete';
+  currentStep: "profile" | "address" | "preferences" | "complete";
   isAuthenticated: boolean;
 }
 
@@ -55,7 +54,6 @@ export interface OTPResponse {
 export interface OTP {
   otp: number | null;
 }
-
 
 export interface Register {
   email: string;
@@ -74,7 +72,7 @@ export interface Register {
 // }
 
 // export interface ChangePassword {
-  
+
 // }
 // export interface User {
 //   id: number;
@@ -94,6 +92,3 @@ export interface RegisterResponse {
   user: AuthUser;
   otp: OTP;
 }
-
-
-

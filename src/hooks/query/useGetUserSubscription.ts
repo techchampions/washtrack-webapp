@@ -53,18 +53,14 @@ export interface SubscriptionResponse {
 }
 
 // Alternative if you want to parse the benefits as actual arrays
-interface PlanWithParsedBenefits extends Omit<Plan, "benefits"> {
-  benefits: string[];
-  parsed_features?: string[]; // Optional parsed features if needed
-}
 
 interface SubscriptionResponseWithParsedBenefits {
   success: boolean;
-  current: PlanWithParsedBenefits;
+  current: Plan;
   start_date: string;
   end_date: string;
   store_id: number;
-  plans: PlanWithParsedBenefits[];
+  plans: Plan[];
   email: string;
 }
 

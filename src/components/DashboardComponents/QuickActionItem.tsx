@@ -1,3 +1,4 @@
+import React, { JSX } from "react";
 import { NavLink } from "react-router-dom";
 
 interface QuickActionProps {

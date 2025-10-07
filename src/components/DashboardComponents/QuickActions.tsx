@@ -1,14 +1,6 @@
-import {
-  FaClipboardList,
-  FaUsers,
-  FaChartBar,
-  FaMoneyBill,
-} from "react-icons/fa";
+import React from "react";
 import QuickActionItem from "./QuickActionItem";
-import { BsFillGridFill } from "react-icons/bs";
-import { FaSackDollar } from "react-icons/fa6";
-
-const QuickActions = () => {
+const QuickActions: React.FC = () => {
   const actions = [
     {
       label: "Inventory",
@@ -28,12 +20,12 @@ const QuickActions = () => {
     {
       label: "Expense",
       icon: <img src="../images/expense-icon.png" alt="inventory" />,
-      path: "expense",
+      path: "expenses",
     },
     {
       label: "Revenue",
       icon: <img src="../images/revenue-icon.png" alt="inventory" />,
-      path: "revenue",
+      path: "revenues",
     },
     {
       label: "Reports",

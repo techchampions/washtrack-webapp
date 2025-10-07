@@ -88,7 +88,7 @@ const OrderOverview = () => {
           </div>
           <div className="flex justify-between text-black py-2">
             <span>Balance</span>
-            <span className="font-bold">
+            <span className="font-bold text-red-500">
               {formatPrice(order?.balance || "")}
             </span>
           </div>

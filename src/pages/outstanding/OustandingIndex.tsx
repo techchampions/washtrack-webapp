@@ -46,14 +46,16 @@ const OutstandingIndex = () => {
           <div className="space-y-2">
             <h3 className="text-2xl font-bold text-left">Outstandings</h3>
             <OutstandingList outstandings={outstandings} />
-            <div className="mt-5">
-              <LinkButton
-                href="/dashboard/outstandings/list"
-                label="View More"
-                rightIcon={<ArrowRight />}
-                className="!font-bold !text-quick-action-icon"
-              />
-            </div>
+            {outstandings.length > 2 && (
+              <div className="mt-5">
+                <LinkButton
+                  href="/dashboard/outstandings/list"
+                  label="View More"
+                  rightIcon={<ArrowRight />}
+                  className="!font-bold !text-quick-action-icon"
+                />
+              </div>
+            )}
           </div>
         </div>
         <RightSideBar />

@@ -4,17 +4,20 @@ import {
   MainCard,
   RightSideBar,
 } from "@/components/DashboardComponents";
+import CreateExpense from "@/components/DashboardComponents/ExpenseComponents/CreateExpense";
 import ExpenseList from "@/components/DashboardComponents/ExpenseComponents/ExpenseList";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { useGetHomeExpense } from "@/hooks/query/usegetExpense";
+import { useModal } from "@/store/useModal.store";
 import { formatPrice } from "@/utils/formatter";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 
 const ExpenseIndex = () => {
   const [filter, setfilter] = useState("all");
   const { data, isLoading } = useGetHomeExpense(filter);
+  const modal = useModal();
   if (isLoading) {
     return <OrderItemLoading />;
   }
@@ -44,16 +47,24 @@ const ExpenseIndex = () => {
             </MainCard>
           </div>
           <div className="space-y-2">
-            <h3 className="text-left font-bold text-2xl">Expense</h3>
-            <ExpenseList expenses={expenses} />
-            <div className="mt-5">
-              <LinkButton
-                href="/dashboard/expenses/list"
-                label="View More"
-                rightIcon={<ArrowRight />}
-                className="!font-bold !text-quick-action-icon"
+            <div className="flex justify-between items-center">
+              <h3 className="text-left font-bold text-2xl">Expense</h3>
+              <PlusCircle
+                className="cursor-pointer"
+                onClick={() => modal.openModal(<CreateExpense />)}
               />
             </div>
+            <ExpenseList expenses={expenses} />
+            {expenses.length > 2 && (
+              <div className="mt-5">
+                <LinkButton
+                  href="/dashboard/expenses/list"
+                  label="View More"
+                  rightIcon={<ArrowRight />}
+                  className="!font-bold !text-quick-action-icon"
+                />
+              </div>
+            )}
           </div>
         </div>
         <RightSideBar />

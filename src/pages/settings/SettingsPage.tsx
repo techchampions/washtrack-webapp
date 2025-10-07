@@ -3,8 +3,12 @@ import {
   MainCard,
   RightSideBar,
 } from "@/components/DashboardComponents";
+import ChangePassword from "@/components/DashboardComponents/SettingsComponents/ChangePassword";
+import DeleteAccount from "@/components/DashboardComponents/SettingsComponents/DeleteAccount";
 import { Button } from "@/components/FormComponents";
+import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
+import { useModal } from "@/store/useModal.store";
 import {
   CalendarSync,
   Lock,
@@ -20,55 +24,56 @@ import {
 } from "lucide-react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-const SETTINGSLIST = [
-  {
-    icon: <Store size={20} className="" />,
-    label: "Store Info",
-    href: "/dashboard/settings/store-setup",
-  },
-  {
-    icon: <Settings size={20} className="" />,
-    label: "Services",
-    href: "/dashboard/settings/services",
-  },
-  {
-    icon: <Package size={20} className="" />,
-    label: "Items",
-    href: "/dashboard/settings/items-setup",
-  },
-  {
-    icon: <CalendarSync size={20} className="" />,
-    label: "Subscription",
-    href: "/dashboard/settings/subscription",
-  },
-];
-const ACTIONSLIST = [
-  {
-    icon: <Lock size={20} className="" />,
-    label: "Password & Security",
-    href: "/dashboard/settings/password-setup",
-    onclick: () => alert("hello"),
-  },
-  {
-    icon: <Trash size={20} className="" />,
-    label: "Delete Account",
-    href: "/dashboard/settings/user-profile",
-    onclick: () => alert("hello"),
-  },
-  {
-    icon: <MessageCircle size={20} className="" />,
-    label: "Send feedback",
-    href: "/dashboard/settings/send-feedback",
-    onclick: () => alert("hello"),
-  },
-  {
-    icon: <LogOut size={20} className="" />,
-    label: "Log out",
-    href: "#",
-    onclick: () => alert("hello"),
-  },
-];
 const SettingsPage = () => {
+  const modal = useModal();
+  const SETTINGSLIST = [
+    {
+      icon: <Store size={20} className="" />,
+      label: "Store Info",
+      href: "/dashboard/settings/store-setup",
+    },
+    {
+      icon: <Settings size={20} className="" />,
+      label: "Services",
+      href: "/dashboard/settings/services",
+    },
+    {
+      icon: <Package size={20} className="" />,
+      label: "Items",
+      href: "/dashboard/settings/items-setup",
+    },
+    {
+      icon: <CalendarSync size={20} className="" />,
+      label: "Subscription",
+      href: "/dashboard/settings/subscription",
+    },
+  ];
+  const ACTIONSLIST = [
+    {
+      icon: <Lock size={20} className="" />,
+      label: "Password & Security",
+      href: "#",
+      onclick: () => modal.openModal(<ChangePassword />),
+    },
+    {
+      icon: <Trash size={20} className="" />,
+      label: "Delete Account",
+      href: "#",
+      onclick: () => modal.openModal(<DeleteAccount />),
+    },
+    {
+      icon: <MessageCircle size={20} className="" />,
+      label: "Send feedback",
+      href: "/dashboard/settings/send-feedback",
+      onclick: () => alert("hello"),
+    },
+    {
+      icon: <LogOut size={20} className="" />,
+      label: "Log out",
+      href: "#",
+      onclick: () => authService.logout2(),
+    },
+  ];
   const { user } = useAuthStore();
   const navigate = useNavigate();
   return (
