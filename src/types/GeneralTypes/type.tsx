@@ -42,13 +42,11 @@ export type OrderCardProps = {
   updated_at: Date;
 };
 
-
 export interface PaymentTypes {
   store_id: number;
-  payment_type: 'plan';
+  payment_type: string;
   plan_id?: number;
 }
-
 
 export interface Plan {
   id: number;
@@ -69,7 +67,7 @@ export interface Subscription {
   store_id: number;
   is_active: number;
   start_date: string; // ISO string
-  end_date: string;   // ISO string
+  end_date: string; // ISO string
   created_at: string;
   updated_at: string;
   plan: Plan;
@@ -79,11 +77,10 @@ export interface SubscriptionHistoryResponse {
   success: boolean;
   currentPlan: Plan;
   start_date: string; // formatted like "12 March 2025"
-  end_date: string;   // formatted like "12 April 2025"
+  end_date: string; // formatted like "12 April 2025"
   subscriptions: Subscription[];
   ordersLeft: number;
 }
-
 
 export interface OrderStatusResponse {
   success: boolean;

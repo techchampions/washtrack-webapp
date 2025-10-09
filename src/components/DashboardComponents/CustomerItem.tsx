@@ -1,14 +1,19 @@
 import { Customers } from "@/hooks/query/useGetCustomers";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface CustomerProps {
   customer: Customers;
 }
 
 const CustomerItem: React.FC<CustomerProps> = ({ customer }) => {
+  const navigate = useNavigate();
   return (
-    <div className="bg-brand-100 cursor-pointer text-[12px] md:text-[16px] p-2 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
+    <div
+      onClick={() => navigate(`/dashboard/customers/order/${customer.id}`)}
+      className="bg-brand-100 cursor-pointer text-[12px] md:text-[16px] p-2 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4"
+    >
       {/* Icon */}
       <img src="/images/user-icon.png" alt="inventory" className="h-12" />
 

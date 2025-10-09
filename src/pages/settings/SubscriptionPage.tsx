@@ -41,7 +41,7 @@ const SubscriptionPage = () => {
               <LinkButton
                 href="/dashboard/settings/subscription/all"
                 label="Change"
-                className="bg-white/70 block hover:bg-white hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1 mt-4"
+                className="bg-white block hover:bg-white/70 hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1 mt-4"
               />
             </MainCard>
           </div>

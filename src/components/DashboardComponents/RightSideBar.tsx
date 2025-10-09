@@ -8,7 +8,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
-import { Button } from "@/components/FormComponents";
 import { formatPrice } from "@/utils/formatter";
 import OrderList from "@/components/DashboardComponents/OrderList";
 import { useGetOrders } from "@/hooks/query/usegetOrders";
@@ -94,9 +93,10 @@ const RightSideBar = () => {
           <div className="font-bold">{data?.user.store_name}</div>
           <div className="text-sm">{data?.user.plan?.name}</div>
         </div>
-        <Button
+        <LinkButton
+          href="/dashboard/settings/subscription/all"
           label="Upgrade plan"
-          className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !text-brand rounded-lg"
+          className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !font-normal !text-brand rounded-lg"
         />
       </div>
       {stats.map((item, i) => (

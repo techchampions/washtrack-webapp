@@ -51,7 +51,10 @@ export interface CustomerOrdersResponse {
   customer: Customer;
   order_items: OrderItemObj[];
 }
-export const useGetCustomerOrder = (customer_id: string, item_type: string) => {
+export const useGetCustomerOrderByType = (
+  customer_id: string,
+  item_type: string
+) => {
   return useQuery<CustomerOrdersResponse>({
     queryKey: ["orders", customer_id, item_type],
     queryFn: () => api.getCustomerOrderView(customer_id, item_type),

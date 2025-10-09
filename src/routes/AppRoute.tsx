@@ -29,6 +29,7 @@ import ServicesSetup from "@/pages/settings/ServicesSetup";
 import ItemsSetup from "@/pages/settings/ItemsSetup";
 import SubscriptionPage from "@/pages/settings/SubscriptionPage";
 import SubscriptionPlanPage from "@/pages/settings/SubscriptionPlanPage";
+import CustomerOrders from "@/pages/customers/CustomerOrders";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -132,6 +133,10 @@ export const AppRoutes: React.FC = () => {
             <Route
               path="/dashboard/customers/:customer_name/:customer_id/:item_type/orders"
               element={<CustomerOrderByType />}
+            />
+            <Route
+              path="/dashboard/customers/order/:id"
+              element={<CustomerOrders />}
             />
             <Route path="/dashboard/expenses" element={<ExpenseIndex />} />
             <Route

@@ -36,7 +36,7 @@ interface Customer {
   "0"?: null; // Optional since it's always null
 }
 
-interface Order {
+export interface Order {
   id: number;
   store_id: number;
   user_id: number;

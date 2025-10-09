@@ -1,8 +1,9 @@
 import React, { ReactNode } from "react";
 import { FiBell, FiSettings } from "react-icons/fi";
-import Button from "../FormComponents/Button";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { useNavigate } from "react-router-dom";
 interface Props {
   children?: ReactNode;
   title?: string;
@@ -10,6 +11,7 @@ interface Props {
 const Header: React.FC<Props> = ({ children, title }) => {
   const { user } = useAuth();
   const { data } = useGetSubscription();
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col w-full py-2 mx-auto mb-6 space-y-3">
       <div className="flex items-center justify-between">
@@ -37,7 +39,10 @@ const Header: React.FC<Props> = ({ children, title }) => {
         ) : (
           <div className="flex items-center space-x-4">
             <FiBell className="text-xl text-black cursor-pointer" />
-            <FiSettings className="text-xl text-black cursor-pointer" />
+            <FiSettings
+              className="text-xl text-black cursor-pointer"
+              onClick={() => navigate("/dashboard/settings")}
+            />
           </div>
         )}
       </div>
@@ -49,9 +54,10 @@ const Header: React.FC<Props> = ({ children, title }) => {
           </p>
           <span className="text-xs">{data?.ordersLeft} Orders left</span>
         </div>
-        <Button
+        <LinkButton
+          href="/dashboard/settings/subscription/all"
           label={data?.expired ? "Subscribe" : "Upgrade"}
-          className="py-0 rounded-md !w-fit px-5"
+          className="py-0 rounded-lg !w-fit px-5"
         />
       </div>
     </div>

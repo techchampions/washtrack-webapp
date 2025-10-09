@@ -92,6 +92,10 @@ button {
   cursor: pointer;
 }
 
+/* .checkout__outer-container {
+  background-color: red !important;
+} */
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

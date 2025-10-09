@@ -2,7 +2,7 @@ import "./App.css";
 import ToasterProvider from "./provider/ToasterProvider";
 // import AllRoutes from "./routes";
 import "react-datepicker/dist/react-datepicker.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -21,30 +21,15 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 const LIBRARIES: Libraries = ["places"];
 
 const queryClient = new QueryClient();
-// const queryClient = new QueryClient({
-//   defaultOptions: {
-//     queries: {
-//       retry: 1,
-//       refetchOnWindowFocus: true,
-//       staleTime: 5 * 60 * 1000, // 5 minutes
-//       gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-//     },
-//     mutations: {
-//       retry: 0,
-//     },
-//   },
-// });
-
-// const localStoragePersister = createAsyncStoragePersister({
-//   storage: window.localStorage,
-// });
-
-// persistQueryClient({
-//   queryClient,
-//   persister: localStoragePersister,
-// });
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <LoadScript
       loadingElement={<Loader />}

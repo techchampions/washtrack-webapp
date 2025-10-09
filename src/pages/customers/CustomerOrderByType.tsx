@@ -1,7 +1,7 @@
 import { Header } from "@/components/DashboardComponents";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 import ItemTypeOrderList from "@/components/DashboardComponents/OrderListByItemType";
-import { useGetCustomerOrder } from "@/hooks/query/useGetCustomerOrders";
+import { useGetCustomerOrderByType } from "@/hooks/query/useGetCustomerOrders";
 import React from "react";
 import { useParams } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const CustomerOrderByType = () => {
     customer_name: string;
   }>();
 
-  const { data, isLoading } = useGetCustomerOrder(
+  const { data, isLoading } = useGetCustomerOrderByType(
     customer_id || "",
     item_type || ""
   );

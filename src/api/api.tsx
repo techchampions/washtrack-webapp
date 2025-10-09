@@ -298,9 +298,8 @@ const getInventoryView = async (data: string, status: string) => {
   return response.data;
 };
 const getCustomerOrderView = async (id: string, itemType: string) => {
-  const response = await apiClient.get(
-    `/api/vendor/customer/${id}/orders/${itemType}`
-  );
+  const endpoint = `/api/vendor/customer/${id}/orders/${itemType}`;
+  const response = await apiClient.get(endpoint);
   return response.data;
 };
 const searchCustomers = async (
@@ -404,8 +403,29 @@ const postStoreItem = async (data: ItemService) => {
   const response = await apiClient.post(`/api/item-services/create`, data);
   return response;
 };
+
+type PaymentResponse = {
+  success: boolean;
+  message: string;
+  payment: {
+    user_id: number;
+    store_id: number;
+    order_id: number | null;
+    total_amount: number;
+    reference: string;
+    payment_type: string;
+    plan_id: number;
+    updated_at: string;
+    created_at: string;
+    id: number;
+  };
+  public_key: string;
+};
 const upgradePlan = async (data: PaymentTypes) => {
-  const response = await apiClient.post(`/api/make-payment`, data);
+  const response = await apiClient.post<PaymentResponse>(
+    `/api/make-payment`,
+    data
+  );
   return response.data;
 };
 

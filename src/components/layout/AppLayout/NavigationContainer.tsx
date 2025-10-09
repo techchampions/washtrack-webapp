@@ -3,7 +3,7 @@ import NavItem from "../Header/NavItem";
 import { FaChartBar, FaHome, FaList, FaUsers } from "react-icons/fa";
 import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
 import { RiAppsLine } from "react-icons/ri";
-import NavbarAddorder from "../Header/NavbarAddorder";
+// import NavbarAddorder from "../Header/NavbarAddorder";
 import { LogIn } from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { useModal } from "@/store/useModal.store";
@@ -61,16 +61,6 @@ function NavigationContainer() {
             icon={<FaUsers className="w-4 h-4 text-white" />}
             path="/dashboard/customers"
           />
-          {/* <NavItem
-            label="Revenue"
-            icon={<TbMoneybag className="text-white" />}
-            path="/dashboard/revenue"
-          />
-          <NavItem
-            label="Expense"
-            icon={<LiaMoneyBillAltSolid className="text-white" />}
-            path="/dashboard/expense"
-          /> */}
           <NavItem
             label="Report"
             icon={<FaChartBar className="w-4 h-4 text-white" />}
@@ -98,7 +88,7 @@ function NavigationContainer() {
           </button>
         </nav>
       </div>
-      <NavbarAddorder />
+      {/* <NavbarAddorder /> */}
     </div>
   );
 }

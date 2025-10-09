@@ -14,6 +14,7 @@ import { Header } from "@/components/DashboardComponents";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { ArrowRight } from "lucide-react";
+import { formatPrice } from "@/utils/formatter";
 
 const HomeScreen: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState("Today");
@@ -42,8 +43,8 @@ const HomeScreen: React.FC = () => {
             <p className="flex flex-row items-center gap-2 text-lg">
               Total Orders <Badge count={data?.total_order_count} />
             </p>
-            <h2 className="text-[40px] md:text-[60px] font-brand-bold">
-              ₦{data?.total_amount.toLocaleString()}
+            <h2 className="text-[40px] md:text-[60px] font-bold">
+              {formatPrice(data?.total_amount || "")}
             </h2>
           </div>
         </MainCard>
@@ -58,7 +59,7 @@ const HomeScreen: React.FC = () => {
                 Completed <Badge count={data?.completed_order_count} />
               </p>
               <h2 className="font-bold text-md lg:text-2xl">
-                ₦{data?.completed_amount.toLocaleString()}
+                {formatPrice(data?.completed_amount || "")}
               </h2>
             </div>
           </SmallMainCard>
@@ -72,7 +73,7 @@ const HomeScreen: React.FC = () => {
                 Pending <Badge count={data?.pending_order_count} />
               </p>
               <h2 className="font-bold text-md lg:text-2xl">
-                ₦{data?.pending_amount.toLocaleString()}
+                {formatPrice(data?.pending_amount || "")}
               </h2>
             </div>
           </SmallMainCard>
