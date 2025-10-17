@@ -8,8 +8,11 @@ import { Button } from "@/components/FormComponents";
 import { Header } from "@/components/DashboardComponents";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import OrderDetailsLoading from "@/components/DashboardComponents/LoadingComponents/OrderOverviewLoading";
+import { useModal } from "@/store/useModal.store";
+import OrderReceipt from "@/components/DashboardComponents/OrderComponents/OrderReciept";
 
 const OrderOverview = () => {
+  const modal = useModal();
   const { order_id } = useParams<{ order_id: string }>();
   const { data, isLoading } = useGetSingleOrder(order_id || "");
   const { mutate: update, isPending } = useUpdateOrderStatus();
@@ -32,19 +35,36 @@ const OrderOverview = () => {
   return (
     <div className="w-full">
       <Header>
-        <Button label="View Reciept" className="!min-w-fit px-4" />
-        {(order?.balance || 0) > 0 ? (
+        <Button
+          label="View Reciept"
+          className="!min-w-fit px-4"
+          onClick={() =>
+            modal.openModal(
+              <OrderReceipt
+                order={order}
+                customer={customer}
+                noOfItems={noOfItems}
+                orderItems={orderItems}
+              />
+            )
+          }
+        />
+        {(order?.balance || 0) > 1 ? (
           <LinkButton
             href={`/dashboard/orders/outstanding/${order?.id}`}
             label="Update Outstanding Balance"
-            className="!min-w-fit px-4"
+            className="!min-w-fit px-4 truncate hidden lg:flex"
           />
         ) : (
-          <Button label="View Payment history" className="!min-w-fit px-4" />
+          <LinkButton
+            href={`/dashboard/orders/outstanding/${order?.id}`}
+            label="View Payment history"
+            className="!min-w-fit px-4 truncate hidden lg:flex"
+          />
         )}
       </Header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
           <div className="flex justify-start gap-2 text-black pb-2 ">
             <img src="/images/washing_machine.svg" alt="" />
@@ -70,10 +90,25 @@ const OrderOverview = () => {
           </div>
         </div>
 
-        <div className="bg-brand-100 p-4 rounded-lg md:col-span-2">
-          <h3 className="text-black text-lg md:text-2xl text-left font-bold py-2">
-            Payment Details
-          </h3>
+        <div className="bg-brand-100 p-4 rounded-lg lg:col-span-2">
+          <div className="flex justify-between items-center">
+            <h3 className="text-black text-lg md:text-2xl text-left font-bold py-2">
+              Payment Details
+            </h3>
+            {(order?.balance || 0) > 1 ? (
+              <LinkButton
+                href={`/dashboard/orders/outstanding/${order?.id}`}
+                label="Update Outstanding Balance"
+                className="!w-fit text-xs px-4 truncate flex lg:hidden"
+              />
+            ) : (
+              <LinkButton
+                href={`/dashboard/orders/outstanding/${order?.id}`}
+                label="View Payment history"
+                className="!w-fit text-xs px-4 truncate flex lg:hidden"
+              />
+            )}
+          </div>
           <div className="flex justify-between text-black py-2">
             <span>Cost of service</span>
             <span className="font-bold">
@@ -169,7 +204,7 @@ const OrderOverview = () => {
           </ol>
         </div>
 
-        <div className=" rounded-lg md:col-span-2 p-4 space-y-1">
+        <div className=" rounded-lg lg:col-span-2 p-4 space-y-1">
           <h3 className="text-left text-black font-bold">Items</h3>
           {orderItems.map((item, index) => (
             <Item

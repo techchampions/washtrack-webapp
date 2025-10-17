@@ -1,10 +1,16 @@
 import React from "react";
 import NavItem from "../Header/NavItem";
-import { FaChartBar, FaHome, FaList, FaUsers } from "react-icons/fa";
-import { MdOutlineAddBox, MdOutlineInventory } from "react-icons/md";
+import { FaChartBar } from "react-icons/fa";
 import { RiAppsLine } from "react-icons/ri";
 // import NavbarAddorder from "../Header/NavbarAddorder";
-import { LogIn } from "lucide-react";
+import {
+  ClipboardCheck,
+  Home,
+  List,
+  LogIn,
+  PlusSquare,
+  Users2,
+} from "lucide-react";
 import { authService } from "@/services/auth.service";
 import { useModal } from "@/store/useModal.store";
 import CreateOrderModal from "@/components/DashboardComponents/CreateOrderComponents/CreateOrderModal";
@@ -23,27 +29,27 @@ function NavigationContainer() {
   };
   return (
     <div className="flex flex-col justify-between h-screen px-4 overflow-y-scroll scrollbar-hide">
-      <div className="w-full py-8">
-        <img src="/images/logo.png" alt="Wash Track" className="w-full" />
+      <div className="w-full pb-8">
+        <img src="/images/logo.svg" alt="Wash Track" className="w-full" />
         <nav className="py-8 space-y-2 text-white">
           <NavItem
             label="Overview"
-            icon={<FaHome className="w-4 h-4 text-white" />}
+            icon={<Home className="h-5 w-5 text-white" />}
             path="/dashboard"
           />
 
           {/* Replace Add Order NavItem with a button to open modal */}
           <button
             onClick={handleCreateOrder}
-            className="flex items-center w-full px-3 py-[7px] text-[12px] text-white rounded-md hover:bg-brand-400"
+            className="flex items-center w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
           >
-            <MdOutlineAddBox className="w-4 h-4 mr-2 text-white" />
+            <PlusSquare className="h-5 w-5  mr-2 text-white" />
             Add Order
           </button>
 
           <NavItem
             label="Inventory"
-            icon={<MdOutlineInventory className="w-4 h-4 text-white" />}
+            icon={<ClipboardCheck className="h-5 w-5  text-white" />}
             path="/dashboard/inventory"
           />
           {/* <NavItem
@@ -53,41 +59,44 @@ function NavigationContainer() {
           /> */}
           <NavItem
             label="Orders"
-            icon={<FaList className="w-4 h-4 text-white" />}
+            icon={<List className="h-5 w-5 text-white" />}
             path="/dashboard/orders"
           />
           <NavItem
             label="Customers"
-            icon={<FaUsers className="w-4 h-4 text-white" />}
+            icon={<Users2 className="w-5 h-5 text-white" />}
             path="/dashboard/customers"
           />
           <NavItem
             label="Report"
-            icon={<FaChartBar className="w-4 h-4 text-white" />}
+            icon={<FaChartBar className="w-5 h-5 text-white" />}
             path="/dashboard/reports"
           />
 
           {/* Nested nav */}
           <NavItem
             label="More"
-            icon={<RiAppsLine className="w-4 h-4 text-white" />}
+            icon={<RiAppsLine className="w-5 h-5 text-white" />}
             children={[
               { label: "Setting", path: "/dashboard/settings" },
               { label: "Revenue", path: "/dashboard/revenues" },
               { label: "Outstanding", path: "/dashboard/outstandings" },
               { label: "Expense", path: "/dashboard/expenses" },
+              {
+                label: "Subscription",
+                path: "/dashboard/settings/subscription",
+              },
             ]}
           />
-
-          <button
-            onClick={authService.logout2}
-            className="flex items-center w-full gap-2 px-3 mt-5 text-sm text-red-500 cursor-pointer font-brand-bold text-leftf"
-          >
-            <LogIn size={16} className="font-brand-bold" />
-            <span>Log Out</span>
-          </button>
         </nav>
       </div>
+      <button
+        onClick={authService.logout2}
+        className="flex items-center w-full gap-2 px-3 py-2 mt-5 text-sm font-bold text-white rounded-lg cursor-pointer hover:text-white bg-red-500 hover:bg-red-400 text-leftf"
+      >
+        <LogIn size={16} className="font-brand-bold" />
+        <span>Log Out</span>
+      </button>
       {/* <NavbarAddorder /> */}
     </div>
   );

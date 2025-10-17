@@ -12,9 +12,9 @@ export interface Service {
 }
 export interface UpdateItem {
   id: number;
-  item_id: number;
-  user_id: number;
-  store_id: number;
+  item_id?: number;
+  user_id?: number;
+  store_id?: number;
   item_name: string;
   service_id: number;
   price: number;

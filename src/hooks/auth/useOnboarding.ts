@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onboardingService } from "@/services/onboarding.service";
 import { useOnboardingStore } from "@/store/onboarding.store";
@@ -23,7 +24,7 @@ export const useCreateStore = () => {
         navigate("/onboarding/add-services-setup");
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("❌ Create Store error:", error.response);
       showError(error.response.data.message);
     },

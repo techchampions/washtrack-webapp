@@ -7,12 +7,13 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import { useOnboardingStore } from "@/store/onboarding.store";
 import { useAuthStore } from "@/store/auth.store";
 // import { useCreateStore } from "@/hooks/auth/useOnboarding";
-import { FormField } from "../forms/FormField";
+// import { FormField } from "../forms/FormField";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 import Loader from "@/components/GeneralComponents/Loader";
 import { useSoosarCreateStore } from "@/hooks/auth/useOnboarding";
 import ImageUploadField from "@/components/FormComponents/ImageInput";
 import RoundImageUpload from "@/components/FormComponents/RoundImageInput";
+import { InputField } from "@/components/FormComponents";
 
 // const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
@@ -336,11 +337,11 @@ const StoreProfileSetup = () => {
                       Store Description
                     </label>
 
-                    <FormField
+                    <InputField
                       name="storeDescription"
                       placeholder="Enter Store Description"
                       type="textarea"
-                      inputClassName="!text-black"
+                      className="!text-black"
                     />
                   </div>
 

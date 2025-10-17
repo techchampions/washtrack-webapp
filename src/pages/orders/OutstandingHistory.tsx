@@ -55,13 +55,15 @@ const OutstandingHistory = () => {
         <div className="mt-10">
           <div className="flex justify-between items center">
             <h3 className="text-lg md:text-3xl font-bold">Payment History</h3>
-            <Button
-              label="Pay Oustanding"
-              className="!w-fit px-4 text-sm"
-              onClick={() =>
-                modal.openModal(<PayOutstandingBalance id={order_id || ""} />)
-              }
-            />
+            {(order?.balance || 0) > 1 && (
+              <Button
+                label="Pay Oustanding"
+                className="!w-fit px-4 text-sm"
+                onClick={() =>
+                  modal.openModal(<PayOutstandingBalance id={order_id || ""} />)
+                }
+              />
+            )}
           </div>
           <div className="grid grid-cols-3 lg:grid-cols-4 text-left bg-gray-100 px-4 py-2 rounded-2xl font-bold mt-5">
             <div className="hidden lg:block">No.</div>

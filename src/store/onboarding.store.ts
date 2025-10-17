@@ -3,16 +3,16 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type Store = {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   description?: string;
   country?: string;
   state?: string;
   address?: string;
   logoUrl?: string;
   createdAt?: string;
-  logitude: string | number;
-  latitude: string | number;
+  logitude?: string | number;
+  latitude?: string | number;
 };
 
 interface OnboardingState {

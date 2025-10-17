@@ -9,7 +9,7 @@ interface OrderDetailResponse {
   customer: Customer;
 }
 
-interface Order {
+export interface Order {
   id: number;
   store_id: number;
   user_id: number;
@@ -41,7 +41,7 @@ interface Order {
   "0": null;
 }
 
-interface OrderItem {
+export interface OrderItem {
   id: number;
   store_id: number;
   user_id: number;
@@ -64,7 +64,7 @@ interface OrderItem {
   "0": null;
 }
 
-interface Customer {
+export interface Customer {
   id: number;
   name: string;
   phone_number: string;

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-const SmallMainCard = ({ children, className = "", ...props }) => {
+const SmallMainCard = ({ children, className = "", ...props }: any) => {
   return (
     <div
       className={` relative overflow-hidden bg-brand text-white p-6 rounded-[20px]  w-[50%] md:w-full h-[100px] md:h-[49.5%]  ${className}`}

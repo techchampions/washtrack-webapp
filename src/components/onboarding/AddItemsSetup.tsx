@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
@@ -20,13 +21,7 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useServicesStore } from "@/store/services.store";
 import { useAuthStore } from "@/store/auth.store";
 
-const ItemsList = ({
-  item,
-  index,
-  setEditIndex,
-  showForm,
-  toggleFormDisplay,
-}) => {
+const ItemsList = ({ item, index, setEditIndex, toggleFormDisplay }: any) => {
   return (
     <div className="mb-2 space-y-1">
       <div
@@ -51,7 +46,7 @@ const ItemsList = ({
           <div className="min-w-0 text-left">
             <h3 className="font-medium text-md text-[#000000]">{item.name}</h3>
             <p className="text-sm text-[#000000] line-clamp-1">
-              {item["services"].map((s) => s.service_name).join(", ")}
+              {item["services"].map((s: any) => s.service_name).join(", ")}
             </p>
           </div>
         </div>
@@ -77,13 +72,11 @@ const ItemsList = ({
 const ItemsServicesForm = ({
   handleSubmit,
   getServicesItem,
-  validationSchema,
   toggleFormDisplay,
   editIndex,
-  setEditIndex,
   items,
   loading,
-}) => {
+}: any) => {
   return (
     <div className="absolute inset-0 h-[100%] w-[100%] mx-auto bg-white rounded-3xl p-6 shadow-xl z-10 flex flex-col">
       <div className="flex">
@@ -128,7 +121,7 @@ const ItemsServicesForm = ({
                   Services
                 </h3>
                 <FieldArray name="services">
-                  {({ push, remove }) => (
+                  {({ remove }) => (
                     <div className="space-y-3 max-h-[430px] overflow-y-scroll scrollbar-hide">
                       <div className="grid items-end grid-cols-11 gap-3 text-black w-full">
                         <div className="col-span-4 text-left text-xs">
@@ -141,9 +134,9 @@ const ItemsServicesForm = ({
                           Est. hours
                         </div>
                       </div>
-                      {values.services.map((service, index) => (
+                      {values.services.map((service: any, index: any) => (
                         <div
-                          key={index}
+                          key={service}
                           className="grid items-end grid-cols-11 gap-3 border border-gray-300 py-1 rounded-lg"
                         >
                           <div className="col-span-4">
@@ -204,6 +197,7 @@ const ItemsServicesForm = ({
 };
 
 interface ServiceInput {
+  id: string;
   service_id: string;
   service_name: string;
   price: number | string;
@@ -215,9 +209,9 @@ interface ItemFormValues {
   services: ServiceInput[];
 }
 
-const AddItemsSetup = ({ handleEdit, handleDelete }) => {
-  const items = useItemsStore((state) => state.items);
-  const userId = useAuthStore((state) => state.user?.id);
+const AddItemsSetup = () => {
+  const items: any = useItemsStore((state) => state.items);
+  // const userId = useAuthStore((state) => state.user?.id);
   const { setCompletedOnboarding } = useAuthStore();
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const navigate = useNavigate();
@@ -249,15 +243,15 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
       const currentItemServices = items?.itemType[editIndex]?.services;
       console.log(currentItemServices, "________currentItemServices");
       console.log(values.services, "------ values.services");
-      const payload = values.services.map((service, idx) => {
-        const original = currentItemServices?.find(
-          (s) => s.service_id === service.service_id
-        );
+      const payload = values.services.map((service) => {
+        // const original = currentItemServices?.find(
+        //   (s) => s.service_id === service.service_id
+        // );
 
         return {
-          id: service.id,
+          id: Number(service.id),
           item_name: values.item_name,
-          service_id: service.service_id,
+          service_id: Number(service.service_id),
           service_name: service.service_name,
           price: Number(service.price),
           estimated_hours: Number(service.estimated_hours),
@@ -274,7 +268,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
             toggleFormDisplay();
           }
         },
-        onError: (error) => {
+        onError: (error: any) => {
           console.error("❌ error:", error.response);
           showError(error.response.data.message);
           toggleFormDisplay();
@@ -310,7 +304,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
             toggleFormDisplay();
           }
         },
-        onError: (error) => {
+        onError: (error: any) => {
           console.error("❌ error:", error.response);
           showError(error.response.data.message);
           toggleFormDisplay();
@@ -330,7 +324,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
   });
 
   const getServicesItem = (data: any) => {
-    const servicesToEdit = [];
+    const servicesToEdit: any[] = [];
     const seenIds = new Set();
 
     if (editIndex !== null) {
@@ -426,7 +420,7 @@ const AddItemsSetup = ({ handleEdit, handleDelete }) => {
         <div className=" min-h-[35vh]">
           {items && (
             <div className="mt-8 max-h-[250px] overflow-y-scroll scrollbar-hide">
-              {items?.itemType?.map((item, index) => (
+              {items?.itemType?.map((item: any, index: any) => (
                 <div key={index}>
                   <ItemsList
                     setEditIndex={setEditIndex}

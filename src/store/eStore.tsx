@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from "@/api/api";
 import {
   EItemService,
@@ -16,10 +17,10 @@ import { OnlineServices } from "@/types/GeneralTypes/ordertypes";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface SuccessResponse {
-  success: boolean;
-  message: string;
-}
+// interface SuccessResponse {
+//   success: boolean;
+//   message: string;
+// }
 
 interface EstoreState {
   estoreData: EstoreData | null;
@@ -73,7 +74,9 @@ export const useEstoreStore = create<EstoreState>()(
           console.error("Failed to fetch estore data:", error);
           set({
             error:
-              error.response && error.response.data && error.response?.data?.message
+              error.response &&
+              error.response.data &&
+              error.response?.data?.message
                 ? error.response.data.message
                 : "An error occurred while fetching the estore data.",
             isLoading: false,
@@ -101,7 +104,9 @@ export const useEstoreStore = create<EstoreState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to fetch orders";
 
@@ -132,7 +137,9 @@ export const useEstoreStore = create<EstoreState>()(
         } catch (error: any) {
           console.error("Error adding service:", error);
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to fetch orders";
           set({ error: errorMessage, isLoading: false });
@@ -155,7 +162,9 @@ export const useEstoreStore = create<EstoreState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to fetch orders";
           console.error("Error sending store data:", errorMessage);
@@ -185,7 +194,9 @@ export const useEstoreStore = create<EstoreState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to fetch orders";
           console.error("Error fetching store items:", errorMessage);
@@ -215,7 +226,9 @@ export const useEstoreStore = create<EstoreState>()(
           }
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to fetch item data";
           console.error("Error fetching store items:", errorMessage);
@@ -232,12 +245,11 @@ export const useEstoreStore = create<EstoreState>()(
             set({ isLoading: false });
             return response.data;
           }
-         
         } catch (error: any) {
-           const errorMessage = error.response.data;
+          const errorMessage = error.response.data;
           console.error("Error post store item:", errorMessage);
           set({ error: errorMessage, isLoading: false });
-          throw new error;
+          throw new error();
         }
       },
       updateStoreItem: async (data) => {
@@ -268,7 +280,9 @@ export const useEstoreStore = create<EstoreState>()(
           set({ isLoading: false });
         } catch (error: any) {
           const errorMessage =
-            error.response && error.response.data && error.response?.data?.message
+            error.response &&
+            error.response.data &&
+            error.response?.data?.message
               ? error.response.data.message
               : "Failed to update store setup";
           console.error("Error updating store setup:", errorMessage);
@@ -287,6 +301,7 @@ export const useEstoreStore = create<EstoreState>()(
       setCurrentStatus: (status: string) => {
         set({ currentStatus: status });
       },
-    }), { name: "estore-state" }
-
-  ));
+    }),
+    { name: "estore-state" }
+  )
+);

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-import { FormField } from "../forms/FormField";
+// import { FormField } from "../forms/FormField";
 import { Form, Formik } from "formik";
 import { Button } from "../common/Button";
 import * as Yup from "yup";
@@ -8,6 +9,7 @@ import { FaEdit } from "react-icons/fa";
 import { useOnboardingStore } from "@/store/onboarding.store";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
+import { InputField } from "@/components/FormComponents";
 
 const ServicesList = ({
   handleEdit,
@@ -17,7 +19,7 @@ const ServicesList = ({
   estimated_hours,
   index,
   id,
-}) => {
+}: any) => {
   return (
     <div className="relative mt-3">
       <div className="grid grid-cols-4 text-sm min-w-0 bg-[#EBF7FC] border-none rounder-lg gap-4 items-center py-2 px-2 border-b border-gray-100">
@@ -55,10 +57,9 @@ const AddServicesSetup = ({
   editIndex,
   showForm,
   toggleFormDisplay,
-  setEditIndex,
   handleEdit,
   handleDelete,
-}) => {
+}: any) => {
   const { setStep } = useOnboardingStore();
   const navigate = useNavigate();
 
@@ -111,7 +112,7 @@ const AddServicesSetup = ({
                 <div className="text-lg text-[#232323] ">Actions</div>
               </div>
               <div className="max-h-[200px] overflow-y-scroll scrollbar-hide">
-                {services.map((service, index) => (
+                {services.map((service: any, index: any) => (
                   <ServicesList
                     handleDelete={handleDelete}
                     handleEdit={handleEdit}
@@ -188,26 +189,26 @@ const AddServicesSetup = ({
                   {() => (
                     <Form className="space-y-6  h-[100vh]">
                       <div className="px-4 mb-2 space-y-5 w-full">
-                        <FormField
+                        <InputField
                           name="name"
                           type="text"
-                          style={{ boxShadow: "none" }}
+                          // style={{ boxShadow: "none" }}
                           placeholder="Service name e.g iron"
-                          inputClassName="text-[#090A0A] shadow-none placeholder:text-gray-400  bg-white border border-gray-300  text-lg placeholder:text-lg  font-medium  rounded-lg block w-full px-2.5   outline-none resize-none"
+                          className="text-[#090A0A] shadow-none placeholder:text-gray-400  bg-white border border-gray-300  text-lg placeholder:text-lg  font-medium  rounded-lg block w-full px-2.5   outline-none resize-none"
                         />
-                        <FormField
+                        <InputField
                           type="number"
                           name="price"
                           placeholder="Enter price"
-                          style={{ boxShadow: "none" }}
-                          inputClassName="text-[#090A0A] shadow-none placeholder:text-gray-400   bg-white border border-gray-300  text-lg  placeholder:text-lg  rounded-lg block w-full px-2.5   outline-none resize-none"
+                          // style={{ boxShadow: "none" }}
+                          className="text-[#090A0A] shadow-none placeholder:text-gray-400   bg-white border border-gray-300  text-lg  placeholder:text-lg  rounded-lg block w-full px-2.5   outline-none resize-none"
                         />
-                        <FormField
+                        <InputField
                           type="text"
                           name="estimated_hours"
                           placeholder="Estimated hours"
-                          style={{ boxShadow: "none" }}
-                          inputClassName=" bg-white border text-[#090A0A] shadow-none placeholder:text-gray-400   border-gray-300  text-lg  placeholder:text-lg  rounded-lg block w-full px-2.5   outline-none resize-none"
+                          // style={{ boxShadow: "none" }}
+                          className=" bg-white border text-[#090A0A] shadow-none placeholder:text-gray-400   border-gray-300  text-lg  placeholder:text-lg  rounded-lg block w-full px-2.5   outline-none resize-none"
                         />
                       </div>
 

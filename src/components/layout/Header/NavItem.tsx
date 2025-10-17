@@ -29,7 +29,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
         >
           <div className="flex items-center space-x-2">
             {icon}
-            <span className="text-white text-[12px]">{label}</span>
+            <span className="text-white">{label}</span>
           </div>
         </NavLink>
       ) : (
@@ -37,7 +37,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-between w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
         >
-          <div className="flex items-center text-[12px] space-x-2">
+          <div className="flex items-center space-x-2">
             {icon}
             <span>{label}</span>
           </div>
@@ -49,7 +49,7 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
 
       {/* Nested Items */}
       {isOpen && children && (
-        <div className="ml-6 mt-2 space-y-2 border-l-1 border-white/40 px-0">
+        <div className="px-0 mt-2 ml-6 space-y-2 border-l-1 border-white/40">
           {children.map((child, index) => (
             <div className="flex items-center">
               <div className="h-[0.5px] w-[10px] text-white bg-white/40"></div>

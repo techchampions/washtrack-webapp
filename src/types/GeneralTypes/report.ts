@@ -19,5 +19,7 @@ export interface MonthlyReportResponse {
   success: boolean;
   order_report: OrderReportItem[];
   expense_report: OrderReportItem[];
+  revenue_report: OrderReportItem[];
+  outstanding_report: OrderReportItem[];
   percentage_change: number[];
 }

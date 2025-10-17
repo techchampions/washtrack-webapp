@@ -17,6 +17,12 @@ export interface CustomersResponse {
   message: string;
   Customers: Customers[];
 }
+export interface SearchCustomersResponse {
+  success: boolean;
+  message: string;
+  result?: Customers[];
+}
+
 interface CustomerProfileResponse {
   success: boolean;
   message: string;
@@ -71,6 +77,13 @@ export const useGetCustomers = () => {
   return useQuery<CustomersResponse>({
     queryKey: ["customers"],
     queryFn: api.getCustomers,
+  });
+};
+export const useSearchCustomers = (query: string) => {
+  return useQuery<SearchCustomersResponse>({
+    queryKey: ["customers", query],
+    queryFn: () => api.searchCustomers(query),
+    enabled: !!query,
   });
 };
 export const useGetCustomerProfile = (id: number | string) => {

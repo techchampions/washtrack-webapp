@@ -42,7 +42,7 @@ const BottomNav: React.FC = () => {
         label="Orders"
         icon={<CiCircleList size={24} />}
         path="/dashboard/orders"
-        badgeCount={4} // Example badge for notifications
+        // badgeCount={4} // Example badge for notifications
       />
       <MobileNavItem
         label="More"

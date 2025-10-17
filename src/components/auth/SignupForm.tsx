@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/common/Button";
-import { FormField } from "@/components/forms/FormField";
+// import { FormField } from "@/components/forms/FormField";
 import { FaEnvelope, FaLock, FaUser, FaPhone, FaShare } from "react-icons/fa6";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logoImage from "@/assets/images/logo.png";
@@ -12,6 +13,7 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { useSignup } from "@/hooks/auth/useSignup";
+import { InputField } from "@/components/FormComponents";
 
 const signupSchema = Yup.object().shape({
   store_name: Yup.string()
@@ -51,7 +53,7 @@ export const SignupForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { resetAuth, setAuthObject, setToken } = useAuthStore();
   const { signUpMutation } = useSignup();
-  const { isPending, error } = signUpMutation;
+  const { isPending } = signUpMutation;
 
   const handleSubmit = async (
     values: SignupData,
@@ -135,37 +137,37 @@ export const SignupForm: React.FC = () => {
           {({ isValid }) => (
             <Form className="mt-2 space-y-6">
               <div className="space-y-2">
-                <FormField
+                <InputField
                   name="store_name"
                   type="text"
                   placeholder="Business Name"
                   icon={<FaUser className="w-3 h-3 text-brand" />}
-                  autoComplete="store_name"
-                  errorClassName="text-left"
-                  inputClassName=" bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
+                  // autoComplete="store_name"
+                  // errorClassName="text-left"
+                  className=" bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
-                <FormField
+                <InputField
                   name="phone_num"
-                  type="tel"
+                  type="number"
                   placeholder="Phone No"
                   icon={<FaPhone className="w-3 h-3 text-brand" />}
-                  autoComplete="phone_num"
-                  errorClassName="text-left"
-                  inputClassName="mt-1.5 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
+                  // autoComplete="phone_num"
+                  // errorClassName="text-left"
+                  className="mt-1.5 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
-                <FormField
+                <InputField
                   name="email"
                   type="email"
                   placeholder="Email Address"
                   icon={<FaEnvelope className="w-3 h-3 text-brand" />}
-                  autoComplete="email"
-                  errorClassName="text-left"
-                  inputClassName="mt-1.5 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
+                  // autoComplete="email"
+                  // errorClassName="text-left"
+                  className="mt-1.5 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
-                <FormField
+                <InputField
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  inputClassName="mt-2 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-2.5 outline-none resize-none"
+                  className="mt-2 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-2.5 outline-none resize-none"
                   placeholder="Password"
                   icon={<FaLock className="w-3 h-3 text-brand" />}
                   rightIcon={
@@ -181,17 +183,17 @@ export const SignupForm: React.FC = () => {
                       )}
                     </button>
                   }
-                  autoComplete="password"
-                  errorClassName="text-left"
+                  // autoComplete="password"
+                  // errorClassName="text-left"
                 />
-                <FormField
+                <InputField
                   name="referral_code"
                   type="text"
                   placeholder="Referral code"
                   icon={<FaShare className="w-3 h-3 text-brand" />}
-                  autoComplete="referral_code"
-                  errorClassName="text-left"
-                  inputClassName="mt-1 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
+                  // autoComplete="referral_code"
+                  // errorClassName="text-left"
+                  className="mt-1 bg-white border text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
               </div>
 

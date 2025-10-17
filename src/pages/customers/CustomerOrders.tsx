@@ -1,6 +1,6 @@
 import { Header } from "@/components/DashboardComponents";
 import CustomerOrderList from "@/components/DashboardComponents/CustomerOrderList";
-import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
+import { CustomerOrdersLoading } from "@/components/DashboardComponents/LoadingComponents/CustomerOrderLoading";
 import { Button, InputField } from "@/components/FormComponents";
 import { useEditCustomer } from "@/hooks/mutations/useEditCustomer";
 import { useGetCustomerProfile } from "@/hooks/query/useGetCustomers";
@@ -17,7 +17,7 @@ const CustomerOrders = () => {
   const { data, isLoading } = useGetCustomerProfile(id || "");
   const { mutate: edit, isPending } = useEditCustomer();
   if (isLoading) {
-    return <OrderItemLoading />;
+    return <CustomerOrdersLoading />;
   }
   const orders = data?.order || [];
   const initialValues = {
@@ -32,7 +32,11 @@ const CustomerOrders = () => {
       email: values.email,
       id: Number(id),
     };
-    edit(payload);
+    edit(payload, {
+      onSuccess() {
+        setshowForm(false);
+      },
+    });
   };
   return (
     <div>

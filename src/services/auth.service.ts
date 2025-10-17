@@ -1,13 +1,13 @@
 import apiClient from "@/api/apiClient";
 import { useAuthStore } from "@/store/auth.store";
-import { useOnboardingStore } from "@/store/onboarding.store";
+// import { useOnboardingStore } from "@/store/onboarding.store";
 import {
   LoginCredentials,
   SignupData,
   ForgotPasswordData,
   ChangePasswordData,
   AuthResponse,
-  AuthUser,
+  // AuthUser,
   OTP,
 } from "@/types/auth.types";
 import { showSuccess } from "@/utils/toast";
@@ -69,12 +69,12 @@ class AuthService {
     return response;
   };
 
-  async getCurrentUser(): Promise<AuthUser> {
-    const response = await apiClient.get<{ user: AuthUser }>(
-      "/api/user-profile"
-    );
-    return response;
-  }
+  // async getCurrentUser(): Promise<AuthUser> {
+  //   const response = await apiClient.get<{ user: AuthUser }>(
+  //     "/api/user-profile"
+  //   );
+  //   return response;
+  // }
 
   async getProfile() {
     const response = await apiClient.get("/api/user-profile");

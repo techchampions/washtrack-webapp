@@ -19,7 +19,7 @@ const CustomerOrderItem: React.FC<OrderProps> = ({ order, onClick }) => {
       {/* Order Details */}
       <div className="flex flex-col flex-1 text-left">
         <p className="font-semibold text-quick-action-icon">
-          Order Ref: {order?.ref}
+          Order #{order?.order_number}
         </p>
         <p className="text-red-500">Balance : {formatPrice(order?.balance)}</p>
       </div>

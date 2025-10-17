@@ -30,6 +30,10 @@ import ItemsSetup from "@/pages/settings/ItemsSetup";
 import SubscriptionPage from "@/pages/settings/SubscriptionPage";
 import SubscriptionPlanPage from "@/pages/settings/SubscriptionPlanPage";
 import CustomerOrders from "@/pages/customers/CustomerOrders";
+import Contact from "@/pages/settings/Contact";
+import FAQ from "@/pages/settings/FAQs";
+import NotificationsPage from "@/pages/notifications/NotificationsPage";
+import More from "@/pages/settings/More";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -177,6 +181,13 @@ export const AppRoutes: React.FC = () => {
               path="/dashboard/settings/subscription/all"
               element={<SubscriptionPlanPage />}
             />
+            <Route path="/dashboard/contact" element={<Contact />} />
+            <Route path="/dashboard/faqs" element={<FAQ />} />
+            <Route
+              path="/dashboard/notifications"
+              element={<NotificationsPage />}
+            />
+            <Route path="/dashboard/more" element={<More />} />
 
             {/* Profile Routes */}
             <Route path="profile">

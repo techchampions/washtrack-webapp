@@ -3,13 +3,17 @@ import {
   MainCard,
   RightSideBar,
 } from "@/components/DashboardComponents";
+import ConfirmUpgrade from "@/components/DashboardComponents/SubscriptionComponents/ConfirmUpgrade";
+import { Button } from "@/components/FormComponents";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
+import { useModal } from "@/store/useModal.store";
 import { formatDate } from "@/utils/formatter";
 import React from "react";
 
 const SubscriptionPage = () => {
   const { data } = useGetSubscription();
+  const modal = useModal();
   const subscriptions = data?.subscriptions ?? [];
   return (
     <div>
@@ -37,12 +41,24 @@ const SubscriptionPage = () => {
                   </div>
                 </div>
               </div>
-
-              <LinkButton
-                href="/dashboard/settings/subscription/all"
-                label="Change"
-                className="bg-white block hover:bg-white/70 hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1 mt-4"
-              />
+              <div className="flex items-center gap-2 mt-4">
+                <LinkButton
+                  href="/dashboard/settings/subscription/all"
+                  label="Change"
+                  className="bg-white block hover:bg-white/70 hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1"
+                />
+                {(data?.currentPlan.price || 0) > 1 && (
+                  <Button
+                    label="Renew"
+                    className="bg-quick-action-icon !w-fit px-10 text-sm !py-1"
+                    onClick={() =>
+                      modal.openModal(
+                        <ConfirmUpgrade plan={data?.currentPlan} />
+                      )
+                    }
+                  />
+                )}
+              </div>
             </MainCard>
           </div>
           <div className="space-y-7">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
@@ -7,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export const useVerifyEmail = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { setUser, setIsAuthenticated, setError, setLoading, setOtpVerified } =
+  const { setIsAuthenticated, setError, setLoading, setOtpVerified } =
     useAuthStore();
 
   const mutation = useMutation({
@@ -35,7 +36,7 @@ export const useVerifyEmail = () => {
         navigate("/auth/auth-flow-complete");
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("❌ Verify Email error:", error.response);
       showError(error.response.data.message);
 
@@ -61,7 +62,7 @@ export const useResendOtp = () => {
       console.log("✅ OTP resent success:", response.data);
       showSuccess("OTP code resent successfully");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       showError("Failed to resend OTP code");
       console.error("❌ Resend OTP error:", error.response);
     },

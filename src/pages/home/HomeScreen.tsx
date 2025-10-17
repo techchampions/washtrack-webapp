@@ -30,7 +30,7 @@ const HomeScreen: React.FC = () => {
   return (
     <div className="w-full">
       <Header />
-      <div className="flex flex-col md:flex-row gap-4 h-fit md:h-[200px]">
+      <div className="flex flex-col lg:flex-row gap-4 h-fit md:h-[200px]">
         <MainCard>
           <div className="mb-4 text-black">
             <CustomDropdown
@@ -49,7 +49,7 @@ const HomeScreen: React.FC = () => {
           </div>
         </MainCard>
 
-        <div className="hidden md:flex flex-row md:flex-col w-full md:w-[45%] h-full gap-1 justify-between">
+        <div className="hidden lg:flex flex-row md:flex-col w-full md:w-[45%] h-full gap-1 justify-between">
           <SmallMainCard>
             <div className="flex items-center justify-start p-1 bg-white rounded-full">
               <BiCheckCircle className="h-[30px] w-[30px] text-green-500" />

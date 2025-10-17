@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/common/Button";
-import { FormField } from "@/components/forms/FormField";
+// import { FormField } from "@/components/forms/FormField";
 import { useLogin } from "@/hooks/auth/useLogin";
 import { LoginCredentials } from "@/types/auth.types";
 import { FaEnvelope, FaLock } from "react-icons/fa6";
@@ -14,6 +15,7 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useAuthStore } from "@/store/auth.store";
 import { useResendOtp } from "@/hooks/auth/useVerifyEmail";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
+import { InputField } from "@/components/FormComponents";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -38,7 +40,7 @@ const initialValues: LoginCredentials & { rememberMe: boolean } = {
 export const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { loginMutation } = useLogin();
-  const { isPending, error } = loginMutation;
+  const { isPending } = loginMutation;
   const { setToken, setAuthObject, resetAuth, setStoreUpdated } =
     useAuthStore();
   const resendOtpMutation = useResendOtp();
@@ -87,7 +89,7 @@ export const LoginForm: React.FC = () => {
         }
       },
 
-      onError: (error) => {
+      onError: (error: any) => {
         // Handle specific error cases
         console.error("❌ Login error:", error.response.data.message);
         showError(error.response.data.message);
@@ -126,19 +128,19 @@ export const LoginForm: React.FC = () => {
           {({ isValid }) => (
             <Form className="mt-8 space-y-6">
               <div className="p-0 m-0 mb-2 space-y-5">
-                <FormField
+                <InputField
                   name="email"
                   type="email"
                   placeholder="Email Address"
                   icon={<FaEnvelope className="w-3 h-3 text-brand" />}
-                  autoComplete="email"
-                  errorClassName="text-left"
-                  inputClassName=" bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
+                  // autoComplete="email"
+                  // errorClassName="text-left"
+                  className=" bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full px-2.5 outline-none resize-none"
                 />
-                <FormField
+                <InputField
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  inputClassName="text-sm bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-2.5 outline-none resize-none"
+                  className=" bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-0 block w-full px-2.5 outline-none resize-none"
                   // containerClassName='border'
                   placeholder="Password"
                   icon={<FaLock className="w-3 h-3 text-brand" />}
@@ -155,8 +157,8 @@ export const LoginForm: React.FC = () => {
                       )}
                     </button>
                   }
-                  autoComplete="password"
-                  errorClassName="text-left"
+                  // autoComplete="password"
+                  // errorClassName="text-left"
                 />
               </div>
 

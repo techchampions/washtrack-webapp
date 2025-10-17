@@ -5,7 +5,7 @@ import { Button } from "@/components/FormComponents";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { useGetItemService } from "@/hooks/query/useGetItemService";
 import { useModal } from "@/store/useModal.store";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,8 +17,8 @@ const ItemsSetup = () => {
   return (
     <div>
       <Header />
-      <div className="flex flex-col gap-6 md:flex-row">
-        <div className="w-full md:w-2/3">
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <div className="w-full lg:w-2/3">
           <div className="flex items-center justify-between mb-5">
             <div className="text-left">
               <h3 className="text-2xl font-bold">My Items Types</h3>
@@ -68,13 +68,14 @@ const ItemsSetup = () => {
             <Button
               onClick={() => navigate(-1)}
               label="Back"
-              className="!w-fit px-6 bg-gray-500 flex hover:!bg-black"
+              className="!w-fit px-6 bg-gray-500 flex hover:!bg-black rounded-xl"
               icon={<ArrowLeft />}
             />
             <LinkButton
               href="/dashboard/settings"
               label="Done"
-              className="!w-fit px-6"
+              className="!w-fit px-6 rounded-xl"
+              rightIcon={<Check />}
             />
           </div>
         </div>

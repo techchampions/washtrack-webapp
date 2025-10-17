@@ -1,28 +1,28 @@
-import { FileData } from "@/utils/addItemService";
+// import { FileData } from "@/utils/addItemService";
 import { Customer } from "./profiletypes";
 
 export interface Orders {
-    is_exist: number;
-    order_type: number;
-    name: string;
-    items_id: (number | null)[];
-    phone_number: string;
-    email: string;
-    total_amount: number;
-    paid_amount: number;
-    payment_type: string;
-    pickup_date: string;
-  }
+  is_exist: number;
+  order_type: number;
+  name: string;
+  items_id: (number | null)[];
+  phone_number: string;
+  email: string;
+  total_amount: number;
+  paid_amount: number;
+  payment_type: string;
+  pickup_date: string;
+}
 export interface ExistingOrders {
-    is_exist: number;
-    order_type: number;
-    customer_id: number | null;
-    items_id: (number | null)[];
-    total_amount: number;
-    paid_amount: number;
-    payment_type: string;
-    pickup_date: string;
-  }
+  is_exist: number;
+  order_type: number;
+  customer_id: number | null;
+  items_id: (number | null)[];
+  total_amount: number;
+  paid_amount: number;
+  payment_type: string;
+  pickup_date: string;
+}
 
 export interface CreatedOrder {
   ref: string;
@@ -72,13 +72,13 @@ export interface Services {
   service_type?: number;
 }
 export interface EditServices {
-  id?:number;
+  id?: number;
   name: string;
   price: number;
   estimated_hours: number;
 }
 export interface DeleteServices {
-  id?:number;
+  id?: number;
 }
 export interface OnlineServices {
   name: string;
@@ -89,11 +89,11 @@ export interface OnlineServices {
 }
 
 export interface ServiceItem {
-  id:number | null;
+  id: number | null;
   service_name: string;
   no_of_items: number;
   item_type: string;
-  photos: FileData[];
+  photos: File[];
 }
 
 export interface AllItems {
@@ -144,7 +144,6 @@ export interface StoreOwner {
   profile_picture: string;
 }
 
-
 export interface OrderResponse {
   message: string;
   status: string;
@@ -169,8 +168,7 @@ export interface OrderItems {
   updated_at: string; // ISO 8601 date string
   status: number; // Numeric status code
   item_type: string;
-};
-
+}
 
 export interface SingleOrderResponse {
   success: boolean;
@@ -178,8 +176,8 @@ export interface SingleOrderResponse {
   order: Order;
   order_item: OrderItems[];
   customer: Customer;
-  item_count: number
-};
+  item_count: number;
+}
 
 export interface RecentOrder {
   id: number;
@@ -202,7 +200,7 @@ export interface RecentOrder {
   created_at: string;
   updated_at: string;
   order_number: number;
-};
+}
 export interface Plan {
   id: number;
   name: string;
@@ -212,7 +210,6 @@ export interface Plan {
   created_at: string | null;
   updated_at: string | null;
 }
-
 
 export interface VendorOrdersResponse {
   success: boolean;
@@ -252,7 +249,7 @@ export interface ExistingOrderResponse {
   order: ExistingOrderData;
 }
 
-export interface DeleteResponse  {
+export interface DeleteResponse {
   id: number;
   user_id: number;
   service_name: string;
@@ -264,13 +261,13 @@ export interface DeleteResponse  {
   store_id: number | null;
   estimated_hours: number | null;
   price: number | null;
-};
+}
 
-export interface ItemRecordResponse  {
+export interface ItemRecordResponse {
   success: boolean;
   message: string;
   service: DeleteResponse;
-};
+}
 
 export interface EditRecordResponse {
   success: boolean;
@@ -288,8 +285,7 @@ export interface EditRecordResponse {
     estimated_hours: string; // Consider changing to number if always numeric
     price: string; // Consider changing to number if always numeric
   };
-};
-
+}
 
 export interface CustomerOrder {
   id: number;
@@ -336,7 +332,7 @@ export interface CustomerOrderResponse {
 export interface SearchCustomersResponse {
   success: boolean;
   message: string;
-  result?: CustomerOrder[]; 
+  result?: CustomerOrder[];
 }
 
 export interface SearchCustomerItem {
@@ -350,8 +346,8 @@ export interface SearchCustomerItemResponse {
   message: string;
   customers: SearchCustomerItem[];
 }
-export interface ItemQuery{
-    item_type :string,
-    status: string,
-    name:string,
+export interface ItemQuery {
+  item_type: string;
+  status: string;
+  name: string;
 }

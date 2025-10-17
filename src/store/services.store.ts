@@ -1,38 +1,38 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { Service } from '@/services/services.service';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { Service } from "@/services/services.service";
 
 interface ServicesState {
-    services: Service[];
+  services: Service[];
   error?: string | null;
 }
 interface ServicesActions {
-    setServices: (data) => void;
- }
+  setServices: (data: any) => void;
+}
 
 type ServicesStore = ServicesState & ServicesActions;
 
 const initialState: ServicesState = {
-    services: [], 
+  services: [],
 };
 
 export const useServicesStore = create<ServicesStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
 
       setServices: (services) => {
         console.log("___________services store_______", services);
-        set({services: services});
+        set({ services: services });
       },
-
-      }),
+    }),
     {
-      name: 'services-storage',
+      name: "services-storage",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         services: state.services,
-            }),
+      }),
     }
   )
 );

@@ -5,6 +5,7 @@ import {
 } from "@/components/DashboardComponents";
 import ChangePassword from "@/components/DashboardComponents/SettingsComponents/ChangePassword";
 import DeleteAccount from "@/components/DashboardComponents/SettingsComponents/DeleteAccount";
+import GetHelp from "@/components/DashboardComponents/SettingsComponents/GetHelp";
 import { Button } from "@/components/FormComponents";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
@@ -63,9 +64,9 @@ const SettingsPage = () => {
     },
     {
       icon: <MessageCircle size={20} className="" />,
-      label: "Send feedback",
-      href: "/dashboard/settings/send-feedback",
-      onclick: () => alert("hello"),
+      label: "Help and Support",
+      href: "#",
+      onclick: () => modal.openModal(<GetHelp />),
     },
     {
       icon: <LogOut size={20} className="" />,

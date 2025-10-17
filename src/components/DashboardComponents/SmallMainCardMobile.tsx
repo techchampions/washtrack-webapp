@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-const SmallMainCardMobile = ({ children, className = "", ...props }) => {
+const SmallMainCardMobile = ({ children, className = "", ...props }: any) => {
   return (
     <div
       className={`bg-brand relative text-white text-left py-6 px-4 md:px-10 rounded-[20px] w-full md:w-[70%] h-[80px] md:hidden overflow-hidden my-auto ${className}`}

@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { HelmetProvider } from "react-helmet-async";
 import { AppRoutes } from "@/routes/AppRoute";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
@@ -45,10 +45,10 @@ const App: React.FC = () => {
               <ToasterProvider />
             </BrowserRouter>
 
-            {/* React Query DevTools - Only in development */}
+            {/* React Query DevTools - Only in development
             {import.meta.env.DEV && (
               <ReactQueryDevtools initialIsOpen={false} />
-            )}
+            )} */}
           </QueryClientProvider>
         </HelmetProvider>
       </ErrorBoundary>

@@ -1,6 +1,5 @@
 import React from "react";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-import logo from "@/assets/images/logo.png";
 import { Button } from "../common/Button";
 import { useCompleteOnboardingStore } from "@/hooks/mutations/useCompleteOnboardingStore";
 

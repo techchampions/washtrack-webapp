@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  Tooltip,
+  ResponsiveContainer,
+  YAxis,
+} from "recharts";
 import { FaSmile } from "react-icons/fa";
 import MainCard from "@/components/DashboardComponents/MainCard";
 import Button from "@/components/FormComponents/Button";
 import { useGetMonthlyReport } from "@/hooks/query/useGetReport";
 import { OrderReportItem } from "@/types/GeneralTypes/report";
 import { formatPrice } from "@/utils/formatter";
+import { Header } from "@/components/DashboardComponents";
 
 // Define the type for the API response data
 const CustomTooltip = ({
@@ -23,6 +31,10 @@ const CustomTooltip = ({
     let placeholder = `${payload[0].value} orders`;
     if (activeTab === "expenses") {
       placeholder = `${formatPrice(payload[0].value)} spent`;
+    } else if (activeTab === "revenues") {
+      placeholder = `${formatPrice(payload[0].value)} made`;
+    } else if (activeTab === "outstanding") {
+      placeholder = `${formatPrice(payload[0].value)} unpaid`;
     }
     return (
       <div className="bg-white shadow-md p-2 rounded-md text-sm text-gray-700">
@@ -38,7 +50,7 @@ const CustomTooltip = ({
 };
 
 const ReportScreen: React.FC = () => {
-  const tabs = ["orders", "expenses", "Revenues", "outstandings"];
+  const tabs = ["orders", "expenses", "revenues", "outstanding"];
   type Tab = (typeof tabs)[number];
 
   const [chartHeight, setChartHeight] = useState(300);
@@ -67,9 +79,19 @@ const ReportScreen: React.FC = () => {
       return reportData?.order_report ?? [];
     } else if (activeTab === "expenses") {
       return reportData?.expense_report ?? [];
+    } else if (activeTab === "revenues") {
+      return reportData?.revenue_report ?? [];
+    } else if (activeTab === "outstanding") {
+      return reportData?.outstanding_report ?? [];
     }
     return [];
-  }, [activeTab, reportData?.order_report, reportData?.expense_report]);
+  }, [
+    activeTab,
+    reportData?.order_report,
+    reportData?.expense_report,
+    reportData?.revenue_report,
+    reportData?.outstanding_report,
+  ]);
 
   const percentageChange = reportData?.percentage_change?.[0] ?? 0;
 
@@ -139,9 +161,15 @@ const ReportScreen: React.FC = () => {
   }
 
   return (
-    <div className="w-full md:w-[90%] bg-white mx-auto">
+    <div className="w-full bg-white mx-auto">
+      <Header />
+      {/* Tabs */}
+      <div className="text-black text-left text-2xl font-bold py-2">
+        Performance
+      </div>
+
       {/* Cards - Updated with real data */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2">
         <MainCard>
           <div className="text-white py-3 md:py-6 flex flex-col justify-between">
             <div className="text-3xl font-bold">{5}</div>
@@ -180,11 +208,7 @@ const ReportScreen: React.FC = () => {
         </MainCard>
       </div>
 
-      {/* Tabs */}
-      <div className="text-black text-left text-2xl font-brand-bold py-5">
-        Performance
-      </div>
-      <div className="grid grid-cols-4 gap-2 mt-10 mb-4 md:mb-8">
+      <div className="grid grid-cols-4 gap-2 mt-5 mb-4 md:mb-8">
         {tabs.map((tab, index) => (
           <button
             key={index}
@@ -204,21 +228,26 @@ const ReportScreen: React.FC = () => {
 
       {/* Chart */}
       {chartData.length > 0 ? (
-        <ResponsiveContainer width="100%" height={chartHeight}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="name" tick={{ fill: "gray" }} />
-            <Tooltip
-              content={<CustomTooltip activeTab={activeTab} />}
-              cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
-            />
-            <Bar
-              dataKey="orders"
-              fill="#00bcff"
-              radius={[7, 7, 0, 0]}
-              background={{ fill: "#eee" }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className=" rounded-lg">
+          <div className="w-full mx-auto">
+            <ResponsiveContainer width="100%" height={chartHeight}>
+              <BarChart data={chartData}>
+                <XAxis dataKey="name" tick={{ fill: "gray" }} />
+                <YAxis dataKey="orders" />
+                <Tooltip
+                  content={<CustomTooltip activeTab={activeTab} />}
+                  cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
+                />
+                <Bar
+                  dataKey="orders"
+                  fill="#00bcff"
+                  radius={[7, 7, 0, 0]}
+                  background={{ fill: "#eee" }}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       ) : (
         <div className="h-64 flex items-center justify-center bg-gray-100 rounded">
           <p className="text-gray-500">No data available for the chart</p>

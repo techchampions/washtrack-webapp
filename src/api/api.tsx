@@ -18,7 +18,6 @@ import {
   ItemQuery,
   OnlineServices,
   SearchCustomerItemResponse,
-  SearchCustomersResponse,
   Services,
 } from "@/types/GeneralTypes/ordertypes";
 import { Customer, UserProfile } from "@/types/GeneralTypes/profiletypes";
@@ -29,7 +28,7 @@ import {
   LoginCredentials,
   Register,
 } from "@/types/auth.types";
-import { DeleteItemsPayload } from "@/store/orderStore";
+// import { DeleteItemsPayload } from "@/store/orderStore";
 import apiClient from "./apiClient";
 import {
   OutStandingResponse,
@@ -156,7 +155,7 @@ const updateItems = async (data: FormData) => {
 
   return response.data;
 };
-const deleteItems = async (data: DeleteItemsPayload) => {
+const deleteItems = async (data: { id: string }) => {
   const response = await apiClient.post(`/api/delete/item`, data);
   return response.data;
 };
@@ -302,12 +301,12 @@ const getCustomerOrderView = async (id: string, itemType: string) => {
   const response = await apiClient.get(endpoint);
   return response.data;
 };
-const searchCustomers = async (
-  query: string
-): Promise<SearchCustomersResponse> => {
-  const response = await apiClient.get<SearchCustomersResponse>(
-    `/api/vendor/search-customers/${query}`
-  );
+const searchCustomers = async (query: string) => {
+  let endpoint = `/api/vendor/search-customers/`;
+  if (query) {
+    endpoint = `/api/vendor/search-customers/${query}`;
+  }
+  const response = await apiClient.get(endpoint);
   return response.data;
 };
 const searchCustomerItem = async (
@@ -431,6 +430,10 @@ const upgradePlan = async (data: PaymentTypes) => {
 
 const getNotifications = async () => {
   const response = await apiClient.get(`/api/notifications`);
+  return response.data;
+};
+const readNotification = async (id: number) => {
+  const response = await apiClient.post(`/api/read_notification?id=${id}`);
   return response.data;
 };
 interface UpdateOrderStatusPayload {
@@ -563,6 +566,7 @@ export const api = {
   getSubscriptionsHistory,
   upgradePlan,
   getNotifications,
+  readNotification,
   changeOrderStatus,
   completeOrder,
   payOutstandingBalance,

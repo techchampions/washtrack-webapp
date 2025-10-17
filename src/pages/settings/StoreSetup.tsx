@@ -11,8 +11,11 @@ import { Button, InputField } from "@/components/FormComponents";
 import { Header, RightSideBar } from "@/components/DashboardComponents";
 import { useSettingStoreSetup } from "@/hooks/mutations/useSettingStoreSetup";
 import SettingStoreSetupLoading from "@/components/DashboardComponents/LoadingComponents/SettingsStoreSetupLoading";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 interface FormValues {
   store_name: string;
+  phone_number: string;
   profile_picture: string | File;
   storeLocation: string;
   storeDescription: string;
@@ -23,6 +26,7 @@ interface FormValues {
 const SettingStoreSetup = () => {
   const { store, setStore } = useOnboardingStore();
   const { user } = useAuthStore();
+  const navigate = useNavigate();
   const { data: profileData, isLoading: isLoadingProfile } =
     useGetUserProfile();
   const { mutate: updateStore, isPending } = useSettingStoreSetup();
@@ -52,6 +56,7 @@ const SettingStoreSetup = () => {
   }
   const initialValues: FormValues = {
     store_name: profileData?.user.store_name || "",
+    phone_number: profileData?.user.phone_num || "",
     profile_picture: profileData?.user.profile_picture || "",
     storeLocation: profileData?.user.address || "",
     storeDescription: profileData?.user.description || "",
@@ -61,6 +66,7 @@ const SettingStoreSetup = () => {
   };
   const validationSchema = Yup.object().shape({
     store_name: Yup.string().required("Store Name is required"),
+    phone_number: Yup.string().required("Phone No. is required"),
     storeLocation: Yup.string().required("Store location is required"),
     storeDescription: Yup.string().required("Description is required"),
   });
@@ -115,7 +121,7 @@ const SettingStoreSetup = () => {
   return (
     <div className="">
       <Header />
-      <div className="flex flex-col gap-6 md:flex-row">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="w-full lg:w-2/3">
           <div className="mb-3 text-center">
             <h1 className="mb-1 text-lg font-bold md:text-2xl text-brand md:mb-2">
@@ -133,6 +139,9 @@ const SettingStoreSetup = () => {
               if (user?.store_name !== undefined && user?.store_name !== null) {
                 formData.append("store_name", values.store_name);
                 console.log(formData, "form data");
+              }
+              if (values.phone_number) {
+                formData.append("phone_num", values.phone_number);
               }
               // formData.set("store_name", user?.store_name || "");
               formData.append("store_location", storeLocation);
@@ -201,16 +210,29 @@ const SettingStoreSetup = () => {
                   />
                 </div>
                 <div className="flex flex-col w-full px-3 space-y-3">
-                  <div className="">
-                    <label className="block text-left text-sm font-medium text-[#090A0A] mb-1">
-                      Store Name
-                    </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="">
+                      <label className="block text-left text-sm font-medium text-[#090A0A] mb-1">
+                        Store Name
+                      </label>
 
-                    <InputField
-                      name="store_name"
-                      placeholder="Enter Store Name"
-                      className="!text-black"
-                    />
+                      <InputField
+                        name="store_name"
+                        placeholder="Enter Store Name"
+                        className="!text-black"
+                      />
+                    </div>
+                    <div className="">
+                      <label className="block text-left text-sm font-medium text-[#090A0A] mb-1">
+                        Phone No.
+                      </label>
+
+                      <InputField
+                        name="phone_number"
+                        placeholder="Enter Phone No."
+                        className="!text-black"
+                      />
+                    </div>
                   </div>
                   <PlacesAutocomplete
                     value={storeLocation}
@@ -279,7 +301,7 @@ const SettingStoreSetup = () => {
                     <p className="mb-3 text-xs text-left text-gray-500 md:hidden">
                       Add your store banner
                     </p>
-                    <div className="flex gap-4 overflow-x-scroll scrollbar-hide md:grid md:grid-cols-3">
+                    <div className="flex gap-4 overflow-x-scroll scrollbar-hide lg:grid lg:grid-cols-3">
                       <ImageUploadField
                         name="store_banner1"
                         height={100}
@@ -298,14 +320,22 @@ const SettingStoreSetup = () => {
                     </div>
                   </div>
                 </div>
+                <div className="flex justify-between mt-14">
+                  <Button
+                    onClick={() => navigate(-1)}
+                    label="Back"
+                    className="!w-fit px-6 bg-gray-500 flex hover:!bg-black rounded-xl"
+                    icon={<ArrowLeft />}
+                  />
 
-                <Button
-                  label="Submit"
-                  type="submit"
-                  className="mt-5 !w-fit px-10"
-                  isLoading={isPending}
-                  disabled={isPending || !isValid}
-                />
+                  <Button
+                    label="Submit"
+                    type="submit"
+                    className="!w-fit px-10 rounded-xl"
+                    isLoading={isPending}
+                    disabled={isPending || !isValid}
+                  />
+                </div>
               </Form>
             )}
           </Formik>

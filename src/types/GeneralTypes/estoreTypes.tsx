@@ -1,4 +1,4 @@
-import { FileData } from "@/utils/imageServices";
+// import { FileData } from "@/utils/imageServices";
 
 export interface RecentEOrder {
   id: number;
@@ -61,15 +61,15 @@ export interface EOrdersResponse {
   orders: EOrders[];
 }
 
-export interface CreateEstore {
-  store_images: FileData[];
-  store_location: string;
-  description: string;
-  profile_picture: FileData | null;
-  latitude: number;
-  longitude: number;
-  geolocation: number;
-}
+// export interface CreateEstore {
+//   store_images: FileData[];
+//   store_location: string;
+//   description: string;
+//   profile_picture: FileData | null;
+//   latitude: number;
+//   longitude: number;
+//   geolocation: number;
+// }
 export interface OnlineServiceResponse {
   name: string;
   item_id: number;
@@ -211,7 +211,7 @@ export interface ItemService {
   }[];
 }
 export interface UpdateService {
-  id: number
+  id: number;
   item_id: number;
   user_id: number;
   store_id: number;

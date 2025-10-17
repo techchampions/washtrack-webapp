@@ -1,56 +1,56 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { IItemService } from '@/services/items.service';
-import { EItemTypeService } from '@/types/GeneralTypes/estoreTypes';
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { EItemTypeService } from "@/types/GeneralTypes/estoreTypes";
 export interface EItemTypes {
-    id: number;
-    name: string;
-    store_id: number;
-    services: EItemTypeService[];
+  id: number;
+  name: string;
+  store_id: number;
+  services: EItemTypeService[];
 }
-interface ItemI {
-    itemType: EItemTypes[]
-}
+// interface ItemI {
+//     itemType: EItemTypes[]
+// }
 interface ItemsState {
-    items: {};
-    error?: string | null;
+  items: {};
+  error?: string | null;
 }
 interface ItemsActions {
-    setItems: (data: any) => void;
+  setItems: (data: any) => void;
 }
 
 type ItemsStore = ItemsState & ItemsActions;
 
 const initialState: ItemsState = {
-    items: {},
+  items: {},
 };
 
 export const useItemsStore = create<ItemsStore>()(
-    persist(
-        (set, get) => ({
-            ...initialState,
+  persist(
+    (set) => ({
+      ...initialState,
 
-            setItems: (data) => {
-                console.log(data, "______inside store item____")
+      setItems: (data) => {
+        console.log(data, "______inside store item____");
 
-                set({
-                    items: {
-                        ...data
-                    }
-                });
-            },
+        set({
+          items: {
+            ...data,
+          },
+        });
+      },
 
-            resetItems: () => {
-                localStorage.removeItem('items-storage')
-            }
-
-        }),
-        {
-            name: 'items-storage',
-            storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({
-                items: state.items,
-            }),
-        }
-    )
+      resetItems: () => {
+        localStorage.removeItem("items-storage");
+      },
+    }),
+    {
+      name: "items-storage",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        items: state.items,
+      }),
+    }
+  )
 );
