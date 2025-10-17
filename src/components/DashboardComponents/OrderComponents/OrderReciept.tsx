@@ -26,11 +26,15 @@ const OrderReceipt: React.FC<Props> = ({
   const [downloading, setdownloading] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>("");
   const { user } = useAuthStore();
+
   const captureReceiptAsImage = async (): Promise<string> => {
     if (!receiptRef.current) throw new Error("Receipt element not found");
 
     const canvas = await html2canvas(receiptRef.current, {
       scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
     });
     return canvas.toDataURL("image.png");
   };
@@ -43,16 +47,16 @@ const OrderReceipt: React.FC<Props> = ({
       const uri = await captureReceiptAsImage();
       const receipt = new jsPDF({
         orientation: "portrait",
-        unit: "px",
-        format: "a4",
+        unit: "mm",
+        format: [100, 200],
       });
 
       // Calculate proper dimensions for PDF
       // const imgProps = receipt.getImageProperties(uri);
       const pdfWidth = receipt.internal.pageSize.getWidth();
       const pdfHeight = receipt.internal.pageSize.getHeight();
-      const width = pdfWidth / 2;
-      receipt.addImage(uri, "PNG", width / 2, 0, width, pdfHeight - 50);
+      const width = pdfWidth - pdfWidth / 4;
+      receipt.addImage(uri, "PNG", 4, 0, 92, pdfHeight);
       receipt.save(`receipt-${order?.order_number || "unknown"}.pdf`);
       showSuccess("Receipt Downloaded Successfully");
       setdownloading(false);
@@ -194,11 +198,6 @@ const OrderReceipt: React.FC<Props> = ({
           url={shareUrl}
           className="text-sm flex items-center !py-1 !bg-transparent !text-black !w-fit px-4 border border-gray-300"
         />
-        {/* <Button
-          label="Share"
-          icon={<Share2 size={18} />}
-          className="text-sm flex items-center !py-1 !bg-transparent !text-black !w-fit px-4 border border-gray-300"
-        /> */}
         <Button
           label="Download"
           isLoading={downloading}
