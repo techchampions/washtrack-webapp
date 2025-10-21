@@ -30,7 +30,7 @@ function NavigationContainer() {
   return (
     <div className="flex flex-col justify-between h-screen px-4 overflow-y-scroll scrollbar-hide">
       <div className="w-full pb-8">
-        <img src="/images/logo.png" alt="Wash Track" className="w-full" />
+        <img src="/images/logo.png" alt="Wash Track" className="w-[70%]" />
         <nav className="py-8 space-y-2 text-white">
           <NavItem
             label="Overview"

@@ -83,7 +83,7 @@ const HomeScreen: React.FC = () => {
       <QuickActions />
 
       <div className="mt-6">
-        <h3 className="text-lg text-left text-black md:text-2xl font-brand-bold md-2 md:mb-4">
+        <h3 className="text-lg text-left text-black md:text-2xl font-bold md-2 md:mb-4">
           Recent Orders
         </h3>
         {isLoading ? (

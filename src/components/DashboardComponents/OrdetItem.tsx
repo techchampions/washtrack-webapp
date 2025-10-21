@@ -30,7 +30,7 @@ const OrderItem: React.FC<OrderProps> = ({ order, onClick }) => {
       {/* Order Date & Amount */}
       <div className="flex flex-col text-right">
         <p className="text-sm text-gray-500">
-          {formatDate(order?.pickup_date ?? "")}
+          {formatDate(order?.created_at ?? "")}
         </p>
         <p className="font-bold text-quick-action-icon">
           {formatPrice(order?.total_amount ?? "")}

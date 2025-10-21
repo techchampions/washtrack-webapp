@@ -10,7 +10,9 @@ interface Props {
 }
 const OrderList: React.FC<Props> = ({ orders }) => {
   const navigate = useNavigate();
-
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
   return orders.length === 0 ? (
     <div className="flex items-center justify-center px-5 py-10 text-center rounded-lg text-brand font-brand-bold bg-brand-100">
       <FaExclamationCircle className="mr-2 text-3xl text-brand" />
@@ -18,7 +20,7 @@ const OrderList: React.FC<Props> = ({ orders }) => {
     </div>
   ) : (
     <div className="space-y-1">
-      {orders.map((order, index) => (
+      {sortedOrders.map((order, index) => (
         <OrderItem
           key={index}
           order={order}
