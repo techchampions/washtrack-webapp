@@ -28,8 +28,8 @@ const Header: React.FC<Props> = ({ children, title }) => {
           <h1 className="text-lg font-bold text-black">
             {title ? title : user?.store_name || "My Store"}
           </h1>
-          <div className="hidden px-2 py-[2px] ml-3 rounded-md text-brand lg:flex flex-col text-justify bg-brand-100">
-            <div className="text-sm">
+          <div className="hidden px-[1rem] py-[.3rem] ml-3 rounded-lg text-brand lg:flex flex-col text-justify bg-brand-100">
+            <div className="text-sm font-bold">
               {data?.currentPlan.name || user?.plan?.name || "Free Plan"}
             </div>
             <div className="text-[10px]">{data?.ordersLeft} Orders left</div>
