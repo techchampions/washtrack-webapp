@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Customer, Order, OrderItem } from "@/hooks/query/usegetOrders";
 import { formatDate, formatPrice } from "@/utils/formatter";
-import SmallItem from "@/components/DashboardComponents/SmallItem";
+// import SmallItem from "@/components/DashboardComponents/SmallItem";
 import { Button } from "@/components/FormComponents";
 import { Download } from "lucide-react";
 import jsPDF from "jspdf";
@@ -53,9 +53,9 @@ const OrderReceipt: React.FC<Props> = ({
 
       // Calculate proper dimensions for PDF
       // const imgProps = receipt.getImageProperties(uri);
-      const pdfWidth = receipt.internal.pageSize.getWidth();
+      // const pdfWidth = receipt.internal.pageSize.getWidth();
       const pdfHeight = receipt.internal.pageSize.getHeight();
-      const width = pdfWidth - pdfWidth / 4;
+      // const width = pdfWidth - pdfWidth / 4;
       receipt.addImage(uri, "PNG", 4, 0, 92, pdfHeight);
       receipt.save(`receipt-${order?.order_number || "unknown"}.pdf`);
       showSuccess("Receipt Downloaded Successfully");
@@ -102,10 +102,9 @@ const OrderReceipt: React.FC<Props> = ({
           <p className="text-xs font-normal text-gray-600">{user?.phone_num}</p>
         </div>
 
+        <h2 className="text-xl font-bold text-left">Order details</h2>
         <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
           <div className="flex flex-col justify-start text-left text-black">
-            <h2 className="text-xl font-bold">Order details</h2>
-
             <div className="text-sm flex justify-between">
               <span>Order number:</span>
               <span className="font-medium">#{order?.order_number}</span>
@@ -128,9 +127,9 @@ const OrderReceipt: React.FC<Props> = ({
             </div>
           </div>
         </div>
+        <h2 className="text-xl font-bold text-left">Customer details</h2>
         <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
           <div className="flex flex-col justify-start text-left text-black">
-            <h2 className="text-xl font-bold">Customer details</h2>
             <div className="text-sm flex justify-between">
               <span>Customer name:</span>
               <span className="font-medium">{customer?.name}</span>{" "}
@@ -147,21 +146,31 @@ const OrderReceipt: React.FC<Props> = ({
         </div>
 
         <div className="space-y-1 mb-2">
-          <h3 className="text-left text-black font-bold px-4">Items</h3>
-          {orderItems.map((item, index) => (
+          <h3 className="text-left text-black font-bold">Items</h3>
+          <div className="bg-brand-100 py-2 px-4 rounded-lg text-xs text-left">
+            {orderItems.map((item) => (
+              <div className="">
+                <div className="">{item.service_name}</div>
+                <div className="text-gray-400 text-[10px]">
+                  {item.item_type}
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* {orderItems.map((item, index) => (
             <SmallItem
               services={item.service_name}
               items={item.item_type}
               quantity={item.no_of_items}
               key={index}
             />
-          ))}
+          ))} */}
         </div>
 
+        <h3 className="text-black text-xl text-left font-bold">
+          Payment Details
+        </h3>
         <div className="bg-brand-100 p-4 rounded-lg text-sm">
-          <h3 className="text-black text-xl text-left font-bold">
-            Payment Details
-          </h3>
           <div className="flex justify-between text-black">
             <span>Cost of service</span>
             <span className="font-medium">

@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
 import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
+import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -34,26 +35,17 @@ export const AddOrderExistingUser: React.FC = () => {
   const orderItems = orderItemData?.Items ?? [];
 
   const initialValues = {
-    // customerName: "",
-    // customerEmail: "",
-    // phoneNumber: "",
     pickupDate: new Date(),
-    payment_type: "",
+    payment_type: "cash",
     costOfService: 0,
     amountPaid: 0,
   };
 
   const validationSchema = Yup.object({
-    // customerName: Yup.string().required("Name is required"),
-    // customerEmail: Yup.string()
-    //   .email("Invalid email")
-    //   .required("Email is required"),
-    // phoneNumber: Yup.number().required("Customer's Phone No. is required"),
     payment_type: Yup.mixed().required("required"),
     pickupDate: Yup.date().required("Required."),
     costOfService: Yup.number().required("Required"),
   });
-  const customer = data?.customer;
 
   const handleEditItem = (item: (typeof orderItems)[0]) => {
     modal.openModal(<EditItemForOrder item={item} />);
@@ -64,10 +56,8 @@ export const AddOrderExistingUser: React.FC = () => {
 
     try {
       const formData = new FormData();
-      if (customer) {
-        formData.append("name", customer?.name);
-        formData.append("email", customer?.email);
-        formData.append("phone_number", customer?.phone_number.toString());
+      if (user_id) {
+        formData.append("customer_id", user_id);
       }
       formData.append("payment_type", values.payment_type);
       formData.append("pickup_date", values.pickupDate?.toISOString() || "");
@@ -96,7 +86,11 @@ export const AddOrderExistingUser: React.FC = () => {
         // }
       });
 
-      createOrder(formData);
+      createOrder(formData, {
+        onSuccess(data) {
+          modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
+        },
+      });
     } catch (error) {
       console.error("Order creation failed:", error);
     }
