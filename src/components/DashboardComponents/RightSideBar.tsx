@@ -13,6 +13,10 @@ import { formatPrice } from "@/utils/formatter";
 // import { useGetOrders } from "@/hooks/query/usegetOrders";
 // import { ArrowRight } from "lucide-react";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { useGetDashboard } from "@/hooks/query/useGetDashboard";
+import { useGetHomeExpense } from "@/hooks/query/usegetExpense";
+import { useGetOustanding } from "@/hooks/query/useGetOustanding";
+import { useGetInventory } from "@/hooks/query/useGetInventory";
 
 const SLIDES = [
   "/src/assets/images/landing-banner-image.png",
@@ -23,17 +27,28 @@ const SLIDES = [
 const RightSideBar = () => {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
+  const { data: orderData } = useGetDashboard();
+  const { data: expData } = useGetHomeExpense("all");
+  const { data: outData } = useGetOustanding("all");
+  const { data: invData } = useGetInventory("all");
 
   const hasPhotos = SLIDES.length > 0;
   const { data } = useGetUserProfile();
   // const { data: orderData } = useGetOrders("all");
   // const orders = orderData?.orders ?? [];
   const stats = [
-    { text: "Total Customers", value: "12" },
-    { text: "Total Orders", value: "18" },
-    { text: "Total Expenses", value: formatPrice(25000) },
-    { text: "Total Outstanding", value: formatPrice(15000) },
-    { text: "Total Income", value: formatPrice(56000) },
+    { text: "Total Customers", value: invData?.total_customers },
+    { text: "Total Orders", value: orderData?.total_order_count },
+    { text: "Total Items", value: invData?.total_Item_count },
+    {
+      text: "Total Expenses",
+      value: formatPrice(expData?.totalExpenses || ""),
+    },
+    {
+      text: "Total Outstanding",
+      value: formatPrice(outData?.totalOutStanding || ""),
+    },
+    { text: "Total Income", value: formatPrice(orderData?.total_amount || "") },
   ];
 
   return (

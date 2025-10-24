@@ -10,6 +10,8 @@ import LinkButton from "@/components/GeneralComponents/LinkButton";
 import OrderDetailsLoading from "@/components/DashboardComponents/LoadingComponents/OrderOverviewLoading";
 import { useModal } from "@/store/useModal.store";
 import OrderReceipt from "@/components/DashboardComponents/OrderComponents/OrderReciept";
+import ItemImages from "@/components/DashboardComponents/ItemImages";
+import CompleteOrder from "@/components/DashboardComponents/CompleteOrder";
 
 const OrderOverview = () => {
   const modal = useModal();
@@ -64,11 +66,11 @@ const OrderOverview = () => {
         )}
       </Header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
-          <div className="flex justify-start gap-2 text-black pb-2 ">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="flex flex-col w-full gap-2 p-4 divide-y divide-gray-300 rounded-lg bg-brand-100">
+          <div className="flex justify-start gap-2 pb-2 text-black ">
             <img src="/images/washing_machine.svg" alt="" />
-            <div className="flex flex-col text-left justify-start">
+            <div className="flex flex-col justify-start text-left">
               <h2 className="text-2xl font-bold">
                 Order #{order?.order_number}
               </h2>
@@ -90,9 +92,9 @@ const OrderOverview = () => {
           </div>
         </div>
 
-        <div className="bg-brand-100 p-4 rounded-lg lg:col-span-2">
-          <div className="flex justify-between items-center">
-            <h3 className="text-black text-lg md:text-2xl text-left font-bold py-2">
+        <div className="p-4 rounded-lg bg-brand-100 lg:col-span-2">
+          <div className="flex items-center justify-between">
+            <h3 className="py-2 text-lg font-bold text-left text-black md:text-2xl">
               Payment Details
             </h3>
             {(order?.balance || 0) > 1 ? (
@@ -109,33 +111,33 @@ const OrderOverview = () => {
               />
             )}
           </div>
-          <div className="flex justify-between text-black py-2">
+          <div className="flex justify-between py-2 text-black">
             <span>Cost of service</span>
             <span className="font-bold">
               {formatPrice(order?.total_amount || "")}
             </span>
           </div>
-          <div className="flex justify-between text-black py-2">
+          <div className="flex justify-between py-2 text-black">
             <span>Amount Paid</span>
             <span className="font-bold">
               {formatPrice(order?.paid_amount || "")}
             </span>
           </div>
-          <div className="flex justify-between text-black py-2">
+          <div className="flex justify-between py-2 text-black">
             <span>Balance</span>
             <span className="font-bold text-red-500">
               {formatPrice(order?.balance || "")}
             </span>
           </div>
-          <div className="flex justify-between mt-2 bg-white p-2 rounded-lg border border-gray-300 text-black font-bold">
+          <div className="flex justify-between p-2 mt-2 font-bold text-black bg-white border border-gray-300 rounded-lg">
             <span>Total Amount</span>
             <span>{formatPrice(order?.total_amount || "")}</span>
           </div>
         </div>
 
-        <div className="flex flel-col bg-brand-100 rounded-lg py-4 px-8">
-          <ol className="relative text-gray-500 border-s border-gray-500 text-left ">
-            <li className="mb-10 ms-6 cursor-pointer">
+        <div className="flex px-8 py-4 rounded-lg flel-col bg-brand-100">
+          <ol className="relative text-left text-gray-500 border-gray-500 border-s ">
+            <li className="mb-10 cursor-pointer ms-6">
               <span
                 className={`absolute flex items-center text-white justify-center w-8 h-8  ${
                   order?.created_at ? "bg-brand" : "bg-gray-100"
@@ -143,14 +145,18 @@ const OrderOverview = () => {
               >
                 01
               </span>
-              <h3 className="font-medium text-black leading-tight">
+              <h3 className="font-medium leading-tight text-black">
                 Order Created
               </h3>
               <p className="text-sm">{formatDate(order?.created_at || "")}</p>
             </li>
             <li
-              className="mb-10 ms-6 cursor-pointer"
-              onClick={() => updateStatus(1)}
+              className="mb-10 cursor-pointer ms-6"
+              onClick={() => {
+                if (!order?.processing_date) {
+                  updateStatus(1);
+                }
+              }}
             >
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
@@ -159,7 +165,7 @@ const OrderOverview = () => {
               >
                 02{" "}
               </span>
-              <h3 className="font-medium text-black leading-tight">
+              <h3 className="font-medium leading-tight text-black">
                 Order Processing
               </h3>
               <p className="text-sm">
@@ -167,8 +173,12 @@ const OrderOverview = () => {
               </p>
             </li>
             <li
-              className="mb-10 ms-6 cursor-pointer"
-              onClick={() => updateStatus(2)}
+              className="mb-10 cursor-pointer ms-6"
+              onClick={() => {
+                if (order?.processing_date && !order?.ready_pickup_date) {
+                  updateStatus(2);
+                }
+              }}
             >
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
@@ -179,14 +189,25 @@ const OrderOverview = () => {
               >
                 03{" "}
               </span>
-              <h3 className="font-medium text-black leading-tight">
+              <h3 className="font-medium leading-tight text-black">
                 Ready for Pickup
               </h3>
               <p className="text-sm">
                 {formatDate(order?.ready_pickup_date || "")}
               </p>
             </li>
-            <li className="ms-6 cursor-pointer" onClick={() => updateStatus(3)}>
+            <li
+              className="cursor-pointer ms-6"
+              onClick={() => {
+                if (
+                  order?.processing_date &&
+                  order?.ready_pickup_date &&
+                  !order?.completed_date
+                ) {
+                  modal.openModal(<CompleteOrder id={order_id || ""} />);
+                }
+              }}
+            >
               <span
                 className={`absolute flex items-center justify-center w-8 h-8 ${
                   order?.completed_date ? "bg-brand text-white" : "bg-gray-100"
@@ -194,7 +215,7 @@ const OrderOverview = () => {
               >
                 04{" "}
               </span>
-              <h3 className="font-medium text-black leading-tight">
+              <h3 className="font-medium leading-tight text-black">
                 Order Completed
               </h3>
               <p className="text-sm">
@@ -204,15 +225,22 @@ const OrderOverview = () => {
           </ol>
         </div>
 
-        <div className=" rounded-lg lg:col-span-2 p-4 space-y-1">
-          <h3 className="text-left text-black font-bold">Items</h3>
+        <div className="p-4 space-y-1 rounded-lg lg:col-span-2">
+          <h3 className="font-bold text-left text-black">Items</h3>
           {orderItems.map((item, index) => (
-            <Item
-              services={item.service_name}
-              items={item.item_type}
-              quantity={item.no_of_items}
+            <div
+              className=""
               key={index}
-            />
+              onClick={() =>
+                modal.openModal(<ItemImages item_photos={item.photos} />)
+              }
+            >
+              <Item
+                services={item.service_name}
+                items={item.item_type}
+                quantity={item.no_of_items}
+              />
+            </div>
           ))}
         </div>
       </div>

@@ -55,11 +55,12 @@ const EditItemForOrder: React.FC<Props> = ({ item }) => {
   const initialSelectedService = initialSelectedItem?.services.find(
     (service) => service.service_name === item.service_name
   );
-
+  const photos = JSON.parse(item.photos);
+  console.log(photos);
   const initialValues: ItemFormData = {
-    photo1: item.photos?.[0] || "",
-    photo2: item.photos?.[1] || "",
-    photo3: item.photos?.[2] || "",
+    photo1: photos[0] || "",
+    photo2: photos[1] || "",
+    photo3: photos[2] || "",
     service_name: initialSelectedService?.id.toString() || "",
     item_type: initialSelectedItem?.id.toString() || "",
     quantity: item.no_of_items,
@@ -81,13 +82,28 @@ const EditItemForOrder: React.FC<Props> = ({ item }) => {
     const selectedService = selectedItem?.services.find(
       (service) => service.id.toString() === values.service_name
     );
-    const Payload = {
-      id: item.id,
-      service_name: selectedService?.service_name ?? "",
-      no_of_items: values.quantity,
-      item_type: selectedItem?.name ?? "",
+    const Payload = new FormData();
+    if (
+      item.id &&
+      selectedService?.service_name &&
+      values.quantity &&
+      selectedItem?.name
+    ) {
+      Payload.append("id", String(item.id));
+      Payload.append("service_name", selectedService.service_name);
+      Payload.append("no_of_items", String(values.quantity));
+      Payload.append("item_type", selectedItem.name);
+      if (typeof values.photo1 !== "string") {
+        Payload.append("photos[]", values.photo1);
+      }
+      if (typeof values.photo2 !== "string") {
+        Payload.append("photos[]", values.photo2);
+      }
+      if (typeof values.photo3 !== "string") {
+        Payload.append("photos[]", values.photo3);
+      }
       // photos: [""],
-    };
+    }
     update(Payload, {
       onSuccess() {
         modal.closeModal();
@@ -158,21 +174,21 @@ const EditItemForOrder: React.FC<Props> = ({ item }) => {
               <div className="flex gap-2 flex-wrap py-2">
                 <div className="w-full text-gray-700 text-left">Add Photo</div>
                 <ImageUploadField
-                  name="image"
+                  name="photo1"
                   text=""
                   width={70}
                   height={70}
                   className="!w-fit"
                 />
                 <ImageUploadField
-                  name="image2"
+                  name="photo2"
                   text=""
                   width={70}
                   height={70}
                   className="!w-fit"
                 />
                 <ImageUploadField
-                  name="image3"
+                  name="photo3"
                   text=""
                   width={70}
                   height={70}

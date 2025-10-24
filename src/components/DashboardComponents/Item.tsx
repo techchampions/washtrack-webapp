@@ -13,7 +13,7 @@ const CustomerItem: React.FC<CustomerProps> = ({
   quantity,
 }) => {
   return (
-    <div className="bg-brand-100 text-[12px] md:text-[16px] p-2 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
+    <div className="bg-brand-100 cursor-pointer text-[12px] md:text-[16px] px-2 py-1 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4">
       {/* Icon */}
       <img src="/images/order-icon.png" alt="inventory" className="h-12" />
 

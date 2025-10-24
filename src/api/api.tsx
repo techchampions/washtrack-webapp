@@ -446,16 +446,19 @@ const changeOrderStatus = async (data: UpdateOrderStatusPayload) => {
   });
   return response.data;
 };
-
-const completeOrder = async (
-  id: string,
-  order_code: number,
-  paid_amount: number
-) => {
-  const response = await apiClient.post(`/api/vendor/complete-orders/${id}`, {
-    order_code,
-    paid_amount,
-  });
+interface CompleteOrderPayload {
+  id: string;
+  order_code: number;
+  paid_amount: number;
+}
+const completeOrder = async (data: CompleteOrderPayload) => {
+  const response = await apiClient.post(
+    `/api/vendor/complete-orders/${data.id}`,
+    {
+      order_code: data.order_code,
+      paid_amount: data.paid_amount,
+    }
+  );
   return response.data;
 };
 

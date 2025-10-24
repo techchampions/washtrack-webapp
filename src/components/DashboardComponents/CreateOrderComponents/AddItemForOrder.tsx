@@ -92,13 +92,26 @@ const AddItemForOrder = () =>
       //   item_type: selectedItem?.name || "",
       //   price: selectedService?.price || 0,
       // };
-      const createItemPayload = {
-        service_name: selectedService?.service_name ?? "",
-        no_of_items: values.quantity,
-        item_type: selectedItem?.name ?? "",
-        // photos: [""],
-      };
-      addItemForOrder(createItemPayload, {
+      const payload = new FormData();
+      if (
+        selectedService?.service_name &&
+        values.quantity &&
+        selectedItem?.name
+      ) {
+        payload.append("service_name", selectedService.service_name);
+        payload.append("no_of_items", String(values.quantity));
+        payload.append("item_type", selectedItem.name);
+      }
+      if (typeof values.image !== "string") {
+        payload.append("photos[]", values.image);
+      }
+      if (typeof values.image2 !== "string") {
+        payload.append("photos[]", values.image2);
+      }
+      if (typeof values.image3 !== "string") {
+        payload.append("photos[]", values.image3);
+      }
+      addItemForOrder(payload, {
         onSuccess() {
           modal.closeModal();
         },

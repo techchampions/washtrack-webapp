@@ -6,7 +6,7 @@ export const useAddItemForOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: orderService.addItem,
+    mutationFn: orderService.addNewItem,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["order-items"],
@@ -18,7 +18,7 @@ export const useEditItemForOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: orderService.updateItem,
+    mutationFn: orderService.updateItem2,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["order-items"],
