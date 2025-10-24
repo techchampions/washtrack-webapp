@@ -9,6 +9,8 @@ import html2canvas from "html2canvas-pro";
 import { useAuthStore } from "@/store/auth.store";
 import { showError, showSuccess } from "@/utils/toast";
 import ShareButton from "@/components/GeneralComponents/ShareButton";
+import { useModal } from "@/store/useModal.store";
+import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
 
 interface Props {
   order?: Order;
@@ -22,6 +24,7 @@ const OrderReceipt: React.FC<Props> = ({
   noOfItems,
   orderItems,
 }) => {
+  const modal = useModal();
   const receiptRef = useRef<HTMLDivElement>(null);
   const [downloading, setdownloading] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>("");
@@ -56,7 +59,7 @@ const OrderReceipt: React.FC<Props> = ({
       // const pdfWidth = receipt.internal.pageSize.getWidth();
       const pdfHeight = receipt.internal.pageSize.getHeight();
       // const width = pdfWidth - pdfWidth / 4;
-      receipt.addImage(uri, "PNG", 4, 0, 92, pdfHeight);
+      receipt.addImage(uri, "PNG", 10, 0, 80, pdfHeight);
       receipt.save(`receipt-${order?.order_number || "unknown"}.pdf`);
       showSuccess("Receipt Downloaded Successfully");
       setdownloading(false);
@@ -83,19 +86,24 @@ const OrderReceipt: React.FC<Props> = ({
 
   return (
     <div className="w-full max-h-[450px] overflow-scroll scrollbar-hide pt-4 mb-3">
-      <h3 className="font-bold text-3xl">Order Receipt</h3>
+      <h3 className="text-3xl font-bold">Order Receipt</h3>
       <div className="grid grid-cols-1 gap-1 px-0" ref={receiptRef}>
         <div className="items-center mb-4 text-center">
           {/* Add your store logo here if available */}
-          <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200 mx-auto mt-3 flex items-center justify-center">
+          <div className="flex items-center justify-center w-20 h-20 mx-auto mt-3 overflow-hidden bg-gray-200 rounded-full">
             <img
+              onClick={() =>
+                modal.openModal(
+                  <OrderCreateSuccess order_id={order?.id || 0} />
+                )
+              }
               src={user?.profile_picture || ""}
               alt={user?.store?.store_name}
               className="w-full h-full"
             />
           </div>
 
-          <h3 className="text-lg font-bold mt-1">{user?.store?.store_name}</h3>
+          <h3 className="mt-1 text-lg font-bold">{user?.store?.store_name}</h3>
           <p className="text-sm font-normal text-gray-600">
             {user?.store?.store_location}
           </p>
@@ -103,51 +111,51 @@ const OrderReceipt: React.FC<Props> = ({
         </div>
 
         <h2 className="text-xl font-bold text-left">Order details</h2>
-        <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
+        <div className="flex flex-col w-full gap-2 p-4 divide-y divide-gray-300 rounded-lg bg-brand-100">
           <div className="flex flex-col justify-start text-left text-black">
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Order number:</span>
               <span className="font-medium">#{order?.order_number}</span>
             </div>
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Order Date:</span>
               <span className="font-medium">
                 {formatDate(order?.created_at || "")}
               </span>
             </div>
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Pickup Date:</span>
               <span className="font-medium">
                 {formatDate(order?.pickup_date || "")}
               </span>
             </div>
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>No of Items:</span>
               <span className="font-medium">{noOfItems} Items</span>{" "}
             </div>
           </div>
         </div>
         <h2 className="text-xl font-bold text-left">Customer details</h2>
-        <div className="flex flex-col rounded-lg bg-brand-100 p-4 divide-y divide-gray-300 gap-2 w-full">
+        <div className="flex flex-col w-full gap-2 p-4 divide-y divide-gray-300 rounded-lg bg-brand-100">
           <div className="flex flex-col justify-start text-left text-black">
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Customer name:</span>
               <span className="font-medium">{customer?.name}</span>{" "}
             </div>
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Phone number:</span>
               <span className="font-medium">{customer?.phone_number}</span>{" "}
             </div>
-            <div className="text-sm flex justify-between">
+            <div className="flex justify-between text-sm">
               <span>Email:</span>
               <span className="font-medium">{customer?.email}</span>
             </div>
           </div>
         </div>
 
-        <div className="space-y-1 mb-2">
-          <h3 className="text-left text-black font-bold">Items</h3>
-          <div className="bg-brand-100 py-2 px-4 rounded-lg text-xs text-left">
+        <div className="mb-2 space-y-1">
+          <h3 className="font-bold text-left text-black">Items</h3>
+          <div className="px-4 py-2 text-xs text-left rounded-lg bg-brand-100">
             {orderItems.map((item) => (
               <div className="">
                 <div className="">{item.service_name}</div>
@@ -167,10 +175,10 @@ const OrderReceipt: React.FC<Props> = ({
           ))} */}
         </div>
 
-        <h3 className="text-black text-xl text-left font-bold">
+        <h3 className="text-xl font-bold text-left text-black">
           Payment Details
         </h3>
-        <div className="bg-brand-100 p-4 rounded-lg text-sm">
+        <div className="p-4 text-sm rounded-lg bg-brand-100">
           <div className="flex justify-between text-black">
             <span>Cost of service</span>
             <span className="font-medium">
@@ -189,20 +197,20 @@ const OrderReceipt: React.FC<Props> = ({
               {formatPrice(order?.balance || "")}
             </span>
           </div>
-          <div className="flex justify-between mt-2 bg-brand-300 p-2 rounded-lg text-black font-bold">
+          <div className="flex justify-between p-2 mt-2 font-bold text-black rounded-lg bg-brand-300">
             <span>Total Amount</span>
             <span>{formatPrice(order?.total_amount || "")}</span>
           </div>
         </div>
         {/* Footer */}
         <div className="mt-6 mb-3 text-center">
-          <p className="text-xs font-bold text-black p-0 m-0">
+          <p className="p-0 m-0 text-xs font-bold text-black">
             Receipt generated by{" "}
             <span className="text-blue-500">washtrack</span>
           </p>
         </div>
       </div>
-      <div className="flex items-center absolute justify-between bottom-3 w-full left-0 px-10 gap-4">
+      <div className="absolute left-0 flex items-center justify-between w-full gap-4 px-10 bottom-3">
         <ShareButton
           url={shareUrl}
           className="text-sm flex items-center !py-1 !bg-transparent !text-black !w-fit px-4 border border-gray-300"

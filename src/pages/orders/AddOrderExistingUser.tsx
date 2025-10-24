@@ -33,7 +33,6 @@ export const AddOrderExistingUser: React.FC = () => {
   const { data, isLoading } = useGetCustomerProfile(user_id || "");
   const { data: orderItemData } = useGetOrderItem();
   const orderItems = orderItemData?.Items ?? [];
-
   const initialValues = {
     pickupDate: new Date(),
     payment_type: "cash",
@@ -99,7 +98,7 @@ export const AddOrderExistingUser: React.FC = () => {
   return (
     <div className="">
       <Header />
-      <div className="flex flex-col lg:flex-row gap-6 w-full">
+      <div className="flex flex-col w-full gap-6 lg:flex-row">
         {/* Left Section */}
         <div className="w-full lg:w-2/3">
           {/* Customer Info */}
@@ -115,7 +114,7 @@ export const AddOrderExistingUser: React.FC = () => {
                   {isLoading ? (
                     <OrderItemLoading count={1} />
                   ) : (
-                    <div className="flex items-center justify-between py-2 px-4 bg-brand-100 rounded-lg">
+                    <div className="flex items-center justify-between px-4 py-2 rounded-lg bg-brand-100">
                       <div className="flex items-center gap-4">
                         <img
                           src="/images/user-icon.png"
@@ -126,7 +125,7 @@ export const AddOrderExistingUser: React.FC = () => {
                           <p className="font-bold text-quick-action-icon">
                             {data?.customer.name}
                           </p>
-                          <p className="text-gray-500 text-sm">
+                          <p className="text-sm text-gray-500">
                             {data?.customer.phone_number} -{" "}
                             {data?.customer.email}
                           </p>
@@ -149,14 +148,14 @@ export const AddOrderExistingUser: React.FC = () => {
 
                   {orderItems.map((item, index) => (
                     <div
-                      className="flex items-center cursor-pointer justify-between px-4 py-2 mt-1 rounded-lg bg-brand-100"
+                      className="flex items-center justify-between px-4 py-2 mt-1 rounded-lg cursor-pointer bg-brand-100"
                       key={index}
                       onClick={() => handleEditItem(item)}
                     >
                       <div className="flex items-center gap-4">
                         <img
                           src="/images/order-icon.png"
-                          className="w-10 h-10 object-cover rounded"
+                          className="object-cover w-10 h-10 rounded"
                           alt={item.item_type}
                         />
                         <div className="text-left">
@@ -169,7 +168,7 @@ export const AddOrderExistingUser: React.FC = () => {
                         </div>
                       </div>
                       <div className="">
-                        <div className="flex gap-1 cursor-pointer text-quick-action-icon hover:text-blue-700 text-sm items-center justify-end">
+                        <div className="flex items-center justify-end gap-1 text-sm cursor-pointer text-quick-action-icon hover:text-blue-700">
                           <ChevronRight />
                         </div>
                       </div>
@@ -177,7 +176,7 @@ export const AddOrderExistingUser: React.FC = () => {
                   ))}
 
                   {/* Pickup Date */}
-                  <div className="text-left mt-4">
+                  <div className="mt-4 text-left">
                     <DatePickerInput label="Pickup Date" name="pickupDate" />
                   </div>
 
@@ -185,18 +184,18 @@ export const AddOrderExistingUser: React.FC = () => {
                   <div className="text-black font-bold text-[16px] mb-0 text-left mt-5">
                     Payment Method
                   </div>
-                  <div className="flex gap-1 text-gray-300 text-sm items-center">
+                  <div className="flex items-center gap-1 text-sm text-gray-300">
                     <Info size={15} />
                     <span>Please select preffered payment method</span>
                   </div>
-                  <div className="ml-5 mb-5">
+                  <div className="mb-5 ml-5">
                     <RadioSelect
                       name="payment_type"
                       options={PAYMENT_OPTIONS}
                     />
                   </div>
                   <div className="mt-4 bg-brand-100 p-4 mb-4 rounded-lg text-[12px]">
-                    <div className="flex justify-between items-center py-2 text-black">
+                    <div className="flex items-center justify-between py-2 text-black">
                       <span>Cost of service</span>
                       <div className="flex items-center gap-1">
                         <span className="font-bold">₦</span>
@@ -207,7 +206,7 @@ export const AddOrderExistingUser: React.FC = () => {
                         />
                       </div>
                     </div>
-                    <div className="flex justify-between items-center py-2 text-black">
+                    <div className="flex items-center justify-between py-2 text-black">
                       <span>Amount Paid</span>
                       <div className="flex items-center gap-1">
                         <span className="font-bold">₦</span>
