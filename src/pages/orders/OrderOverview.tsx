@@ -18,7 +18,7 @@ const OrderOverview = () => {
   const { order_id } = useParams<{ order_id: string }>();
   const { data, isLoading } = useGetSingleOrder(order_id || "");
   const { mutate: update, isPending } = useUpdateOrderStatus();
-  if (isLoading || isPending) {
+  if (isLoading) {
     return (
       <div className="">
         <Header />
@@ -33,6 +33,19 @@ const OrderOverview = () => {
   const updateStatus = (status: number) => {
     const payload = { id: order_id || "", status: status };
     update(payload);
+  };
+
+  const Updating = () => {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+        <div className="p-4 bg-white rounded-xl">
+          <div className="flex flex-col items-center justify-center gap-2 text-brand">
+            <div className="w-10 h-10 border-b-2 rounded-full border-brand animate-spin"></div>
+            <div className="">Updating Order...</div>
+          </div>
+        </div>
+      </div>
+    );
   };
   return (
     <div className="w-full">
@@ -244,6 +257,7 @@ const OrderOverview = () => {
           ))}
         </div>
       </div>
+      {isPending && <Updating />}
     </div>
   );
 };

@@ -66,7 +66,7 @@ const Keypad = ({ onKeyPress }: any) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-y-0 w-3/4  gap-x-0 place-items-center mx-auto">
+    <div className="grid w-3/4 grid-cols-3 mx-auto gap-y-0 gap-x-0 place-items-center">
       {keys.flat().map((key, index) => {
         if (key === "") {
           return <div key={index} className="w-16 h-16 bg-white"></div>;
@@ -77,7 +77,7 @@ const Keypad = ({ onKeyPress }: any) => {
             <button
               key={index}
               onClick={() => handleKeyPress(key)}
-              className="w-6 h-6 bg-white hover:bg-white flex items-center justify-center"
+              className="flex items-center justify-center w-6 h-6 bg-white hover:bg-white"
             >
               <FaBackspace className="w-4 h-4 text-gray-600" />
             </button>
@@ -88,7 +88,7 @@ const Keypad = ({ onKeyPress }: any) => {
           <button
             key={index}
             onClick={() => handleKeyPress(key)}
-            className="w-6 h-6 bg-white text-lg font-semibold text-black hover:bg-gray-200 rounded-lg"
+            className="w-6 h-6 text-lg font-semibold text-black bg-white rounded-lg hover:bg-gray-200"
           >
             {key}
           </button>
@@ -122,7 +122,7 @@ const ActionButton = ({
     >
       {loading ? (
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+          <div className="w-4 h-4 mr-2 border-b-2 border-white rounded-full animate-spin"></div>
           Verifying...
         </div>
       ) : (
@@ -161,10 +161,10 @@ const OTPForm = ({
 
   return (
     <div className="">
-      <div className="text-center mb-4">
-        <p className="text-gray-600 text-sm leading-relaxed">
+      <div className="mb-4 text-center">
+        <p className="text-sm text-gray-600">
           Enter pickup verification code sent to{" "}
-          <span className="text-blue-500 font-medium">{user?.phone_num} </span>
+          <span className="font-medium text-blue-500">{user?.phone_num} </span>
           and <span className="text-blue-500">{user?.email}</span>
         </p>
       </div>
@@ -172,11 +172,11 @@ const OTPForm = ({
 
       <Keypad onKeyPress={handleKeyPress} />
       <div className="">
-        <div className="flex border border-gray-300 rounded-lg p-2 items-center gap-2">
+        <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg">
           <div className="">₦</div>
           <input
             type="number"
-            className="border-none outline-none"
+            className="flex-1 border-none outline-none"
             placeholder="Enter Balance (optional)"
             onChange={(e) => setPaidAmount(Number(e.target.value))}
           />
