@@ -15,7 +15,7 @@ import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
 import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
 import { FaChevronRight } from "react-icons/fa";
 import { useGetCustomerProfile } from "@/hooks/query/useGetCustomers";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
 import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
@@ -29,6 +29,7 @@ const PAYMENT_OPTIONS: RadioOption[] = [
 export const AddOrderExistingUser: React.FC = () => {
   const { user_id } = useParams<{ user_id: string }>();
   const modal = useModal();
+  const navigate = useNavigate();
   const { mutate: createOrder, isPending } = useCreateOrder();
   const { data, isLoading } = useGetCustomerProfile(user_id || "");
   const { data: orderItemData } = useGetOrderItem();
@@ -88,6 +89,7 @@ export const AddOrderExistingUser: React.FC = () => {
       createOrder(formData, {
         onSuccess(data) {
           modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
+          navigate(`/dashboard/orders/${data.order.id}`);
         },
       });
     } catch (error) {

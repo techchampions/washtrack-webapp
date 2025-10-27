@@ -217,7 +217,9 @@ const OrderOverview = () => {
                   order?.ready_pickup_date &&
                   !order?.completed_date
                 ) {
-                  modal.openModal(<CompleteOrder id={order_id || ""} />);
+                  modal.openModal(
+                    <CompleteOrder id={order_id || ""} customer={customer} />
+                  );
                 }
               }}
             >

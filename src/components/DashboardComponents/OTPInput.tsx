@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { useAuthStore } from "@/store/auth.store";
 import { FaBackspace } from "react-icons/fa";
 
 const CodeInput = ({ value, onChange, length = 4 }: any) => {
@@ -135,16 +134,19 @@ const ActionButton = ({
 const OTPForm = ({
   onSubmit,
   isLoading,
+  customerEmail,
+  customerPhone,
 }: // isLoading = false,
 {
   onSubmit: (code: string, paidAmount: number) => void;
   isLoading: boolean;
+  customerEmail?: string;
+  customerPhone?: string;
 }) => {
   const [code, setCode] = useState("");
   const [paidAmount, setPaidAmount] = useState(0);
   // const [loading, setLoading] = useState(false);
   // const [error, setError] = useState("");
-  const { user } = useAuthStore();
 
   const handleKeyPress = (key: any) => {
     if (key === "backspace") {
@@ -164,8 +166,8 @@ const OTPForm = ({
       <div className="mb-4 text-center">
         <p className="text-sm text-gray-600">
           Enter pickup verification code sent to{" "}
-          <span className="font-medium text-blue-500">{user?.phone_num} </span>
-          and <span className="text-blue-500">{user?.email}</span>
+          <span className="font-medium text-blue-500">{customerPhone} </span>
+          and <span className="text-blue-500">{customerEmail}</span>
         </p>
       </div>
       <CodeInput value={code} onChange={setCode} />
