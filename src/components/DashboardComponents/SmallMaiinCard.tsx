@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-const SmallMainCard = ({ children, className = "", ...props }) => {
+const SmallMainCard = ({ children, className = "", ...props }: any) => {
   return (
     <div
       className={` relative overflow-hidden bg-brand text-white p-6 rounded-[20px]  w-[50%] md:w-full h-[100px] md:h-[49.5%]  ${className}`}
-      {...props}>
+      {...props}
+    >
       <img
-        src="../images/small-main-ellipse.svg"
+        // src="../images/small-main-ellipse.svg"
+        src="/images/small-main-ellipse.svg"
         alt="inventory"
         className="absolute top-0 left-0 h-8 "
       />
-      <div className="relative z-10 flex flex-row justify-start items-center gap-2">
+      <div className="relative z-10 flex flex-row items-center justify-start gap-2">
         {children}
       </div>
     </div>

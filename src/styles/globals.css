@@ -1,0 +1,116 @@
+@import url("/src/assets/fonts/stylesheet.css");
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/scrollbar";
+
+
+
+@theme inline {
+  --color-brand: #00bcff;
+  --color-brand-100: #ebf7fc;
+  --color-brand-200: rgba(83, 165, 223, 0.2);
+  --color-brand-250: #cde7f7;
+  --color-brand-300: #80deff;
+  --color-brand-400: #09b1ef;
+  --color-brand-500: #eef6fc;
+  --color-brand-muted: rgba(0, 188, 255, 0.4);
+  --color-brand-border: #a8d3f0;
+  --color-dark-purple: #4b164c;
+  --color-quick-action-icon: rgba(9, 39, 101, 1);
+  --font-brand-bold: sk-modernist-bold;
+  --spacing: 0.28rem;
+}
+
+@font-face {
+  font-family: "sk-modernist-bold";
+  src: url("../src/assets/fonts/Sk-Modernist-Bold.otf");
+}
+
+@font-face {
+  font-family: "sk-modernist";
+  src: url("../src/assets/fonts/Sk-Modernist.ttf");
+}
+
+/* Add this in your global stylesheet or index.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+:root {
+  /* font-family: sk-modernist, sans-serif; */
+  font-family: "Hellix", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  /* color: rgba(255, 255, 255, 0.87); */
+  color: black;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  /* color: white; */
+  text-decoration: none;
+}
+
+/* a:hover {
+  color: #535bf2;
+} */
+
+html, body, #root {
+  font-family: "Hellix", sans-serif;
+  /* font-family: sk-modernist, sans-serif; */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: "#FFFFFF";
+}
+
+h1 {
+  font-family: "Hellix"
+}
+
+input:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 50px white inset !important;
+  -webkit-text-fill-color: black !important;
+  /* Change to your desired text color */
+}
+
+button {
+  cursor: pointer;
+}
+
+/* .checkout__outer-container {
+  background-color: red !important;
+} */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  /* button {
+    background-color: #f9f9f9;
+  } */
+}

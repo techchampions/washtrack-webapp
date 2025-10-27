@@ -1,0 +1,41 @@
+import { orderService } from "@/services/orders.service";
+import { showSuccess } from "@/utils/toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+export const useAddItemForOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: orderService.addNewItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["order-items"],
+      });
+    },
+  });
+};
+export const useEditItemForOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: orderService.updateItem2,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["order-items"],
+      });
+    },
+  });
+};
+export const useDeleteItemForOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: orderService.deleteItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["order-items"],
+      });
+      showSuccess("Item Deleted");
+    },
+  });
+};

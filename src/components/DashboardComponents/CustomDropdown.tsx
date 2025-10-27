@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
 interface DropdownProps {
@@ -19,7 +19,8 @@ const CustomDropdown: React.FC<DropdownProps> = ({
       {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center text-left bg-transparent outline-none text-white py-2 rounded-md">
+        className="flex items-center text-left bg-transparent outline-none text-white py-2 rounded-md"
+      >
         {selected} <FaChevronDown className="ml-2 text-white" />
       </button>
 
@@ -33,7 +34,8 @@ const CustomDropdown: React.FC<DropdownProps> = ({
                 onSelect(option);
                 setIsOpen(false);
               }}
-              className="px-4 py-2 cursor-pointer text-white hover:bg-gray-100 hover:text-brand">
+              className="px-4 py-2 cursor-pointer text-white hover:bg-gray-100 hover:text-brand"
+            >
               {option}
             </div>
           ))}

@@ -2,132 +2,30 @@ import React from "react";
 import OrderItem from "./OrdetItem";
 import { useNavigate } from "react-router-dom";
 import { FaExclamationCircle } from "react-icons/fa";
+import { Order } from "@/hooks/query/useGetDashboard";
+import { OrderWithCustomer } from "@/hooks/query/usegetOrders";
 
-// const orders = [
-//   {
-//     orderId: "676888",
-//     customerName: "Victoria Idris",
-//     phoneNumber: "09012345678",
-//     date: "12/10/24",
-//     amount: "₦250,000",
-//   },
-//   {
-//     orderId: "676889",
-//     customerName: "John Doe",
-//     phoneNumber: "08123456789",
-//     date: "13/10/24",
-//     amount: "₦120,000",
-//   },
-//   {
-//     orderId: "676890",
-//     customerName: "Jane Smith",
-//     phoneNumber: "08098765432",
-//     date: "14/10/24",
-//     amount: "₦80,000",
-//   },
-//   {
-//     orderId: "676888",
-//     customerName: "Victoria Idris",
-//     phoneNumber: "09012345678",
-//     date: "12/10/24",
-//     amount: "₦250,000",
-//   },
-//   {
-//     orderId: "676889",
-//     customerName: "John Doe",
-//     phoneNumber: "08123456789",
-//     date: "13/10/24",
-//     amount: "₦120,000",
-//   },
-//   {
-//     orderId: "676890",
-//     customerName: "Jane Smith",
-//     phoneNumber: "08098765432",
-//     date: "14/10/24",
-//     amount: "₦80,000",
-//   },
-//   {
-//     orderId: "676888",
-//     customerName: "Victoria Idris",
-//     phoneNumber: "09012345678",
-//     date: "12/10/24",
-//     amount: "₦250,000",
-//   },
-//   {
-//     orderId: "676889",
-//     customerName: "John Doe",
-//     phoneNumber: "08123456789",
-//     date: "13/10/24",
-//     amount: "₦120,000",
-//   },
-//   {
-//     orderId: "676890",
-//     customerName: "Jane Smith",
-//     phoneNumber: "08098765432",
-//     date: "14/10/24",
-//     amount: "₦80,000",
-//   },
-//   {
-//     orderId: "676888",
-//     customerName: "Victoria Idris",
-//     phoneNumber: "09012345678",
-//     date: "12/10/24",
-//     amount: "₦250,000",
-//   },
-//   {
-//     orderId: "676889",
-//     customerName: "John Doe",
-//     phoneNumber: "08123456789",
-//     date: "13/10/24",
-//     amount: "₦120,000",
-//   },
-//   {
-//     orderId: "676890",
-//     customerName: "Jane Smith",
-//     phoneNumber: "08098765432",
-//     date: "14/10/24",
-//     amount: "₦80,000",
-//   },
-//   {
-//     orderId: "676888",
-//     customerName: "Victoria Idris",
-//     phoneNumber: "09012345678",
-//     date: "12/10/24",
-//     amount: "₦250,000",
-//   },
-//   {
-//     orderId: "676889",
-//     customerName: "John Doe",
-//     phoneNumber: "08123456789",
-//     date: "13/10/24",
-//     amount: "₦120,000",
-//   },
-//   {
-//     orderId: "676890",
-//     customerName: "Jane Smith",
-//     phoneNumber: "08098765432",
-//     date: "14/10/24",
-//     amount: "₦80,000",
-//   },
-// ];
-
-const OrderList = ({ orders }) => {
+interface Props {
+  orders: Order[] | OrderWithCustomer[];
+}
+const OrderList: React.FC<Props> = ({ orders }) => {
   const navigate = useNavigate();
-
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
   return orders.length === 0 ? (
-    <div className="flex text-center justify-center items-center text-brand font-brand-bold py-10 bg-brand-100 px-5 rounded-lg">
-      <FaExclamationCircle className="text-3xl text-brand mr-2" />
+    <div className="flex items-center justify-center px-5 py-10 text-center rounded-lg text-brand font-brand-bold bg-brand-100">
+      <FaExclamationCircle className="mr-2 text-3xl text-brand" />
       You have no Orders
     </div>
   ) : (
-    <div className="space-y-4">
-      {orders.map((order) => (
+    <div className="space-y-1">
+      {sortedOrders.map((order, index) => (
         <OrderItem
-          key={order.orderId}
-          {...order}
+          key={index}
+          order={order}
           onClick={() => {
-            // Navigate to a dynamic URL with the orderId
-            navigate(`/dashboard/order/${order.orderId}`);
+            navigate(`/dashboard/orders/${order.id}`);
           }}
         />
       ))}

@@ -1,14 +1,6 @@
-import {
-  FaClipboardList,
-  FaUsers,
-  FaChartBar,
-  FaMoneyBill,
-} from "react-icons/fa";
+import React from "react";
 import QuickActionItem from "./QuickActionItem";
-import { BsFillGridFill } from "react-icons/bs";
-import { FaSackDollar } from "react-icons/fa6";
-
-const QuickActions = () => {
+const QuickActions: React.FC = () => {
   const actions = [
     {
       label: "Inventory",
@@ -28,12 +20,12 @@ const QuickActions = () => {
     {
       label: "Expense",
       icon: <img src="../images/expense-icon.png" alt="inventory" />,
-      path: "expense",
+      path: "expenses",
     },
     {
       label: "Revenue",
       icon: <img src="../images/revenue-icon.png" alt="inventory" />,
-      path: "revenue",
+      path: "revenues",
     },
     {
       label: "Reports",
@@ -44,7 +36,7 @@ const QuickActions = () => {
 
   return (
     <div className="mt-5 mx-auto ">
-      <h2 className="text-lg md:text-[20px] font-brand-bold mn-2 md:mb-4 text-left text-black">
+      <h2 className="text-lg md:text-[20px] font-bold mn-2 md:mb-4 text-left text-black">
         Quick Actions
       </h2>
       <div className="grid grid-cols-4 md:grid-cols-6 gap-6 justify-between">

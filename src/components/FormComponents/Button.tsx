@@ -3,6 +3,7 @@ import React from "react";
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
   label: string;
+  loadingText?: string;
   onClick?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
@@ -13,6 +14,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({
   type = "button",
   label,
+  loadingText,
   onClick,
   isLoading = false,
   disabled = false,
@@ -34,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
           <svg
             aria-hidden="true"
             role="status"
-            className="inline w-4 h-4 me-3 text-white animate-spin"
+            className="inline w-4 h-4 text-white me-3 animate-spin"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +50,7 @@ const Button: React.FC<ButtonProps> = ({
               fill="currentColor"
             />
           </svg>
-          Loading...
+          {loadingText ? loadingText : "Loading..."}
         </div>
       ) : (
         <>

@@ -1,43 +1,40 @@
+import { Order } from "@/hooks/query/useGetDashboard";
+import { OrderWithCustomer } from "@/hooks/query/usegetOrders";
+import { formatDate, formatPrice } from "@/utils/formatter";
 import React from "react";
-import { BsClipboard2Check, BsFileTextFill } from "react-icons/bs";
 
 interface OrderProps {
-  orderId: string;
-  customerName: string;
-  phoneNumber: string;
-  date: string;
-  amount: string;
+  order: Order | OrderWithCustomer | undefined;
   onClick?: () => void;
 }
 
-const OrderItem: React.FC<OrderProps> = ({
-  orderId,
-  customerName,
-  phoneNumber,
-  date,
-  amount,
-  onClick,
-}) => {
+const OrderItem: React.FC<OrderProps> = ({ order, onClick }) => {
   return (
     <div
-      className="bg-brand-100 text-[12px] md:text-[16px] p-2 md:p-4 rounded-lg border border-gray-200 flex flex-row justify-between items-center gap-4"
+      className="bg-brand-100 text-[12px] md:text-[16px] p-2 rounded-lg border cursor-pointer border-gray-200 flex flex-row justify-between items-center gap-4"
       onClick={onClick}
     >
       {/* Icon */}
-      <img src="../images/order-icon.png" alt="inventory" className="h-12" />
+      <img src="/images/order-icon.png" alt="inventory" className="h-12" />
 
       {/* Order Details */}
-      <div className="flex flex-col text-left w-full">
-        <p className="text-quick-action-icon font-semibold">Order #{orderId}</p>
+      <div className="flex flex-col flex-1 text-left">
+        <p className="font-semibold text-quick-action-icon">
+          Order #{order?.order_number}
+        </p>
         <p className="text-gray-500">
-          {customerName} - {phoneNumber}
+          {order?.customer.name} - {order?.customer.phone_number}
         </p>
       </div>
 
       {/* Order Date & Amount */}
       <div className="flex flex-col text-right">
-        <p className="text-gray-500 text-sm">{date}</p>
-        <p className="text-quick-action-icon font-bold">{amount}</p>
+        <p className="text-sm text-gray-500">
+          {formatDate(order?.created_at ?? "")}
+        </p>
+        <p className="font-bold text-quick-action-icon">
+          {formatPrice(order?.total_amount ?? "")}
+        </p>
       </div>
     </div>
   );

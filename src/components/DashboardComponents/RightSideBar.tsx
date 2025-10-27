@@ -1,28 +1,138 @@
-import React from "react";
+import React, { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { Swiper as SwiperType } from "swiper/types";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
+import { formatPrice } from "@/utils/formatter";
+// import OrderList from "@/components/DashboardComponents/OrderList";
+// import { useGetOrders } from "@/hooks/query/usegetOrders";
+// import { ArrowRight } from "lucide-react";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { useGetDashboard } from "@/hooks/query/useGetDashboard";
+import { useGetHomeExpense } from "@/hooks/query/usegetExpense";
+import { useGetOustanding } from "@/hooks/query/useGetOustanding";
+import { useGetInventory } from "@/hooks/query/useGetInventory";
+
+const SLIDES = [
+  "/src/assets/images/landing-banner-image.png",
+  "/src/assets/images/landing-banner-image1.png",
+  "/src/assets/images/ads.png",
+];
 
 const RightSideBar = () => {
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  const { data: orderData } = useGetDashboard();
+  const { data: expData } = useGetHomeExpense("all");
+  const { data: outData } = useGetOustanding("all");
+  const { data: invData } = useGetInventory("all");
+
+  const hasPhotos = SLIDES.length > 0;
+  const { data } = useGetUserProfile();
+  // const { data: orderData } = useGetOrders("all");
+  // const orders = orderData?.orders ?? [];
+  const stats = [
+    { text: "Total Customers", value: invData?.total_customers },
+    { text: "Total Orders", value: orderData?.total_order_count },
+    { text: "Total Items", value: invData?.total_Item_count },
+    {
+      text: "Total Expenses",
+      value: formatPrice(expData?.totalExpenses || ""),
+    },
+    {
+      text: "Total Outstanding",
+      value: formatPrice(outData?.totalOutStanding || ""),
+    },
+    { text: "Total Income", value: formatPrice(orderData?.total_amount || "") },
+  ];
+
   return (
-    <div className="w-full h-full md:w-1/3 hidden md:flex flex-col gap-4">
-      <div className="px-16 py-12 bg-brand text-white rounded-lg text-center flex items-center justify-between">
-        <div className="leading-5 text-white text-[22px] text-left p-2 rounded-lg font-brand-bold">
-          GET STARTED
+    <div className="flex-col hidden w-full h-full gap-4 lg:w-1/3 lg:flex">
+      <div className="relative w-full h-[170px] rounded-lg overflow-hidden">
+        <Swiper
+          spaceBetween={10}
+          slidesPerView={1}
+          navigation={{
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+          }}
+          onBeforeInit={(swiper: SwiperType) => {
+            if (
+              swiper.params.navigation &&
+              typeof swiper.params.navigation === "object"
+            ) {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+            }
+          }}
+          modules={[Navigation]}
+          className="w-full h-full rounded-lg"
+        >
+          {hasPhotos ? (
+            SLIDES.map((img, idx) => (
+              <SwiperSlide key={idx}>
+                <img
+                  src={img}
+                  alt={`Image ${idx + 1}`}
+                  className="object-cover w-full h-full rounded-3xl"
+                />
+              </SwiperSlide>
+            ))
+          ) : (
+            <SwiperSlide>
+              <div className="w-full h-full bg-gray-300"></div>
+            </SwiperSlide>
+          )}
+        </Swiper>
+
+        <button
+          ref={prevRef}
+          className="absolute z-10 p-2 -translate-y-1/2 rounded-full shadow cursor-pointer left-2 top-1/2 bg-white/50 bg-opacity-60 hover:bg-opacity-90"
+        >
+          <FaChevronLeft size={20} />
+        </button>
+        <button
+          ref={nextRef}
+          className="absolute z-10 p-2 -translate-y-1/2 rounded-full shadow cursor-pointer right-2 top-1/2 bg-white/50 bg-opacity-60 hover:bg-opacity-90"
+        >
+          <FaChevronRight size={20} />
+        </button>
+      </div>
+      <div className="flex items-center justify-between px-5 py-2 text-left text-white bg-brand rounded-xl">
+        <div className="">
+          <div className="font-bold">{data?.user.store_name}</div>
+          <div className="text-sm">{data?.user.plan?.name}</div>
         </div>
-        <img src="/images/white-logo.png" alt="" className="items-end w-16" />
+        <LinkButton
+          href="/dashboard/settings/subscription/all"
+          label="Upgrade plan"
+          className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !font-normal !text-brand rounded-lg"
+        />
       </div>
-
-      <p className="font-bold text-black text-left">DOWNLOAD MOBILE APP</p>
-      <div className="flex justify-center gap-2 mt-2">
-        <img src="/images/playstore.png" alt="Google Play" className="w-1/2" />
-        <img src="/images/appstore.png" alt="App Store" className="w-1/2" />
-      </div>
-
-      <p className="font-bold text-black text-left">DO MORE WITH WASHTRACK</p>
-      <div className=" rounded-lg text-center overflow-hidden relative">
-        <img src="/images/ads.png" alt="" className="w-full object-cover" />
-        <p className="text-[27px] text-left text-white absolute bottom-4 left-3 z-50">
-          Build with Tech Champions today.
-        </p>
-      </div>
+      {stats.map((item, i) => (
+        <div
+          className="flex justify-between px-5 py-2 bg-gray-100 rounded-xl"
+          key={i}
+        >
+          <div className="font-bold">{item.text}:</div>
+          <div className="">{item.value}</div>
+        </div>
+      ))}
+      {/* <div className="space-y-2">
+        <div className="font-bold text-left">Recent Orders</div>
+        <OrderList orders={orders.slice(0, 4)} />
+        <LinkButton
+          href="/dashboard/orders"
+          label="View more"
+          rightIcon={<ArrowRight />}
+          className="!text-black"
+        />
+      </div> */}
     </div>
   );
 };
