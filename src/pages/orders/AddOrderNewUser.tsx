@@ -17,6 +17,7 @@ import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
 import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
 import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
 import { useNavigate } from "react-router-dom";
+import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -47,7 +48,7 @@ export const AddOrderNewUser: React.FC = () => {
     phoneNumber: Yup.number().required("Customer's Phone No. is required"),
     payment_type: Yup.mixed().required("required"),
     pickupDate: Yup.date().required("Required."),
-    costOfService: Yup.number().required("Required"),
+    amountPaid: Yup.number().max(Yup.ref("costOfService")),
   });
 
   const handleEditItem = (item: (typeof orderItems)[0]) => {
@@ -195,37 +196,35 @@ export const AddOrderNewUser: React.FC = () => {
                     />
                   </div>
                   <div className="mt-4 bg-brand-100 p-4 mb-4 rounded-lg text-[12px]">
-                    <div className="flex items-center justify-between py-2 text-black">
-                      <span>Cost of service</span>
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold">₦</span>
-                        <InputField
-                          size="sm"
-                          name="costOfService"
-                          className="!max-w-[80px] "
-                        />
+                    <div className="grid grid-cols-2 py-2 text-black gap-y-3 md:grid-cols-3">
+                      <div className="md:col-span-2 justify-self-start">
+                        Cost of service
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between py-2 text-black">
-                      <span>Amount Paid</span>
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold">₦</span>
-                        <InputField
-                          size="sm"
-                          name="amountPaid"
-                          className="!max-w-[80px] "
-                        />
+                      <InputFieldFormatted
+                        formatAsNaira
+                        name="costOfService"
+                        className="justify-self-end "
+                      />
+                      <div className="md:col-span-2 justify-self-start">
+                        Amount Paid
                       </div>
-                    </div>
-                    <div className="flex justify-between py-2 text-black">
-                      <span>Balance</span>
-                      <span className="font-bold">
-                        {formatPrice(values.costOfService - values.amountPaid)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between p-2 mt-2 font-bold text-black bg-white border border-gray-300 rounded-lg">
-                      <span>Total Amount</span>
-                      <span>{formatPrice(values.costOfService)}</span>
+                      <InputFieldFormatted
+                        formatAsNaira
+                        name="amountPaid"
+                        className="justify-self-end"
+                      />
+                      <div className="justify-self-start md:col-span-2">
+                        Balance
+                      </div>
+                      <div className="font-bold justify-self-end">
+                        {formatPrice(
+                          (values.costOfService || 0) - (values.amountPaid || 0)
+                        )}
+                      </div>
+                      <div className="flex justify-between col-span-2 p-2 mt-2 font-bold text-black bg-white border border-gray-300 rounded-lg md:col-span-3">
+                        <span>Total Amount</span>
+                        <span>{formatPrice(values.costOfService || 0)}</span>
+                      </div>
                     </div>
                   </div>
 
