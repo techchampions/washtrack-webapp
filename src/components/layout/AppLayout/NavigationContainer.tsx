@@ -92,7 +92,7 @@ function NavigationContainer() {
       </div>
       <button
         onClick={authService.logout2}
-        className="flex items-center w-full gap-2 px-3 py-2 mt-5 text-sm font-bold text-white rounded-lg cursor-pointer hover:text-white bg-red-500 hover:bg-red-400 text-leftf"
+        className="flex items-center w-full gap-2 px-3 py-2 mt-5 text-sm font-bold text-red-500 rounded-lg cursor-pointer hover:text-white bg-red-50 hover:bg-red-400 text-leftf"
       >
         <LogIn size={16} className="font-brand-bold" />
         <span>Log Out</span>

@@ -16,6 +16,7 @@ import AddItemForOrder from "@/components/DashboardComponents/CreateOrderCompone
 import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
 import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
 import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
+import { useNavigate } from "react-router-dom";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -24,6 +25,7 @@ const PAYMENT_OPTIONS: RadioOption[] = [
 
 export const AddOrderNewUser: React.FC = () => {
   const modal = useModal();
+  const navigate = useNavigate();
   const { mutate: createOrder, isPending } = useCreateOrder();
   const { data } = useGetOrderItem();
   const orderItems = data?.Items ?? [];
@@ -85,19 +87,11 @@ export const AddOrderNewUser: React.FC = () => {
           `items[${index}][no_of_items]`,
           item.no_of_items.toString()
         );
-        // if (item.photos) {
-        //   formData.append(`items[${index}][photos]`, item.photos as File);
-        // }
-        // if (item.photo2) {
-        //   formData.append(`items[${index}][photos]`, item.photo2 as File);
-        // }
-        // if (item.photo3) {
-        //   formData.append(`items[${index}][photos]`, item.photo3 as File);
-        // }
       });
       createOrder(formData, {
         onSuccess(data) {
           modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
+          navigate(`/dashboard/orders/${data.order.id}`);
         },
       });
     } catch (error) {
