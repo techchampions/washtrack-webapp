@@ -22,7 +22,7 @@
 //   const [field, meta] = useField(name); // Get Formik field state
 
 //   return (
-//     <div className=" w-full">
+//     <div className="w-full ">
 //       <div
 //         className={`w-full relative flex flex-row border rounded-lg py-[1px] ${
 //           meta.touched && meta.error ? "border-red-500" : "border-gray-300"
@@ -53,7 +53,7 @@
 //       <ErrorMessage
 //         name={name}
 //         component="p"
-//         className="text-red-500 text-xs mt-1 text-left"
+//         className="mt-1 text-xs text-left text-red-500"
 //       />
 //     </div>
 //   );
@@ -135,7 +135,7 @@ const InputField: React.FC<InputFieldProps> = ({
       <ErrorMessage
         name={name}
         component="p"
-        className="text-red-500 text-xs mt-1 text-left"
+        className="mt-1 text-xs text-left text-red-500"
       />
     </div>
   );
