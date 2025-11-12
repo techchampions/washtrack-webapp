@@ -69,6 +69,10 @@ const changePassword = async (data: ChangePasswordData) => {
   // console.log(response.data.success);
   return response.data;
 };
+const changePasswordOnboarding = async (data: ChangePasswordData) => {
+  const response = await apiClient.post("/api/change-password", data);
+  return response.data;
+};
 const logout = async () => {
   const response = await apiClient.post("/api/logout");
   return response.data;
@@ -507,6 +511,7 @@ export const api = {
   login,
   forgotPassword,
   changePassword,
+  changePasswordOnboarding,
   logout,
   getProfile,
   editProfile,
