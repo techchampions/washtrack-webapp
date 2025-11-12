@@ -59,6 +59,7 @@ const AddServicesSetup = ({
   toggleFormDisplay,
   handleEdit,
   handleDelete,
+  isSubmiting,
 }: any) => {
   const { setStep } = useOnboardingStore();
   const navigate = useNavigate();
@@ -216,6 +217,9 @@ const AddServicesSetup = ({
                         <Button
                           style={{ borderRadius: "40px" }}
                           type="submit"
+                          disabled={isSubmiting}
+                          loading={isSubmiting}
+                          loadingText="Saving"
                           className="w-full p-0 m-0"
                           size="lg"
                         >

@@ -18,6 +18,22 @@ export const useChangePassword = () => {
     },
   });
 };
+export const useChangePasswordOnboarding = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.changePasswordOnboarding,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-profile"],
+      });
+      showSuccess("Change Password successfully");
+    },
+    onError() {
+      showError("Failed to change password");
+    },
+  });
+};
 export const useForgotPassword = () => {
   const queryClient = useQueryClient();
 

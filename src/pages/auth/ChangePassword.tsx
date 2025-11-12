@@ -7,21 +7,22 @@ import React, {
 } from "react";
 import * as Yup from "yup";
 import Button from "../../components/FormComponents/Button";
-import { useChangePassword } from "@/hooks/mutations/useChangePassword";
+import { useChangePasswordOnboarding } from "@/hooks/mutations/useChangePassword";
 import { Form, Formik } from "formik";
 import { InputField } from "@/components/FormComponents";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 interface OTPProps {
   length?: number;
 }
 
 const OTPforgotPassword: React.FC<OTPProps> = ({ length = 4 }) => {
-  const { mutate, isPending } = useChangePassword();
+  const { mutate, isPending } = useChangePasswordOnboarding();
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-
+  const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const inputRefs = useRef<(HTMLInputElement | null)[]>(
     new Array(length).fill(null)
@@ -74,7 +75,11 @@ const OTPforgotPassword: React.FC<OTPProps> = ({ length = 4 }) => {
       password: values.new_password,
       password_confirmation: values.password_confirmation,
     };
-    mutate(payload);
+    mutate(payload, {
+      onSuccess() {
+        navigate("/auth/login");
+      },
+    });
   };
 
   const initialValues = {
@@ -88,9 +93,9 @@ const OTPforgotPassword: React.FC<OTPProps> = ({ length = 4 }) => {
 
   return (
     <div className="flex flex-col items-center w-full m-auto space-y-4">
-      <h2 className="text-2xl text-left text-brand font-brand-bold">
+      <h3 className="text-2xl text-left text-brand font-brand-bold">
         Change Password
-      </h2>
+      </h3>
 
       {/* <h2 className="text-3xl font-brand-bold text-brand">
         00:{timer < 10 ? `0${timer}` : timer}
