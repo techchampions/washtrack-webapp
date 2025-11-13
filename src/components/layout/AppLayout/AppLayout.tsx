@@ -20,7 +20,7 @@ export const AppLayout = () => {
         <ChevronLeft strokeWidth={3} />
       </div> */}
       {/* Main Content */}
-      <main className="flex-1 mb-16 overflow-y-auto bg-white md:mb-0 scrollbar-hide py-2">
+      <main className="flex-1 pb-20 overflow-y-auto bg-white md:pb-5 scrollbar-hide py-2">
         {/* Header */}
         {/* <Header /> */}
         <div className="px-2.5 md:px-7">

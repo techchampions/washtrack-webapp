@@ -233,7 +233,7 @@ const ReportScreen: React.FC = () => {
             <ResponsiveContainer width="100%" height={chartHeight}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" tick={{ fill: "gray" }} />
-                <YAxis dataKey="orders" />
+                {window.innerWidth >= 500 && <YAxis dataKey="orders" />}
                 <Tooltip
                   content={<CustomTooltip activeTab={activeTab} />}
                   cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}

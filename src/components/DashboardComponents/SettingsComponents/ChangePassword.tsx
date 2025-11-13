@@ -12,6 +12,7 @@ const ChangePassword = () => {
   const { mutate: change, isPending } = useChangePassword();
   const modal = useModal();
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const initialValues = {
     new_password: "",
@@ -33,6 +34,7 @@ const ChangePassword = () => {
     });
   };
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const togglePasswordVisibility2 = () => setShowPassword2((prev) => !prev);
 
   return (
     <div>
@@ -65,18 +67,18 @@ const ChangePassword = () => {
               />
               <InputField
                 name="password_confirmation"
-                type={showPassword ? "text" : "password"}
+                type={showPassword2 ? "text" : "password"}
                 placeholder="Confirm password"
                 rightIcon={
-                  showPassword ? (
+                  showPassword2 ? (
                     <FaEye
                       className="text-gray-500 w-5 h-5 cursor-pointer"
-                      onClick={togglePasswordVisibility}
+                      onClick={togglePasswordVisibility2}
                     />
                   ) : (
                     <FaEyeSlash
                       className="text-gray-500 w-5 h-5 cursor-pointer"
-                      onClick={togglePasswordVisibility}
+                      onClick={togglePasswordVisibility2}
                     />
                   )
                 }
