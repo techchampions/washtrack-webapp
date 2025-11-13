@@ -32,7 +32,7 @@ const More = () => {
     {
       icon: <DollarSign size={20} className="" />,
       label: "Expense",
-      href: "/dashboard/expense",
+      href: "/dashboard/expenses",
     },
     {
       icon: <ChartBar size={20} className="" />,
