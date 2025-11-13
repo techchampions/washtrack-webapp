@@ -22,7 +22,7 @@ function NavigationContainer() {
   const { data } = useGetSubscription();
   const handleCreateOrder = () => {
     if (data?.expired || (data?.ordersLeft || 0) < 1) {
-      modal.openModal(<ExhaustedOrder />);
+      modal.openModal(<ExhaustedOrder expired={data?.expired} />);
     } else {
       modal.openModal(<CreateOrderModal />);
     }

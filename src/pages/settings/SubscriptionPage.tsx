@@ -33,6 +33,11 @@ const SubscriptionPage = () => {
                       <div className="px-2 bg-red-500 rounded-3xl">
                         {data?.ordersLeft} orders left
                       </div>
+                      {data?.expired && (
+                        <div className="bg-red-500 text-white rounded-3xl px-2">
+                          Expired
+                        </div>
+                      )}
                     </div>
                     <div className="">{data?.currentPlan.features}</div>
                     <div className="">

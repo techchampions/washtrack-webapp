@@ -28,11 +28,21 @@ const Header: React.FC<Props> = ({ children, title }) => {
           <h1 className="text-lg font-bold text-black">
             {title ? title : user?.store_name || "My Store"}
           </h1>
-          <div className="hidden px-[1rem] py-[.3rem] ml-3 rounded-lg text-brand lg:flex flex-col text-justify bg-brand-100">
+          <div
+            className={`hidden px-[1rem] py-[.3rem] ml-3 rounded-lg lg:flex flex-col text-justify ${
+              data?.expired
+                ? "text-red-500 bg-red-100"
+                : "text-brand bg-brand-100"
+            }`}
+          >
             <div className="text-sm font-bold">
               {data?.currentPlan.name || user?.plan?.name || "Free Plan"}
             </div>
-            <div className="text-[10px]">{data?.ordersLeft} Orders left</div>
+            {data?.expired ? (
+              <div className="text-[10px] font-medium">Expired</div>
+            ) : (
+              <div className="text-[10px]">{data?.ordersLeft} Orders left</div>
+            )}
           </div>
           <LinkButton
             href="/dashboard/settings/subscription/all"
