@@ -68,12 +68,20 @@ const Header: React.FC<Props> = ({ children, title }) => {
         )}
       </div>
       {/* Mobile-only upgrade banner */}
-      <div className="flex md:hidden items-center justify-between w-full px-4 py-2 rounded-md bg-brand-100 text-brand">
+      <div
+        className={`flex md:hidden items-center justify-between w-full px-4 py-2 rounded-md ${
+          data?.expired ? "text-red-500 bg-red-100" : "text-brand bg-brand-100"
+        } `}
+      >
         <div className="flex-1 w-full text-left">
           <p className="w-full text-sm font-bold text-left">
             {data?.currentPlan.name || user?.plan?.name || "Free Plan"}
           </p>
-          <span className="text-xs">{data?.ordersLeft} Orders left</span>
+          {data?.expired ? (
+            <span className="text-xs">Expired</span>
+          ) : (
+            <span className="text-xs">{data?.ordersLeft} Orders left</span>
+          )}
         </div>
         <LinkButton
           href="/dashboard/settings/subscription/all"

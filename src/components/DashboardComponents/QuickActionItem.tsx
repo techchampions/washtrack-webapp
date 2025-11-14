@@ -16,7 +16,7 @@ const QuickActionItem: React.FC<QuickActionProps> = ({ label, icon, path }) => {
       }`}
     >
       <div className="w-[50px]">{icon}</div>
-      <span className="mt-2 text-lg font-medium text-black">{label}</span>
+      <span className="mt-2 md:text-lg font-medium text-black">{label}</span>
     </NavLink>
   );
 };
