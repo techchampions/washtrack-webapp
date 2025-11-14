@@ -1,17 +1,12 @@
 import "./App.css";
 import ToasterProvider from "./provider/ToasterProvider";
-// import AllRoutes from "./routes";
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { HelmetProvider } from "react-helmet-async";
 import { AppRoutes } from "@/routes/AppRoute";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
-// import { persistQueryClient } from "@tanstack/react-query-persist-client";
-// import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-
 import "@/styles/globals.css";
 import { Libraries, LoadScript } from "@react-google-maps/api";
 // import Loader from "@/components/GeneralComponents/Loader";
