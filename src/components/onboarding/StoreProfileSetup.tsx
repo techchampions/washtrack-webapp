@@ -132,7 +132,7 @@ const StoreProfileSetup = () => {
         <div className="bg-white  rounded-2xl max-w-md md:max-w-2xl sm:h-auto md:h-[90vh] lg:h-[100%] md:rounded-3xl p-3 sm:p-3 md:p-5 lg:px-12 shadow-xl overflow-x-hidden scrollbar-hide">
           <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
             <img
-              src="/src/assets/images/logo.png"
+              src="/images/logo(black).png"
               alt="Wash Track"
               className="w-25 h-25"
             />

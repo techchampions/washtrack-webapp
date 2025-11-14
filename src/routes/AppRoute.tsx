@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
 import { AppLayout } from "@/components/layout/AppLayout/AppLayout";
-// import Loader from "@/components/GeneralComponents/Loader";
+import Loader from "@/components/GeneralComponents/Loader";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { HomeScreen } from "@/pages/home";
 import ReportScreen from "@/pages/stats/ReportScreen";
@@ -34,7 +34,6 @@ import Contact from "@/pages/settings/Contact";
 import FAQ from "@/pages/settings/FAQs";
 import NotificationsPage from "@/pages/notifications/NotificationsPage";
 import More from "@/pages/settings/More";
-import StartScreen from "@/components/GeneralComponents/StartScreen";
 // import { Loading } from '@/components/common/Loading/Loading';
 
 // Lazy load pages for better performance
@@ -69,7 +68,7 @@ const NotFoundPage = React.lazy(() => import("@/pages/NotFoundPage"));
 export const AppRoutes: React.FC = () => {
   const { token, isAuthenticated, otpVerified, storeUpdated } = useAuth();
   return (
-    <Suspense fallback={<StartScreen />}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         <Route
           path="/"

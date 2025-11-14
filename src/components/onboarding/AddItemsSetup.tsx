@@ -16,7 +16,7 @@ import {
 } from "@/hooks/items/useItems";
 import { useGetServices } from "@/hooks/services/useServices";
 import { useItemsStore } from "@/store/items.store";
-import { InputField } from "../FormComponents";
+import { Button, InputField } from "../FormComponents";
 import { showError, showSuccess } from "@/utils/toast";
 import { useServicesStore } from "@/store/services.store";
 import { useAuthStore } from "@/store/auth.store";
@@ -85,11 +85,7 @@ const ItemsServicesForm = ({
           onClick={toggleFormDisplay}
         />
         <div className="flex flex-1 items-center justify-center h-0 p-0 mt-2 mb-7 ">
-          <img
-            src="/src/assets/images/logo.png"
-            alt="Wash Track"
-            className="w-25 h-25"
-          />
+          <img src="/images/logo.png" alt="Wash Track" className="w-25 h-25" />
           <div className="ml-5" />
         </div>
       </div>
@@ -180,13 +176,12 @@ const ItemsServicesForm = ({
               </div>
 
               <div className="absolute bottom-0 left-0 w-full rigt-0">
-                <button
+                <Button
                   type="submit"
-                  disabled={loading}
-                  className="w-full px-4 py-3 font-medium text-white transition-colors rounded-full bg-brand hover:bg-brand/30"
-                >
-                  {editIndex !== null ? "Update item" : "Add item"}
-                </button>
+                  isLoading={loading}
+                  label={`${editIndex !== null ? "Update item" : "Add item"}`}
+                  disabled={loading || values.item_name === ""}
+                />
               </div>
             </div>
           </Form>
@@ -395,7 +390,7 @@ const AddItemsSetup = () => {
         )}
         <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
           <img
-            src="/src/assets/images/logo.png"
+            src="/images/logo(black).png"
             alt="Wash Track"
             className="w-25 h-25"
           />

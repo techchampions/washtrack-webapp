@@ -20,7 +20,7 @@ export default function CongratsScreen() {
       <div className="w-full max-w-md p-8 mx-4 text-center bg-white shadow-lg rounded-2xl md:p-12">
         <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
           <img
-            src="/src/assets/images/logo.png"
+            src="/images/logo(black).png"
             alt="Wash Track"
             className="w-25 h-25"
           />

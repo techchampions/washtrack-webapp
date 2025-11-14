@@ -108,7 +108,7 @@ export const SignupForm: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center bg-transparent">
-      <div className="min-h-[70%] max-w-[70%] space-y-2 bg-white p-8 rounded-2xl md:shadow-xl px-15">
+      <div className="min-h-[70%] space-y-2 bg-white px-8 py-8 rounded-2xl md:shadow-xl md:p-10">
         <div className="flex items-center justify-center h-0 p-0 mt-3 mb-7 ">
           <img src={logoImage} alt="Wash Track" className="w-25 h-25" />
           {/* <div className="ml-5" /> */}
@@ -213,7 +213,7 @@ export const SignupForm: React.FC = () => {
                   </span>
                   <span>
                     <a
-                      href="/terms"
+                      href="https://washtrack.ng/privacy"
                       className="text-brand"
                       target="_blank"
                       rel="noreferrer"
@@ -225,7 +225,7 @@ export const SignupForm: React.FC = () => {
                   <span className="mx-1 text-gray-500">and</span>
                   <span>
                     <a
-                      href="/terms"
+                      href="https://washtrack.ng/privacy"
                       className="text-brand"
                       target="_blank"
                       rel="noreferrer"

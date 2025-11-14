@@ -3,13 +3,13 @@ import React from "react";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
 // import { FormField } from "../forms/FormField";
 import { Form, Formik } from "formik";
-import { Button } from "../common/Button";
+// import { Button } from "../common/Button";
 import * as Yup from "yup";
 import { FaEdit } from "react-icons/fa";
 import { useOnboardingStore } from "@/store/onboarding.store";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
-import { InputField } from "@/components/FormComponents";
+import { Button, InputField } from "@/components/FormComponents";
 
 const ServicesList = ({
   handleEdit,
@@ -59,7 +59,7 @@ const AddServicesSetup = ({
   toggleFormDisplay,
   handleEdit,
   handleDelete,
-  isSubmiting,
+  loading,
 }: any) => {
   const { setStep } = useOnboardingStore();
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ const AddServicesSetup = ({
       <div className="bg-white  relative  rounded-3xl overflow-hidden  shadow-lg p-8 max-w-md md:max-w-lg  w-[90%] text-center">
         <div className="flex items-center justify-center h-0 p-0 mt-2 mb-7 ">
           <img
-            src="/src/assets/images/logo.png"
+            src="/images/logo(black).png"
             alt="Wash Track"
             className="w-25 h-25"
           />
@@ -187,7 +187,7 @@ const AddServicesSetup = ({
                   onSubmit={handleSubmit}
                   enableReinitialize
                 >
-                  {() => (
+                  {({ isValid }) => (
                     <Form className="space-y-6  h-[100vh]">
                       <div className="px-4 mb-2 space-y-5 w-full">
                         <InputField
@@ -214,7 +214,7 @@ const AddServicesSetup = ({
                       </div>
 
                       <div className=" px-7 pb-3 flex flex-col  h-[200px] justify-center  items-center">
-                        <Button
+                        {/* <Button
                           style={{ borderRadius: "40px" }}
                           type="submit"
                           disabled={isSubmiting}
@@ -228,7 +228,18 @@ const AddServicesSetup = ({
                               ? "Update service"
                               : "Add service"
                           }`}
-                        </Button>
+                        </Button> */}
+                        <Button
+                          disabled={loading || !isValid}
+                          loadingText="Saving"
+                          isLoading={loading}
+                          type="submit"
+                          label={`${
+                            editIndex !== null
+                              ? "Update service"
+                              : "Add service"
+                          }`}
+                        />
                       </div>
                     </Form>
                   )}

@@ -125,7 +125,9 @@ const AddServicesSetupPage: React.FC = () => {
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         handleSubmit={handleSubmit}
-        isSubmiting={updateServiceMutation.isPending}
+        loading={
+          updateServiceMutation.isPending || addServicesMutation.isPending
+        }
         toggleFormDisplay={toggleFormDisplay}
       />
     </div>
