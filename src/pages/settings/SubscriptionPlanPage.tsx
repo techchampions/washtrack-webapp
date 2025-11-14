@@ -2,16 +2,20 @@ import { Header } from "@/components/DashboardComponents";
 import SubscriptionPlanPageLoading from "@/components/DashboardComponents/LoadingComponents/SubscriptionPlanPageLoading";
 import ConfirmUpgrade from "@/components/DashboardComponents/SubscriptionComponents/ConfirmUpgrade";
 import { Button } from "@/components/FormComponents";
-import { useGetAllSubscriptions } from "@/hooks/query/useGetUserSubscription";
+import {
+  useGetAllSubscriptions,
+  useGetSubscription,
+} from "@/hooks/query/useGetUserSubscription";
 import { useModal } from "@/store/useModal.store";
 import { formatPrice } from "@/utils/formatter";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Info } from "lucide-react";
 import React from "react";
 
 const SubscriptionPlanPage = () => {
   const { data, isLoading } = useGetAllSubscriptions();
+  const { data: subData, isLoading: subDataLoading } = useGetSubscription();
   const modal = useModal();
-  if (isLoading) {
+  if (isLoading || subDataLoading) {
     return <SubscriptionPlanPageLoading />;
   }
   const plans = data?.plans ?? [];
@@ -24,9 +28,20 @@ const SubscriptionPlanPage = () => {
         <div className="flex flex-wrap justify-start gap-3 p-5 text-left text-white bg-quick-action-icon rounded-2xl">
           <div className="">
             <div className="">Active Plan</div>
-            <div className="text-2xl font-bold">{data?.current.name}</div>
+            <div className="flex items-center gap-2">
+              <div className="text-2xl font-bold">{data?.current.name}</div>
+              {subData?.expired && (
+                <div className="bg-red-500 text-white rounded-2xl text-sm px-2">
+                  Expired
+                </div>
+              )}
+            </div>
             <div className="text-sm text-gray-200">{data?.current.caption}</div>
             <div className="">{data?.current.features}</div>
+            <div className="flex items-center gap-1 text-gray-400">
+              <Info size={16} />
+              {subData?.ordersLeft} orders left
+            </div>
           </div>
           <div className="w-full md:w-auto">
             <ul className="ml-5 space-y-1 text-sm text-left text-gray-300 list-inside">
