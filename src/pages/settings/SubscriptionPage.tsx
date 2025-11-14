@@ -30,11 +30,11 @@ const SubscriptionPage = () => {
                       <div className="text-3xl font-bold">
                         {data?.currentPlan.name}
                       </div>
-                      <div className="px-2 bg-red-500 rounded-3xl">
+                      <div className="px-2 bg-red-500 rounded-3xl py-1 md:py-0 text-xs md:text-sm truncate">
                         {data?.ordersLeft} orders left
                       </div>
                       {data?.expired && (
-                        <div className="bg-red-500 text-white rounded-3xl px-2">
+                        <div className="bg-red-500 text-white rounded-3xl px-2 py-1 md:py-0 text-xs md:text-sm">
                           Expired
                         </div>
                       )}

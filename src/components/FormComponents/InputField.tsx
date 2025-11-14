@@ -135,7 +135,7 @@ const InputField: React.FC<InputFieldProps> = ({
       <ErrorMessage
         name={name}
         component="p"
-        className="mt-1 text-xs text-left text-red-500"
+        className="mt-[2px] text-xs text-left text-red-500"
       />
     </div>
   );

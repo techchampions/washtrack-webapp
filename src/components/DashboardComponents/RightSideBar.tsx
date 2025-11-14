@@ -19,9 +19,9 @@ import { useGetOustanding } from "@/hooks/query/useGetOustanding";
 import { useGetInventory } from "@/hooks/query/useGetInventory";
 
 const SLIDES = [
-  "/src/assets/images/landing-banner-image.png",
-  "/src/assets/images/landing-banner-image1.png",
-  "/src/assets/images/ads.png",
+  "/images/landing-banner-image.png",
+  "/images/landing-banner-image1.png",
+  "/images/ads.png",
 ];
 
 const RightSideBar = () => {
