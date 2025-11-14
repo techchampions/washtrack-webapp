@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
   return (
     <LoadScript
-      loadingElement={<Loader />}
+      loadingElement={<Loader className="!h-15 !w-15" />}
       googleMapsApiKey={GOOGLE_MAPS_API_KEY}
       libraries={LIBRARIES}
     >
