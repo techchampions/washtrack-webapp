@@ -14,8 +14,9 @@ import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
 
 import "@/styles/globals.css";
 import { Libraries, LoadScript } from "@react-google-maps/api";
-import Loader from "@/components/GeneralComponents/Loader";
+// import Loader from "@/components/GeneralComponents/Loader";
 import Modal from "@/components/DashboardComponents/Modal2";
+import StartScreen from "@/components/GeneralComponents/StartScreen";
 const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
 
 const LIBRARIES: Libraries = ["places"];
@@ -32,7 +33,7 @@ const App: React.FC = () => {
 
   return (
     <LoadScript
-      loadingElement={<Loader />}
+      loadingElement={<StartScreen />}
       googleMapsApiKey={GOOGLE_MAPS_API_KEY}
       libraries={LIBRARIES}
     >

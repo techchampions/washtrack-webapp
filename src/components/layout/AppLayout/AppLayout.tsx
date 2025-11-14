@@ -10,7 +10,7 @@ export const AppLayout = () => {
   return (
     <div className="fixed inset-0 z-50 flex w-screen h-screen scrollbar-hide">
       {/* Sidebar */}
-      <aside className="hidden w-[300px] bg-brand text-white p-4 md:flex flex-col">
+      <aside className="hidden w-[300px] bg-white text-brand p-4 md:flex flex-col">
         <NavigationContainer />
       </aside>
       {/* <div
@@ -20,7 +20,7 @@ export const AppLayout = () => {
         <ChevronLeft strokeWidth={3} />
       </div> */}
       {/* Main Content */}
-      <main className="flex-1 pb-20 overflow-y-auto bg-white md:pb-5 scrollbar-hide py-2">
+      <main className="flex-1 pb-20 overflow-y-auto bg-[#fafafa] md:pb-5 scrollbar-hide py-2">
         {/* Header */}
         {/* <Header /> */}
         <div className="px-2.5 md:px-7">

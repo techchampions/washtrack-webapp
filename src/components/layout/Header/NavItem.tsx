@@ -22,20 +22,20 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
           className={({ isActive }) =>
             `flex items-center justify-between px-3 py-[7px] rounded-md transition ${
               isActive
-                ? "bg-brand-400 text-white"
-                : "text-white hover:bg-brand-400"
+                ? "bg-brand-100 text-brand"
+                : "text-black hover:text-brand hover:bg-brand-100"
             }`
           }
         >
           <div className="flex items-center space-x-2">
             {icon}
-            <span className="text-white">{label}</span>
+            <span className="">{label}</span>
           </div>
         </NavLink>
       ) : (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-between w-full px-3 py-[7px] text-white rounded-md hover:bg-brand-400"
+          className="flex items-center justify-between w-full px-3 py-[7px] text-black rounded-md hover:bg-brand-100"
         >
           <div className="flex items-center space-x-2">
             {icon}
@@ -49,10 +49,10 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
 
       {/* Nested Items */}
       {isOpen && children && (
-        <div className="px-0 mt-2 ml-6 space-y-2 border-l-1 border-white/40">
+        <div className="px-0 mt-2 ml-6 space-y-2 border-l-1 border-gray-300">
           {children.map((child, index) => (
             <div className="flex items-center">
-              <div className="h-[0.5px] w-[10px] text-white bg-white/40"></div>
+              <div className="h-[0.5px] w-[10px] text-black bg-gray-300"></div>
               <NavLink
                 key={index}
                 to={child.path}
@@ -60,8 +60,8 @@ const NavItem: React.FC<NavItemProps> = ({ label, icon, path, children }) => {
                 className={({ isActive }) =>
                   `block py-[7px] flex-1 px-2 rounded-md transition text-left text-[12px] ${
                     isActive
-                      ? "bg-brand-400 text-white"
-                      : "text-white hover:bg-brand-400"
+                      ? "bg-brand-100 text-brand"
+                      : "text-black hover:text-brand hover:bg-brand-100"
                   }`
                 }
               >
