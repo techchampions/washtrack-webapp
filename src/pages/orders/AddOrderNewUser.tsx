@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import React from "react";
@@ -97,6 +98,59 @@ export const AddOrderNewUser: React.FC = () => {
           } else if (data.success == true) {
             modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
             navigate(`/dashboard/orders/${data.order.id}`);
+          }
+        },
+        onError(error: any) {
+          // const errorData = error.response?.data;
+
+          // // Handle structured errors with phone_number and email fields
+          // if (errorData?.errors) {
+          //   console.log(errorData.errors);
+
+          //   // Extract all error messages and show the first one
+          //   const allErrorMessages: string[] = [];
+
+          //   Object.values(errorData.errors).forEach((errorArray: any) => {
+          //     if (Array.isArray(errorArray)) {
+          //       allErrorMessages.push(...errorArray);
+          //     }
+          //   });
+
+          //   // Show the first error message
+          //   if (allErrorMessages.length > 0) {
+          //     showError(allErrorMessages[0]);
+          //   } else {
+          //     showError("An error occurred. Please check your input.");
+          //   }
+
+          //   // If you want to show ALL error messages:
+          //   // showError(allErrorMessages.join(', '));
+          // } else if (errorData?.message) {
+          //   // Fallback to general error message
+          //   showError(errorData.message);
+          // } else {
+          //   // Generic error message
+          //   showError("Failed to create order. Please try again.");
+          // }
+
+          const errorData = error.response?.data;
+
+          if (errorData?.errors) {
+            console.log(errorData.errors);
+
+            // Loop through each field
+            Object.values(errorData.errors).forEach((errorArray: any) => {
+              if (Array.isArray(errorArray)) {
+                // Loop through each error message and show separate toast
+                errorArray.forEach((message: string) => {
+                  showError(message); // Each error gets its own toast
+                });
+              }
+            });
+          } else if (errorData?.message) {
+            showError(errorData.message);
+          } else {
+            showError("Failed to create order. Please try again.");
           }
         },
       });
