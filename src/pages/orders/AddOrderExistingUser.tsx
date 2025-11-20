@@ -21,6 +21,7 @@ import EditItemForOrder from "@/components/DashboardComponents/CreateOrderCompon
 import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
 import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
 import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
+import { showError } from "@/utils/toast";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -92,8 +93,12 @@ export const AddOrderExistingUser: React.FC = () => {
 
       createOrder(formData, {
         onSuccess(data) {
-          modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
-          navigate(`/dashboard/orders/${data.order.id}`);
+          if (data.success === false) {
+            showError(data.message);
+          } else if (data.success === true) {
+            modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
+            navigate(`/dashboard/orders/${data.order.id}`);
+          }
         },
       });
     } catch (error) {
@@ -113,7 +118,7 @@ export const AddOrderExistingUser: React.FC = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
-              enableReinitialize
+              // enableReinitialize
             >
               {({ isValid, values }) => (
                 <Form className="w-full space-y-2">

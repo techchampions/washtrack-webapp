@@ -82,8 +82,8 @@ const OrderOverview = () => {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="flex flex-col w-full gap-2 p-4 divide-y divide-gray-300 rounded-lg bg-brand-100">
           <div className="flex justify-start gap-2 pb-2 text-black ">
-            <img src="/images/washing_machine.svg" alt="" />
-            <div className="flex flex-col justify-start text-left">
+            <img src="/images/washing_machine.svg" alt="" className="w-1/3" />
+            <div className="flex flex-col flex-1 justify-start text-left">
               <h2 className="text-2xl font-bold">
                 Order #{order?.order_number}
               </h2>

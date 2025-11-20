@@ -18,6 +18,7 @@ import EditItemForOrder from "@/components/DashboardComponents/CreateOrderCompon
 import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
 import { useNavigate } from "react-router-dom";
 import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
+import { showError } from "@/utils/toast";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -91,8 +92,12 @@ export const AddOrderNewUser: React.FC = () => {
       });
       createOrder(formData, {
         onSuccess(data) {
-          modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
-          navigate(`/dashboard/orders/${data.order.id}`);
+          if (data.success === false) {
+            showError(data.message);
+          } else if (data.success == true) {
+            modal.openModal(<OrderCreateSuccess order_id={data.order.id} />);
+            navigate(`/dashboard/orders/${data.order.id}`);
+          }
         },
       });
     } catch (error) {
@@ -112,7 +117,7 @@ export const AddOrderNewUser: React.FC = () => {
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
-              enableReinitialize
+              // enableReinitialize
             >
               {({ isValid, values }) => (
                 <Form className="w-full space-y-2">
