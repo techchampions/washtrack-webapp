@@ -1,25 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import React from "react";
-import { Button, InputField } from "@/components/FormComponents";
-import { FiPlusCircle } from "react-icons/fi";
 import { Header, RightSideBar } from "@/components/DashboardComponents";
+import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
+import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
+import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
+import { Button, InputField } from "@/components/FormComponents";
 import DatePickerInput from "@/components/FormComponents/DateInput";
-import { useModal } from "@/store/useModal.store";
-import { ChevronRight, Info } from "lucide-react";
-import { formatPrice } from "@/utils/formatter";
+import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
 import RadioSelect, {
   RadioOption,
 } from "@/components/FormComponents/RadioInput";
 import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
-import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
 import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
-import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
-import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
-import { useNavigate } from "react-router-dom";
-import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
+import { useModal } from "@/store/useModal.store";
+import { formatPrice } from "@/utils/formatter";
 import { showError } from "@/utils/toast";
+import { Form, Formik } from "formik";
+import { ChevronRight, Info } from "lucide-react";
+import React from "react";
+import { FiPlusCircle } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -71,7 +71,7 @@ export const AddOrderNewUser: React.FC = () => {
 
     try {
       const formData = new FormData();
-      const totalAmount = Number(values.costOfService) - values.amountPaid;
+      const totalAmount = Number(values.costOfService);
       formData.append("name", values.customerName);
       formData.append("email", values.customerEmail);
       formData.append("payment_type", values.payment_type);

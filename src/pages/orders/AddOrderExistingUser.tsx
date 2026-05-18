@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Form, Formik } from "formik";
-import * as Yup from "yup";
-import React from "react";
-import { Button } from "@/components/FormComponents";
-import { FiPlusCircle } from "react-icons/fi";
 import { Header, RightSideBar } from "@/components/DashboardComponents";
+import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
+import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
+import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
+import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
+import { Button } from "@/components/FormComponents";
 import DatePickerInput from "@/components/FormComponents/DateInput";
-import { useModal } from "@/store/useModal.store";
-import { ChevronRight, Info } from "lucide-react";
-import { formatPrice } from "@/utils/formatter";
+import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
 import RadioSelect, {
   RadioOption,
 } from "@/components/FormComponents/RadioInput";
 import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
-import AddItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/AddItemForOrder";
-import { FaChevronRight } from "react-icons/fa";
 import { useGetCustomerProfile } from "@/hooks/query/useGetCustomers";
-import { useNavigate, useParams } from "react-router-dom";
 import { useGetOrderItem } from "@/hooks/query/useGetOrderItem";
-import EditItemForOrder from "@/components/DashboardComponents/CreateOrderComponents/EditItemForOrder";
-import OrderItemLoading from "@/components/DashboardComponents/OrderItemLoading";
-import OrderCreateSuccess from "@/components/DashboardComponents/CreateOrderComponents/OrderCreateSuccess";
-import InputFieldFormatted from "@/components/FormComponents/InputField+Format";
+import { useModal } from "@/store/useModal.store";
+import { formatPrice } from "@/utils/formatter";
 import { showError } from "@/utils/toast";
+import { Form, Formik } from "formik";
+import { ChevronRight, Info } from "lucide-react";
+import React from "react";
+import { FaChevronRight } from "react-icons/fa";
+import { FiPlusCircle } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 
 const PAYMENT_OPTIONS: RadioOption[] = [
   { label: "Cash", value: "cash" },
@@ -76,7 +76,8 @@ export const AddOrderExistingUser: React.FC = () => {
       if (values.costOfService && values.amountPaid) {
         formData.append(
           "total_amount",
-          String(values.costOfService - values.amountPaid)
+          String(values.costOfService)
+          // String(values.costOfService - values.amountPaid)
         );
       }
       formData.append("paid_amount", String(values.amountPaid));
