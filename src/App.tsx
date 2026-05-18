@@ -11,7 +11,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import ToasterProvider from "./provider/ToasterProvider";
-
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const LIBRARIES: Libraries = ["places"];
 
 const queryClient = new QueryClient();
@@ -23,11 +23,12 @@ const App: React.FC = () => {
     script.async = true;
     document.body.appendChild(script);
   }, []);
+  console.log(GOOGLE_MAPS_API_KEY);
 
   return (
     <LoadScript
       loadingElement={<Loader className="!h-15 !w-15" />}
-      googleMapsApiKey={"AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U"}
+      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
       libraries={LIBRARIES}
     >
       <ErrorBoundary>

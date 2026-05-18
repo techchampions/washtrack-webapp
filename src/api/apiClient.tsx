@@ -15,8 +15,6 @@ const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
   async (config) => {
-    console.log(config.url, "request interceptor");
-
     const token =
       localStorage.getItem("auth-token") ||
       JSON.parse(localStorage.getItem("auth-storage") || "{}")?.state?.token;
