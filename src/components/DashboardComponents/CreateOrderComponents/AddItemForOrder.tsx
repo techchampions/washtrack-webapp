@@ -101,6 +101,10 @@ const AddItemForOrder = () =>
         payload.append("service_name", selectedService.service_name);
         payload.append("no_of_items", String(values.quantity));
         payload.append("item_type", selectedItem.name);
+        payload.append(
+          "price",
+          String(selectedService.price * values.quantity)
+        );
       }
       if (typeof values.image !== "string") {
         payload.append("photos[]", values.image);
