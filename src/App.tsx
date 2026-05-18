@@ -1,7 +1,6 @@
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
 import Modal from "@/components/DashboardComponents/Modal2";
 import Loader from "@/components/GeneralComponents/Loader";
-import { GOOGLE_MAPS_API_KEY } from "@/data/constants";
 import { AppRoutes } from "@/routes/AppRoute";
 import "@/styles/globals.css";
 import { Libraries, LoadScript } from "@react-google-maps/api";
@@ -28,7 +27,7 @@ const App: React.FC = () => {
   return (
     <LoadScript
       loadingElement={<Loader className="!h-15 !w-15" />}
-      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+      googleMapsApiKey={"AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U"}
       libraries={LIBRARIES}
     >
       <ErrorBoundary>
