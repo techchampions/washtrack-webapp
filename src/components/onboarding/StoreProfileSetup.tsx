@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "../common/Button";
-import * as Yup from "yup";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-import { Form, Formik, FormikHelpers } from "formik";
-import PlacesAutocomplete from "react-places-autocomplete";
-import { useOnboardingStore } from "@/store/onboarding.store";
 import { useAuthStore } from "@/store/auth.store";
+import { useOnboardingStore } from "@/store/onboarding.store";
+import { Form, Formik, FormikHelpers } from "formik";
+import React, { useEffect, useState } from "react";
+import PlacesAutocomplete from "react-places-autocomplete";
+import * as Yup from "yup";
+import { Button } from "../common/Button";
 // import { useCreateStore } from "@/hooks/auth/useOnboarding";
 // import { FormField } from "../forms/FormField";
-import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
-import Loader from "@/components/GeneralComponents/Loader";
-import { useSoosarCreateStore } from "@/hooks/auth/useOnboarding";
+import { InputField } from "@/components/FormComponents";
 import ImageUploadField from "@/components/FormComponents/ImageInput";
 import RoundImageUpload from "@/components/FormComponents/RoundImageInput";
-import { InputField } from "@/components/FormComponents";
-
-// const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
+import Loader from "@/components/GeneralComponents/Loader";
+import { useSoosarCreateStore } from "@/hooks/auth/useOnboarding";
+import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 
 // const LIBRARIES: Libraries = ["places"];
 const StoreProfileSetup = () => {

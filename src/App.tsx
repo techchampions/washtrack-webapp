@@ -1,18 +1,17 @@
-import "./App.css";
-import ToasterProvider from "./provider/ToasterProvider";
-import "react-datepicker/dist/react-datepicker.css";
-import React, { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
-import { AppRoutes } from "@/routes/AppRoute";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary/ErrorBoundary";
+import Modal from "@/components/DashboardComponents/Modal2";
+import Loader from "@/components/GeneralComponents/Loader";
+import { AppRoutes } from "@/routes/AppRoute";
 import "@/styles/globals.css";
 import { Libraries, LoadScript } from "@react-google-maps/api";
-import Loader from "@/components/GeneralComponents/Loader";
-import Modal from "@/components/DashboardComponents/Modal2";
-const GOOGLE_MAPS_API_KEY = "AIzaSyBPIyWllHG8je77s56Pyp69b5mzlghzD9U";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { useEffect } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { HelmetProvider } from "react-helmet-async";
+import { BrowserRouter } from "react-router-dom";
+import "./App.css";
+import ToasterProvider from "./provider/ToasterProvider";
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const LIBRARIES: Libraries = ["places"];
 
 const queryClient = new QueryClient();
@@ -24,6 +23,7 @@ const App: React.FC = () => {
     script.async = true;
     document.body.appendChild(script);
   }, []);
+  console.log(GOOGLE_MAPS_API_KEY);
 
   return (
     <LoadScript

@@ -1,13 +1,12 @@
-import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAuthStore } from "@/store/auth.store";
+import React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const PrivateRoute: React.FC = () => {
   const { token, otpVerified } = useAuth();
   const { completedOnboarding } = useAuthStore();
   const location = useLocation();
-  console.log(token, " in private route");
 
   if (!token) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
