@@ -68,7 +68,7 @@ const SubscriptionPlanPage = () => {
       </div>
       <div className="">
         <div className="my-5 text-left">
-          <h3 className="text-3xl font-bold">Monthly Subsripions</h3>
+          <h3 className="text-3xl font-bold">Monthly Subscripions</h3>
           <p>
             Unlock and enjoy fast laundry management experience like never
             before.

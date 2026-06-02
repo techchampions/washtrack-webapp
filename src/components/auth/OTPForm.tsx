@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
+import { ArrowLeft } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 const CountdownTimer = ({ initialTime = 59, onExpire }: any) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -28,7 +28,7 @@ const CountdownTimer = ({ initialTime = 59, onExpire }: any) => {
   };
 
   return (
-    <div className="text-2xl font-bold text-brand mb-2">
+    <div className="mb-2 text-2xl font-bold text-brand">
       {formatTime(timeLeft)}
     </div>
   );
@@ -97,7 +97,7 @@ const Keypad = ({ onKeyPress }: any) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-y-0 w-3/4  gap-x-0 place-items-center mx-auto">
+    <div className="grid w-3/4 grid-cols-3 mx-auto gap-y-0 gap-x-0 place-items-center">
       {keys.flat().map((key, index) => {
         if (key === "") {
           return <div key={index} className="w-16 h-16 bg-white"></div>;
@@ -108,7 +108,7 @@ const Keypad = ({ onKeyPress }: any) => {
             <button
               key={index}
               onClick={() => handleKeyPress(key)}
-              className="w-6 h-6 bg-white hover:bg-white flex items-center justify-center"
+              className="flex items-center justify-center w-6 h-6 bg-white hover:bg-white"
             >
               <ArrowLeft className="w-4 h-4 text-gray-600" />
             </button>
@@ -119,7 +119,7 @@ const Keypad = ({ onKeyPress }: any) => {
           <button
             key={index}
             onClick={() => handleKeyPress(key)}
-            className="w-6 h-6 bg-white text-lg font-semibold text-black"
+            className="w-6 h-6 text-lg font-semibold text-black bg-white"
           >
             {key}
           </button>
@@ -153,7 +153,7 @@ const ActionButton = ({
     >
       {loading ? (
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-2"></div>
+          <div className="w-6 h-6 mr-2 border-b-2 border-white rounded-full animate-spin"></div>
           Verifying...
         </div>
       ) : (
@@ -165,14 +165,14 @@ const ActionButton = ({
 
 // const Header = ({ onBack, title }) => {
 //   return (
-//     <div className="flex items-center justify-between mb-8 px-6 pt-6">
+//     <div className="flex items-center justify-between px-6 pt-6 mb-8">
 //       <div className="flex items-center">
-//         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
-//           <div className="w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center">
+//         <div className="flex items-center justify-center w-8 h-8 mr-3 bg-white rounded-full">
+//           <div className="flex items-center justify-center w-6 h-6 bg-gray-800 rounded-full">
 //             <div className="w-3 h-3 bg-white rounded-full"></div>
 //           </div>
 //         </div>
-//         <span className="text-white font-bold text-xl">{title}</span>
+//         <span className="text-xl font-bold text-white">{title}</span>
 //       </div>
 //     </div>
 //   );
@@ -181,11 +181,13 @@ const ActionButton = ({
 const OTPForm = ({
   onSubmit,
   resendOtp,
-}: // isLoading = false,
-{
+  isLoading,
+  reSending,
+}: {
   onSubmit: (code: string) => Promise<void>;
   resendOtp: () => Promise<void>;
   isLoading: boolean;
+  reSending: boolean;
 }) => {
   const [timer, setTimer] = useState(59);
   const [code, setCode] = useState("");
@@ -217,17 +219,17 @@ const OTPForm = ({
   };
 
   return (
-    <div className="bg-white w-full lg:max-w-md sm:max-w-xs rounded-none md:border border-white  md:rounded-3xl lg:px-10 pt-5 md:pb-10 shadow-xl">
-      <div className="text-center mb-6">
+    <div className="w-full pt-5 bg-white border-white rounded-none shadow-xl lg:max-w-md sm:max-w-xs md:border md:rounded-3xl lg:px-10 md:pb-10">
+      <div className="mb-6 text-center">
         <CountdownTimer initialTime={timer} onExpire={onExpire} />
-        <p className="text-gray-600 text-sm leading-relaxed">
+        <p className="text-sm leading-relaxed text-gray-600">
           Type the verification code
           <br />
           sent to <span className="text-blue-500">{user?.email}</span>
         </p>
       </div>
       <div className="mb-8 text-center">
-        <p className="text-gray-500 text-xs">
+        <p className="text-xs text-gray-500">
           This code will expire in{" "}
           <span className="font-semibold">60 secs</span>
         </p>
@@ -239,19 +241,19 @@ const OTPForm = ({
         <ActionButton
           onClick={handleProceed}
           disabled={code.length !== 4}
-          loading={false}
+          loading={isLoading}
         >
           Proceed
         </ActionButton>
       </div>
 
-      <div className="text-center mt-6">
-        <span className="text-gray-500 text-sm">Didn't get code? </span>
+      <div className="mt-6 text-center">
+        <span className="text-sm text-gray-500">Didn't get code? </span>
         <button
-          onClick={resendOtp}
-          className="text-brand text-sm font-medium hover:text-brand transition-colors"
+          onClick={() => reSending && resendOtp()}
+          className="text-sm font-medium transition-colors text-brand hover:text-brand"
         >
-          Send again
+          {reSending ? "Sending OTP" : "Send again"}
         </button>
       </div>
     </div>
