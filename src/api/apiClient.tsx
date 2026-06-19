@@ -91,18 +91,38 @@ apiClient.interceptors.response.use(
 );
 
 function getErrorMessage(error: AxiosError): string {
-  if (error.response?.data) {
-    const data = error.response.data as any;
+  try {
+    if (error.response?.data) {
+      const data = error.response.data as any;
 
-    if (typeof data === "string") return data;
-    if (data.message) return data.message;
-    if (data.error) return data.error;
-    if (data.errors && Array.isArray(data.errors)) {
-      return data.errors[0]?.message || data.errors[0];
+      if (typeof data === "string") return data;
+      if (data.message && typeof data.message === "string") return data.message;
+      if (data.error && typeof data.error === "string") return data.error;
+      if (data.errors && Array.isArray(data.errors)) {
+        return data.errors[0]?.message || data.errors[0];
+      }
+      if (data.message && typeof data.message === "object") {
+        if (data.message.errors) {
+          const errorObj = data.message.errors;
+          if (errorObj && typeof errorObj === "object") {
+            const err_msg = Object.entries(errorObj).flatMap(([, messages]) => {
+              if (Array.isArray(messages) && messages.length > 0) {
+                return messages[0];
+              }
+            });
+            return err_msg[0] || "validate";
+          }
+        }
+
+        return data.message.message;
+      }
     }
-  }
 
-  return error.message || "An unexpected error occurred";
+    return error.message || "An unexpected error occurred";
+  } catch (error) {
+    console.log(error);
+    return "Validation failed";
+  }
 }
 
 export default apiClient;

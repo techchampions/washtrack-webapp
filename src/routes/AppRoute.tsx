@@ -1,39 +1,41 @@
 import React, { Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import { PrivateRoute } from "./PrivateRoute";
-import { PublicRoute } from "./PublicRoute";
-import { AppLayout } from "@/components/layout/AppLayout/AppLayout";
 import Loader from "@/components/GeneralComponents/Loader";
+import { AppLayout } from "@/components/layout/AppLayout/AppLayout";
 import { useAuth } from "@/hooks/auth/useAuth";
+import CustomerOrderByType from "@/pages/customers/CustomerOrderByType";
+import CustomerOrders from "@/pages/customers/CustomerOrders";
+import CustomerScreen from "@/pages/customers/CustomerScreen";
+import AllExpenseList from "@/pages/expense/AllExpenseList";
+import ExpenseIndex from "@/pages/expense/ExpenseIndex";
 import { HomeScreen } from "@/pages/home";
-import ReportScreen from "@/pages/stats/ReportScreen";
-import { AddOrderNewUser } from "@/pages/orders/AddOrderNewUser";
+import InventoryCustomers from "@/pages/inventory/InventoryCustomers";
+import InventoryScreen from "@/pages/inventory/InventoryScreen";
+import NotificationsPage from "@/pages/notifications/NotificationsPage";
 import { AddOrderExistingUser } from "@/pages/orders/AddOrderExistingUser";
+import { AddOrderNewUser } from "@/pages/orders/AddOrderNewUser";
 import OrderOverview from "@/pages/orders/OrderOverview";
 import OrdersScreen from "@/pages/orders/OrdersScreen";
-import InventoryScreen from "@/pages/inventory/InventoryScreen";
-import CustomerScreen from "@/pages/customers/CustomerScreen";
 import OutstandingHistory from "@/pages/orders/OutstandingHistory";
-import InventoryCustomers from "@/pages/inventory/InventoryCustomers";
-import CustomerOrderByType from "@/pages/customers/CustomerOrderByType";
-import ExpenseIndex from "@/pages/expense/ExpenseIndex";
-import AllExpenseList from "@/pages/expense/AllExpenseList";
-import RevenueIndex from "@/pages/revenue/RevenueIndex";
-import AllRevenueList from "@/pages/revenue/RevenueList";
 import OutstandingIndex from "@/pages/outstanding/OustandingIndex";
 import AllOutstandingList from "@/pages/outstanding/OutstandingList";
-import SettingsPage from "@/pages/settings/SettingsPage";
-import SettingStoreSetup from "@/pages/settings/StoreSetup";
-import ServicesSetup from "@/pages/settings/ServicesSetup";
-import ItemsSetup from "@/pages/settings/ItemsSetup";
-import SubscriptionPage from "@/pages/settings/SubscriptionPage";
-import SubscriptionPlanPage from "@/pages/settings/SubscriptionPlanPage";
-import CustomerOrders from "@/pages/customers/CustomerOrders";
+import RevenueIndex from "@/pages/revenue/RevenueIndex";
+import AllRevenueList from "@/pages/revenue/RevenueList";
+import Branches from "@/pages/settings/Branches";
 import Contact from "@/pages/settings/Contact";
 import FAQ from "@/pages/settings/FAQs";
-import NotificationsPage from "@/pages/notifications/NotificationsPage";
+import ItemsSetup from "@/pages/settings/ItemsSetup";
 import More from "@/pages/settings/More";
+import ServicesSetup from "@/pages/settings/ServicesSetup";
+import SettingsPage from "@/pages/settings/SettingsPage";
+import Staffs from "@/pages/settings/Staffs";
+import SettingStoreSetup from "@/pages/settings/StoreSetup";
+import SubscriptionPage from "@/pages/settings/SubscriptionPage";
+import SubscriptionPlanPage from "@/pages/settings/SubscriptionPlanPage";
+import ReportScreen from "@/pages/stats/ReportScreen";
+import { PrivateRoute } from "./PrivateRoute";
+import { PublicRoute } from "./PublicRoute";
 
 // Lazy load pages for better performance
 const LoginPage = React.lazy(() => import("@/pages/auth/LoginPage"));
@@ -180,6 +182,8 @@ export const AppRoutes: React.FC = () => {
               path="/dashboard/settings/subscription/all"
               element={<SubscriptionPlanPage />}
             />
+            <Route path="/dashboard/settings/branches" element={<Branches />} />
+            <Route path="/dashboard/settings/staff" element={<Staffs />} />
             <Route path="/dashboard/contact" element={<Contact />} />
             <Route path="/dashboard/faqs" element={<FAQ />} />
             <Route

@@ -61,13 +61,14 @@
 
 // export default InputField;
 
+import { ErrorMessage, Field, useField } from "formik";
 import React from "react";
-import { Field, ErrorMessage, useField } from "formik";
 import { FaExclamationCircle } from "react-icons/fa"; // Error Icon
 
 interface InputFieldProps {
   type?: "text" | "email" | "password" | "number" | "checkbox" | "textarea";
   placeholder?: string;
+  label?: string;
   size?: "sm" | "md" | "lg";
   name: string;
   editable?: boolean;
@@ -80,6 +81,7 @@ interface InputFieldProps {
 const InputField: React.FC<InputFieldProps> = ({
   type = "text",
   placeholder,
+  label,
   size = "md",
   name,
   editable = true,
@@ -94,6 +96,11 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div className="w-full">
+      {label && (
+        <div className="text-gray-800 mb-0.5 text-xs sm:text-sm text-left font-medium">
+          {label}
+        </div>
+      )}
       <div
         className={`w-full relative flex bg-white ${
           isTextarea ? "flex-col" : "flex-row"

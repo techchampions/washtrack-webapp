@@ -1,8 +1,10 @@
-import React, { ReactNode } from "react";
-import { FiBell, FiSettings } from "react-icons/fi";
+import { Button } from "@/components/FormComponents";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
-import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { showError } from "@/utils/toast";
+import React, { ReactNode } from "react";
+import { FiBell, FiSettings } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 interface Props {
   children?: ReactNode;
@@ -44,11 +46,19 @@ const Header: React.FC<Props> = ({ children, title }) => {
               <div className="text-[10px]">{data?.ordersLeft} Orders left</div>
             )}
           </div>
-          <LinkButton
-            href="/dashboard/settings/subscription/all"
-            label={data?.expired ? "Renew" : "Upgrade"}
-            className="py-0 rounded-lg !w-fit px-5 hidden lg:flex"
-          />
+          {user?.user_type === 4 ? (
+            <Button
+              label={data?.expired ? "Renew" : "Upgrade"}
+              className="py-0 rounded-lg !w-fit px-5 hidden lg:flex"
+              onClick={() => showError("You don't have permission")}
+            />
+          ) : (
+            <LinkButton
+              href="/dashboard/settings/subscription/all"
+              label={data?.expired ? "Renew" : "Upgrade"}
+              className="py-0 rounded-lg !w-fit px-5 hidden lg:flex"
+            />
+          )}
         </div>
         {children ? (
           <div className="flex items-center w-auto gap-3 text-xs max-w-max">
@@ -83,11 +93,19 @@ const Header: React.FC<Props> = ({ children, title }) => {
             <span className="text-xs">{data?.ordersLeft} Orders left</span>
           )}
         </div>
-        <LinkButton
-          href="/dashboard/settings/subscription/all"
-          label={data?.expired ? "Renew" : "Upgrade"}
-          className="py-0 rounded-lg !w-fit px-5"
-        />
+        {user?.user_type === 4 ? (
+          <Button
+            label={data?.expired ? "Renew" : "Upgrade"}
+            className="py-0 rounded-lg !w-fit px-5"
+            onClick={() => showError("You don't have permission")}
+          />
+        ) : (
+          <LinkButton
+            href="/dashboard/settings/subscription/all"
+            label={data?.expired ? "Renew" : "Upgrade"}
+            className="py-0 rounded-lg !w-fit px-5"
+          />
+        )}
       </div>
     </div>
   );

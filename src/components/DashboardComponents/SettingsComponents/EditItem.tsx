@@ -1,10 +1,11 @@
 import { Button, InputField } from "@/components/FormComponents";
-import { useUpdateItem } from "@/hooks/mutations/useMutateItems";
+import { useDeleteItem, useUpdateItem } from "@/hooks/mutations/useMutateItems";
 import { ItemType } from "@/hooks/query/useGetItemService";
 import { Service, UpdateItem } from "@/services/items.service";
 import { useAuthStore } from "@/store/auth.store";
+import { useModal } from "@/store/useModal.store";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Trash } from "lucide-react";
+import { Save, Trash, Trash2 } from "lucide-react";
 import React from "react";
 
 interface FormValues {
@@ -16,7 +17,9 @@ interface Props {
 }
 const EditItem: React.FC<Props> = ({ item }) => {
   const { mutate: updateItem, isPending } = useUpdateItem();
+  const { mutate: deleteItem, isPending: isDeleting } = useDeleteItem();
   const { user } = useAuthStore();
+  const { closeModal } = useModal();
   const services = item.services ?? [];
 
   // Initialize service prices for each service
@@ -66,6 +69,13 @@ const EditItem: React.FC<Props> = ({ item }) => {
     // Create a new array without the service at the specified index
     const updatedServices = values.services.filter((_, i) => i !== index);
     setFieldValue("services", updatedServices);
+  };
+  const handleDelete = () => {
+    deleteItem(item.id, {
+      onSuccess() {
+        closeModal();
+      },
+    });
   };
   return (
     <div className="max-w-sm">
@@ -127,13 +137,26 @@ const EditItem: React.FC<Props> = ({ item }) => {
                 );
               })}
             </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                label="Delete"
+                loadingText="Deleting"
+                isLoading={isDeleting}
+                disabled={isDeleting || isPending}
+                onClick={handleDelete}
+                icon={<Trash2 size={18} />}
+                className="text-red-500! bg-transparent border hover:bg-red-500 hover:text-white!"
+              />
 
-            <Button
-              label="Save"
-              isLoading={isPending}
-              disabled={isPending}
-              type="submit"
-            />
+              <Button
+                label="Save"
+                loadingText="Saving"
+                isLoading={isPending}
+                disabled={isPending}
+                type="submit"
+                icon={<Save size={18} />}
+              />
+            </div>
           </Form>
         )}
       </Formik>

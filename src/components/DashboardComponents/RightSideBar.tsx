@@ -1,22 +1,24 @@
 import React, { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper/types";
 // import "swiper/css";
 // import "swiper/css/navigation";
 // import "swiper/css/pagination";
 // import "swiper/css/scrollbar";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
 import { formatPrice } from "@/utils/formatter";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 // import OrderList from "@/components/DashboardComponents/OrderList";
 // import { useGetOrders } from "@/hooks/query/usegetOrders";
 // import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/FormComponents";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
 import { useGetDashboard } from "@/hooks/query/useGetDashboard";
 import { useGetHomeExpense } from "@/hooks/query/usegetExpense";
-import { useGetOustanding } from "@/hooks/query/useGetOustanding";
 import { useGetInventory } from "@/hooks/query/useGetInventory";
+import { useGetOustanding } from "@/hooks/query/useGetOustanding";
+import { showError } from "@/utils/toast";
 
 const SLIDES = [
   "/images/landing-banner-image.png",
@@ -108,11 +110,19 @@ const RightSideBar = () => {
           <div className="font-bold">{data?.user.store_name}</div>
           <div className="text-sm">{data?.user.plan?.name}</div>
         </div>
-        <LinkButton
-          href="/dashboard/settings/subscription/all"
-          label="Upgrade plan"
-          className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !font-normal !text-brand rounded-lg"
-        />
+        {data?.user.user_type === 4 ? (
+          <Button
+            onClick={() => showError("You don't have permission")}
+            label="Upgrade plan"
+            className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !font-normal !text-brand rounded-lg"
+          />
+        ) : (
+          <LinkButton
+            href="/dashboard/settings/subscription/all"
+            label="Upgrade plan"
+            className="!w-fit bg-white hover:!bg-white/70 px-4 text-sm !font-normal !text-brand rounded-lg"
+          />
+        )}
       </div>
       {stats.map((item, i) => (
         <div

@@ -6,15 +6,25 @@ import {
 import ConfirmUpgrade from "@/components/DashboardComponents/SubscriptionComponents/ConfirmUpgrade";
 import { Button } from "@/components/FormComponents";
 import LinkButton from "@/components/GeneralComponents/LinkButton";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { useGetSubscription } from "@/hooks/query/useGetUserSubscription";
 import { useModal } from "@/store/useModal.store";
 import { formatDate } from "@/utils/formatter";
+import { showError } from "@/utils/toast";
 import React from "react";
 
 const SubscriptionPage = () => {
+  const { user } = useAuth();
   const { data } = useGetSubscription();
   const modal = useModal();
   const subscriptions = data?.subscriptions ?? [];
+  const confirmRenew = () => {
+    if (user?.user_type === 4) {
+      showError("You don't have permission");
+    } else {
+      modal.openModal(<ConfirmUpgrade plan={data?.currentPlan} />);
+    }
+  };
   return (
     <div>
       <Header />
@@ -47,20 +57,18 @@ const SubscriptionPage = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2 mt-4">
-                <LinkButton
-                  href="/dashboard/settings/subscription/all"
-                  label="Change"
-                  className="bg-white block hover:bg-white/70 hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1"
-                />
+                {user?.user_type !== 4 && (
+                  <LinkButton
+                    href="/dashboard/settings/subscription/all"
+                    label="Change"
+                    className="bg-white block hover:bg-white/70 hover:!text-brand !text-brand !w-fit px-10 text-sm !py-1"
+                  />
+                )}
                 {(data?.currentPlan.price || 0) > 1 && (
                   <Button
                     label="Renew"
                     className="bg-quick-action-icon !w-fit px-10 text-sm !py-1"
-                    onClick={() =>
-                      modal.openModal(
-                        <ConfirmUpgrade plan={data?.currentPlan} />
-                      )
-                    }
+                    onClick={confirmRenew}
                   />
                 )}
               </div>

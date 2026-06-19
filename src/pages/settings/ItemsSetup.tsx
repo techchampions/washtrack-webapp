@@ -1,4 +1,5 @@
 import { Header, RightSideBar } from "@/components/DashboardComponents";
+import ItemSkeleton from "@/components/DashboardComponents/LoadingComponents/ItemSkeleton";
 import AddItem from "@/components/DashboardComponents/SettingsComponents/AddItem";
 import EditItem from "@/components/DashboardComponents/SettingsComponents/EditItem";
 import { Button } from "@/components/FormComponents";
@@ -10,7 +11,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ItemsSetup = () => {
-  const { data } = useGetItemService();
+  const { data, isLoading, isError } = useGetItemService();
   const modal = useModal();
   const navigate = useNavigate();
   const items = data?.itemType ?? [];
@@ -32,38 +33,47 @@ const ItemsSetup = () => {
               onClick={() => modal.openModal(<AddItem />)}
             />
           </div>
-          <div className="flex-1">
-            {items.map((item, index) => (
-              <div
-                className="flex items-center justify-between px-4 py-2 mt-1 rounded-lg cursor-pointer bg-brand-100"
-                key={index}
-                onClick={() => modal.openModal(<EditItem item={item} />)}
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src="/images/order-icon.png"
-                    className="object-cover w-10 h-10 rounded"
-                    alt={item.name}
-                  />
-                  <div className="text-left">
-                    <p className="font-semibold text-quick-action-icon">
-                      {item.name}
-                    </p>
-                    <div className="text-sm text-gray-500 line-clamp-1">
-                      {item.services.map(
-                        (service) => `${service.service_name}, `
-                      )}
+          {isLoading || isError ? (
+            <div className="flex-1">
+              <ItemSkeleton />
+              <ItemSkeleton />
+              <ItemSkeleton />
+              <ItemSkeleton />
+            </div>
+          ) : (
+            <div className="flex-1">
+              {items.map((item, index) => (
+                <div
+                  className="flex items-center justify-between px-4 py-2 mt-1 rounded-lg cursor-pointer bg-brand-100"
+                  key={index}
+                  onClick={() => modal.openModal(<EditItem item={item} />)}
+                >
+                  <div className="flex items-center gap-4">
+                    <img
+                      src="/images/order-icon.png"
+                      className="object-cover w-10 h-10 rounded"
+                      alt={item.name}
+                    />
+                    <div className="text-left">
+                      <p className="font-semibold text-quick-action-icon">
+                        {item.name}
+                      </p>
+                      <div className="text-sm text-gray-500 line-clamp-1">
+                        {item.services.map(
+                          (service) => `${service.service_name}, `
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="flex items-center justify-end gap-1 text-sm cursor-pointer text-quick-action-icon hover:text-blue-700">
+                      <ChevronRight />
                     </div>
                   </div>
                 </div>
-                <div className="">
-                  <div className="flex items-center justify-end gap-1 text-sm cursor-pointer text-quick-action-icon hover:text-blue-700">
-                    <ChevronRight />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
           <div className="flex justify-between mt-14">
             <Button
               onClick={() => navigate(-1)}
