@@ -32,6 +32,10 @@ class ItemsService {
     const response = await apiClient.get(`/api/estore/get-item-service`);
     return response.data;
   }
+  async deleteItems(id: number) {
+    const response = await apiClient.delete(`/api/estore/item-list/${id}`);
+    return response.data;
+  }
   async getItem(id: string) {
     const response = await apiClient.get(`/api/item-services/${id}`);
     return response.data;

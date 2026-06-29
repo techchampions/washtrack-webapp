@@ -34,19 +34,19 @@ export const useAddItem = () => {
     },
   });
 };
-// export const useDeleteService = () => {
-//   const queryClient = useQueryClient();
+export const useDeleteItem = () => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: itemsService.getItem,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({
-//         queryKey: ["services"],
-//       });
-//       showSuccess("Deleted service successfully");
-//     },
-//     onError() {
-//       showError("Failed to deleted service");
-//     },
-//   });
-// };
+  return useMutation({
+    mutationFn: itemsService.deleteItems,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["items"],
+      });
+      showSuccess("Deleted item successfully");
+    },
+    onError() {
+      showError("Failed to deleted item");
+    },
+  });
+};

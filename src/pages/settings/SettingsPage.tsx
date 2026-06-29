@@ -11,6 +11,7 @@ import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useModal } from "@/store/useModal.store";
 import {
+  Building2,
   CalendarSync,
   Lock,
   LogOut,
@@ -22,6 +23,7 @@ import {
   Settings,
   Store,
   Trash,
+  Users,
 } from "lucide-react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,6 +36,11 @@ const SettingsPage = () => {
       href: "/dashboard/settings/store-setup",
     },
     {
+      icon: <Building2 size={20} className="" />,
+      label: "My Branches",
+      href: "/dashboard/settings/branches",
+    },
+    {
       icon: <Settings size={20} className="" />,
       label: "Services",
       href: "/dashboard/settings/services",
@@ -42,6 +49,11 @@ const SettingsPage = () => {
       icon: <Package size={20} className="" />,
       label: "Items",
       href: "/dashboard/settings/items-setup",
+    },
+    {
+      icon: <Users size={20} className="" />,
+      label: "My Staffs",
+      href: "/dashboard/settings/staff",
     },
     {
       icon: <CalendarSync size={20} className="" />,
@@ -88,7 +100,7 @@ const SettingsPage = () => {
                 <img
                   src={user?.profile_picture || ""}
                   alt=""
-                  className="w-16 h-full md:w-24 md:h-full"
+                  className="w-16 h-full md:w-24 md:h-full rounded-2xl"
                 />
                 <div className="flex-1">
                   <div className="flex justify-between">

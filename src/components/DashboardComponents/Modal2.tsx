@@ -26,17 +26,20 @@ const Modal = () => {
       onClick={closeModal}
     >
       <div
-        className="bg-white p-10 rounded-[25px] shadow-lg w-[98%] md:w-fit md:min-w-[400px] md:max-w-[800px] relative"
+        className="p-5 md:p-10 rounded-2xl w-fit h-fit relative bg-white"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute text-gray-600 top-4 right-3 hover:text-gray-900"
+          className="absolute bg-white border border-gray-200 rounded-full p-1 text-gray-600 top-4 right-3 hover:text-gray-900"
           onClick={closeModal}
           aria-label="Close Modal"
         >
           <IoClose size={24} />
         </button>
-        {content}
+
+        <div className=" max-h-[75vh] overflow-y-scroll scrollbar-hide">
+          {content}
+        </div>
       </div>
     </div>
   );

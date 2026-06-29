@@ -8,7 +8,8 @@ interface ButtonProps {
   isLoading?: boolean;
   disabled?: boolean;
   className?: string;
-  icon?: React.ReactNode; // Optional icon (e.g., a spinner or an arrow)
+  icon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,23 +21,27 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   className = "",
   icon,
+  rightIcon,
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`w-full bg-brand text-white py-2 rounded-full  transition duration-300 
+      className={`w-full bg-brand cursor-pointer py-2 rounded-full transition duration-300 text-white ${className}
         ${
-          disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-brand"
-        } ${className}`}
+          disabled || isLoading
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-brand-dark"
+        }
+        `}
     >
       {isLoading ? (
         <div className="flex items-center justify-center">
           <svg
             aria-hidden="true"
             role="status"
-            className="inline w-4 h-4 text-white me-3 animate-spin"
+            className="inline w-4 h-4 me-3 text-white animate-spin"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -50,13 +55,14 @@ const Button: React.FC<ButtonProps> = ({
               fill="currentColor"
             />
           </svg>
-          {loadingText ? loadingText : "Loading..."}
+          <span>{loadingText || "Loading"}</span>
         </div>
       ) : (
-        <>
+        <div className="flex items-center justify-center">
           {icon && <span className="mr-2">{icon}</span>}
           {label}
-        </>
+          {rightIcon && <span className="ml-2">{rightIcon}</span>}
+        </div>
       )}
     </button>
   );

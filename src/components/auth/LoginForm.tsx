@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Form, Formik } from "formik";
 import React from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 import { Button } from "@/components/common/Button";
 // import { FormField } from "@/components/forms/FormField";
-import { useLogin } from "@/hooks/auth/useLogin";
-import { LoginCredentials } from "@/types/auth.types";
-import { FaEnvelope, FaLock } from "react-icons/fa6";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logoImage from "@/assets/images/logo.png";
-import { showError, showSuccess } from "@/utils/toast";
-import { useAuthStore } from "@/store/auth.store";
+import { InputField } from "@/components/FormComponents";
+import { useLogin } from "@/hooks/auth/useLogin";
 import { useResendOtp } from "@/hooks/auth/useVerifyEmail";
 import { useGetUserProfile } from "@/hooks/query/useGetUserProfile";
-import { InputField } from "@/components/FormComponents";
+import { useAuthStore } from "@/store/auth.store";
+import { LoginCredentials } from "@/types/auth.types";
+import { showError, showSuccess } from "@/utils/toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEnvelope, FaLock } from "react-icons/fa6";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -69,6 +69,7 @@ export const LoginForm: React.FC = () => {
           showSuccess(response.data.message);
           setToken(response.data.token);
           setAuthObject(response.data);
+          setStoreUpdated(response.data.storeUpdated);
 
           if (!response.data.otpVerified) {
             resendOtpMutation.mutate({ otp: null });
@@ -80,12 +81,13 @@ export const LoginForm: React.FC = () => {
             response.data,
             "---------response data after login--------"
           );
-
           if (!response.data.storeUpdated) {
             setStoreUpdated(response.data.storeUpdated);
             navigate("/onboarding/store-profile-setup", { replace: true });
             return response.data;
           }
+        } else {
+          showError(response.data.message);
         }
       },
 

@@ -5,7 +5,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const PrivateRoute: React.FC = () => {
   const { token, otpVerified } = useAuth();
-  const { completedOnboarding } = useAuthStore();
+  const { completedOnboarding, user } = useAuthStore();
   const location = useLocation();
 
   if (!token) {
@@ -21,12 +21,14 @@ export const PrivateRoute: React.FC = () => {
   ) {
     return <Navigate to="/auth/verify-email" replace />;
   }
-  if (
-    token &&
-    !completedOnboarding &&
-    location.pathname.includes("/onboarding/welcome")
-  ) {
-    return <Navigate to="/onboarding/store-profile-setup" replace />;
+  if (user?.role !== 1) {
+    if (
+      token &&
+      !completedOnboarding &&
+      location.pathname.includes("/onboarding/welcome")
+    ) {
+      return <Navigate to="/onboarding/store-profile-setup" replace />;
+    }
   }
 
   // if(user && location.pathname.startsWith('/dashboard')) {

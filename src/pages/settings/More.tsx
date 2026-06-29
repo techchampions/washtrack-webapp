@@ -7,6 +7,7 @@ import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useModal } from "@/store/useModal.store";
 import {
+  Building2,
   CalendarSync,
   ChartBar,
   ClipboardClock,
@@ -22,6 +23,7 @@ import {
   Settings,
   Store,
   Trash,
+  Users,
   Users2,
 } from "lucide-react";
 import React from "react";
@@ -65,6 +67,16 @@ const More = () => {
       icon: <Store size={20} className="" />,
       label: "Store Info",
       href: "/dashboard/settings/store-setup",
+    },
+    {
+      icon: <Building2 size={20} className="" />,
+      label: "My Branches",
+      href: "/dashboard/settings/branches",
+    },
+    {
+      icon: <Users size={20} className="" />,
+      label: "My Staffs",
+      href: "/dashboard/settings/staff",
     },
     {
       icon: <Settings size={20} className="" />,

@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { showError, showSuccess } from "@/utils/toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export const useVerifyEmail = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { setIsAuthenticated, setError, setLoading, setOtpVerified } =
-    useAuthStore();
+  const {
+    setIsAuthenticated,
+    storeUpdated,
+    setError,
+    setLoading,
+    setOtpVerified,
+  } = useAuthStore();
 
   const mutation = useMutation({
     mutationFn: authService.verifyUser,
@@ -33,7 +38,11 @@ export const useVerifyEmail = () => {
         setIsAuthenticated(response.data.verify);
         setError(null);
         console.log(response.data, "---------response data--------");
-        navigate("/auth/auth-flow-complete");
+        if (!storeUpdated) {
+          navigate("/auth/auth-flow-complete");
+        } else {
+          navigate("/dashboard");
+        }
       }
     },
     onError: (error: any) => {
