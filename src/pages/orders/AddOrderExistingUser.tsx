@@ -73,14 +73,16 @@ export const AddOrderExistingUser: React.FC = () => {
       formData.append("pickup_date", values.pickupDate?.toISOString() || "");
       formData.append("order_type", "2");
       formData.append("is_exist", "1");
-      if (values.costOfService && values.amountPaid) {
+      if (values.costOfService) {
         formData.append(
           "total_amount",
           String(values.costOfService)
           // String(values.costOfService - values.amountPaid)
         );
       }
-      formData.append("paid_amount", String(values.amountPaid));
+      if (values.amountPaid) {
+        formData.append("paid_amount", String(values.amountPaid));
+      }
       orderItems.forEach((item, index) => {
         formData.append(`items[${index}][service_name]`, item.service_name);
         formData.append(`items[${index}][item_type]`, item.item_type);
