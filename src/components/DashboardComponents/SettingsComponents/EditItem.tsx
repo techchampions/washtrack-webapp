@@ -58,7 +58,11 @@ const EditItem: React.FC<Props> = ({ item }) => {
       payload.push(shortPayload);
     }
 
-    updateItem(payload);
+    updateItem(payload, {
+      onSuccess() {
+        closeModal();
+      },
+    });
   };
 
   const removeService = (
