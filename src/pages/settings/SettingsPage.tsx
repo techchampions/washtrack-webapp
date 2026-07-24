@@ -20,9 +20,11 @@ import {
   MessageCircle,
   Package,
   Phone,
+  QrCode,
   Settings,
   Store,
   Trash,
+  User,
   Users,
 } from "lucide-react";
 import React from "react";
@@ -59,6 +61,11 @@ const SettingsPage = () => {
       icon: <CalendarSync size={20} className="" />,
       label: "Subscription",
       href: "/dashboard/settings/subscription",
+    },
+    {
+      icon: <QrCode size={20} className="" />,
+      label: "Referral center",
+      href: "/dashboard/settings/referrals",
     },
   ];
   const ACTIONSLIST = [
@@ -97,11 +104,17 @@ const SettingsPage = () => {
           <div className="h-fit md:h-48">
             <MainCard>
               <div className="flex flex-col gap-2 md:flex-row">
-                <img
-                  src={user?.profile_picture || ""}
-                  alt=""
-                  className="w-16 h-full md:w-24 md:h-full rounded-2xl"
-                />
+                <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl overflow-hidden border border-white/50 flex justify-center items-center">
+                  {user?.profile_picture ? (
+                    <img
+                      src={user?.profile_picture}
+                      alt=""
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <User className="h-2/3 w-2/3 text-white/50" />
+                  )}
+                </div>
                 <div className="flex-1">
                   <div className="flex justify-between">
                     <h3 className="text-xl font-bold">{user?.store_name}</h3>

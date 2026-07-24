@@ -1,17 +1,19 @@
-import React from "react";
-import Item from "@/components/DashboardComponents/Item";
-import { useParams } from "react-router-dom";
-import { useGetSingleOrder } from "@/hooks/query/usegetOrders";
-import { formatDate, formatPrice } from "@/utils/formatter";
-import { useUpdateOrderStatus } from "@/hooks/mutations/useUpdateOrderStatus";
-import { Button } from "@/components/FormComponents";
 import { Header } from "@/components/DashboardComponents";
-import LinkButton from "@/components/GeneralComponents/LinkButton";
-import OrderDetailsLoading from "@/components/DashboardComponents/LoadingComponents/OrderOverviewLoading";
-import { useModal } from "@/store/useModal.store";
-import OrderReceipt from "@/components/DashboardComponents/OrderComponents/OrderReciept";
-import ItemImages from "@/components/DashboardComponents/ItemImages";
 import CompleteOrder from "@/components/DashboardComponents/CompleteOrder";
+import Item from "@/components/DashboardComponents/Item";
+import ItemImages from "@/components/DashboardComponents/ItemImages";
+import OrderDetailsLoading from "@/components/DashboardComponents/LoadingComponents/OrderOverviewLoading";
+import OrderReceipt from "@/components/DashboardComponents/OrderComponents/OrderReciept";
+import { Button } from "@/components/FormComponents";
+import LinkButton from "@/components/GeneralComponents/LinkButton";
+import DeleteOrder from "@/components/order/DeleteOrder";
+import { useUpdateOrderStatus } from "@/hooks/mutations/useUpdateOrderStatus";
+import { useGetSingleOrder } from "@/hooks/query/usegetOrders";
+import { useModal } from "@/store/useModal.store";
+import { formatDate, formatPrice } from "@/utils/formatter";
+import { Trash2 } from "lucide-react";
+import React from "react";
+import { useParams } from "react-router-dom";
 
 const OrderOverview = () => {
   const modal = useModal();
@@ -81,7 +83,17 @@ const OrderOverview = () => {
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="flex flex-col w-full gap-2 p-4 divide-y divide-gray-300 rounded-lg bg-brand-100">
-          <div className="flex justify-start gap-2 pb-2 text-black ">
+          <div className="flex justify-start gap-2 pb-2 text-black relative">
+            <div
+              className="absolute top-0 right-0 text-red-500 bg-red-300/20 hover:bg-red-300/50 cursor-pointer h-10 w-10 rounded-lg flex justify-center items-center"
+              onClick={() => {
+                if (order) {
+                  modal.openModal(<DeleteOrder order={order} />);
+                }
+              }}
+            >
+              <Trash2 className="w-5 h-5" />
+            </div>
             <img src="/images/washing_machine.svg" alt="" className="w-1/3" />
             <div className="flex flex-col flex-1 justify-start text-left">
               <h2 className="text-2xl font-bold">

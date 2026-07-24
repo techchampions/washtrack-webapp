@@ -107,3 +107,40 @@ interface UpdateStaffPayload {
   password?: string;
   store_id?: string;
 }
+
+interface ReferredUser {
+  id: number;
+  store_name: string;
+  email: string;
+  name: string;
+  referral_date: string;
+}
+interface RefWithdrawal {
+  amount: number;
+  date: string;
+  status: "success" | "pending" | "failed";
+}
+interface ReferralStatData {
+  referral_code: string;
+  number_of_referrals: number;
+  wallet: { balance: number; total_withdrawn: number; total_earned: number };
+  referred_users_details: ReferredUser[];
+  transaction_history: ReferralTransaction[];
+}
+
+interface ReferralTransaction {
+  id: number;
+  type: string;
+  amount: number;
+  balance_after: number;
+  source_type: string;
+  description: string;
+  date: string;
+}
+
+interface WithdrawalPayload {
+  account_name: string;
+  bank_name: string;
+  account_number: string;
+  amount: string;
+}
