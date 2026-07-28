@@ -27,6 +27,7 @@ import Contact from "@/pages/settings/Contact";
 import FAQ from "@/pages/settings/FAQs";
 import ItemsSetup from "@/pages/settings/ItemsSetup";
 import More from "@/pages/settings/More";
+import ReferralPage from "@/pages/settings/ReferralPage";
 import ServicesSetup from "@/pages/settings/ServicesSetup";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import Staffs from "@/pages/settings/Staffs";
@@ -173,6 +174,10 @@ export const AppRoutes: React.FC = () => {
             <Route
               path="/dashboard/settings/items-setup"
               element={<ItemsSetup />}
+            />
+            <Route
+              path="/dashboard/settings/referrals"
+              element={<ReferralPage />}
             />
             <Route
               path="/dashboard/settings/subscription"

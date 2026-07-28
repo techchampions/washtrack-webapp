@@ -1,4 +1,10 @@
 import {
+  ChangePasswordData,
+  ForgotPasswordData,
+  LoginCredentials,
+  Register,
+} from "@/types/auth.types";
+import {
   AccountName,
   BankDetails,
   ItemService,
@@ -22,25 +28,18 @@ import {
 } from "@/types/GeneralTypes/ordertypes";
 import { Customer, UserProfile } from "@/types/GeneralTypes/profiletypes";
 import { OTP } from "@/types/OnboardingTypes/otpTypes";
-import {
-  ChangePasswordData,
-  ForgotPasswordData,
-  LoginCredentials,
-  Register,
-} from "@/types/auth.types";
 // import { DeleteItemsPayload } from "@/store/orderStore";
-import apiClient from "./apiClient";
 import {
   OutStandingResponse,
   SearchExpensesResponse,
 } from "@/types/GeneralTypes/ExpenseTypes";
+import { MonthlyReportResponse, Report } from "@/types/GeneralTypes/report";
 import {
   RevenueResponse,
   SearchRevenueResponse,
 } from "@/types/GeneralTypes/revenueTypes";
-import { Report } from "@/types/GeneralTypes/report";
-import { MonthlyReportResponse } from "@/types/GeneralTypes/report";
 import { PaymentTypes } from "@/types/GeneralTypes/type";
+import apiClient from "./apiClient";
 
 // Function to handle user registration
 const registerUser = async (data: Register) => {
@@ -500,6 +499,10 @@ const fetchFaqs = async () => {
   const response = await apiClient.get(`/api/faq`);
   return response.data;
 };
+const getReferralStats = async () => {
+  const response = await apiClient.get("/api/referral-stats");
+  return response.data;
+};
 
 // Exporting all API functions
 export const api = {
@@ -580,4 +583,5 @@ export const api = {
   payOutstandingBalance,
   getOutstandingHistory,
   deleteAccount,
+  getReferralStats,
 };

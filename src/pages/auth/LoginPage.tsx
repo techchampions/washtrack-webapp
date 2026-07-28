@@ -1,10 +1,8 @@
-import React from "react";
-import { LoginForm } from "@/components/auth/LoginForm";
 import landingBannerImage from "@/assets/images/landing-banner-image.png";
-
+import { LoginForm } from "@/components/auth/LoginForm";
+import React from "react";
 
 const LoginPage: React.FC = () => {
-
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       <img
